@@ -1,0 +1,181 @@
+.form-filter form .form-group {
+    flex-basis: calc(33% - 3px);
+}
+@media only screen and (max-width: 767px) {
+    .form-filter form {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+@media only screen and (min-width: 568px) and (max-width: 767px) {
+    .form-filter form .form-group {
+        flex-basis: calc(50% - 4px);
+    }
+}
+@media only screen and (max-width: 567px) {
+    .form-filter form .form-group {
+        flex-basis: 100%;
+    }
+}
+
+/* product_detail.blade.php-start */
+.form-group-product,
+.form-group-categories {
+    flex-basis: 48%;
+}
+.search-box form .form-group-container select {
+    padding-block: 12px;
+    padding-left: 55px;
+    padding-right: 10px;
+    font-size: 16px;
+    line-height: 20px;
+    box-shadow: none;
+}
+
+/* product-details-start */
+.product-navigation-links {
+    padding: 20px 0px;
+}
+.product-navigation-links li a {
+    padding-block: 3px;
+    padding-inline: 16px;
+    color: var(--theme-black);
+    background-color: var(--theme-light-blue);
+    text-align: center;
+    border-radius: 4px;
+    font-size: 13px;
+}
+.product-navigation-links li a.active {
+    background-color: var(--theme-blue);
+    color: var(--primary-white);
+}
+/* product-details-end */
+/* item-details-start */
+.item-details .item-detail-top {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 10px;
+}
+/* item-detail-left-start */
+.item-detail-left {
+    flex-basis: 40%;
+}
+/* item-detail-left-end */
+/* item-detail-right-start */
+.item-detail-right {
+    flex-basis: 60%;
+}
+.cat-name {
+    font-size: 14px;
+    color: var(--theme-blue);
+    font-weight: 400;
+}
+.product-name {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--theme-black);
+    margin-bottom: 20px;
+    line-height: 32px;
+    margin-top: 10px;
+}
+.product-desc {
+    color: var(--theme-black);
+}
+.product-price {
+    margin-top: 30px;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--primary-black);
+}
+/* item-detail-right-end */
+.item-detail-bottom {
+    margin-block: 20px;
+}
+.item-detail-bottom-box {
+    padding: 30px 25px;
+    border: 1px solid var(--theme-light-blue);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+        rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+        rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    border-radius: 20px;
+}
+
+/* star-rating-start */
+.star-rating-container {
+    color: var(--theme-black);
+}
+.star-rating-container > p:first-child {
+    margin-bottom: 10px;
+}
+.show-review-overall {
+    margin-bottom: 15px;
+}
+.show-review-overall p {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--primary-black);
+}
+.show-review-overall span {
+    font-size: 34px;
+    font-weight: 600;
+    color: var(--primary-black);
+}
+.show-rating-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    column-gap: 10px;
+}
+.star-rating-list li {
+    font-size: 15px;
+}
+.progress-box {
+    min-width: 210px;
+    height: 15px;
+    background-color: var(--theme-light-blue);
+    border-radius: 5px;
+}
+.progress-bar {
+    width: 50%;
+    height: 100%;
+    background-color: var(--theme-black);
+    border-radius: inherit;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.user-group {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    column-gap: 10px;
+}
+.user-figure {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--primary-black);
+    border-radius: 50%;
+}
+.user-figure i {
+    font-size: 30px;
+}
+.user-name {
+    color: var(--primary-black);font-size: 18px;font-weight: 600;
+}
+.form-box label {
+    font-size: 16px;color: var(--theme-black);margin-bottom: 5px;
+}
+.form-group textarea {
+    padding-block: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 16px;
+    line-height: 20px;
+    box-shadow: none;
+}
+/* star-rating-end */
+/* item-details-end */
+/* product_detail.blade.php-end */

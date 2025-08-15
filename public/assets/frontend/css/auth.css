@@ -1,0 +1,16 @@
+/* register.blade.php-start */
+.register-section {
+    padding-top: 100px;padding-bottom: 30px;min-height: 60vh;background-color: var(--theme-light-gray);
+}
+.register-section form input {
+    box-shadow: unset;
+}
+.register-section form input:focus {
+    box-shadow: unset;
+}
+.form-card {
+    padding: 30px;
+    border: 1px solid var(--theme-light-green);
+    border-radius: 30px;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+/* register.blade.php-end */
