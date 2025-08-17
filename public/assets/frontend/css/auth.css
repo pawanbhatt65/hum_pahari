@@ -1,6 +1,9 @@
 /* register.blade.php-start */
 .register-section {
-    padding-top: 100px;padding-bottom: 30px;min-height: 60vh;background-color: var(--theme-light-gray);
+    padding-top: 100px;
+    padding-bottom: 30px;
+    min-height: 60vh;
+    background-color: var(--theme-light-gray);
 }
 .register-section form input {
     box-shadow: unset;
@@ -8,9 +11,24 @@
 .register-section form input:focus {
     box-shadow: unset;
 }
+form input.password-input {
+    padding-right: 50px;
+}
 .form-card {
     padding: 30px;
     border: 1px solid var(--theme-light-green);
-    border-radius: 30px;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 30px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.error {
+    font-size: 14px;
+    line-height: 20px;
+    color: rgb(204, 14, 14);
+}
+.eye {
+    position: absolute;
+    right: 10px;
+    top: 41px;
+    color: rgb(204, 14, 14);
 }
 /* register.blade.php-end */

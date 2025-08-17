@@ -6,7 +6,9 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -23,15 +25,41 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        try {
+            // Attempt authentication
+            $request->authenticate();
 
-        $request->session()->regenerate();
+            // Log successful authentication
+            // Log::info('Authentication successful', [
+            //     'user_id' => $request->user()->id,
+            //     'email' => $request->user()->email
+            // ]);
 
-        if ($request->user()->role === "seller") {
-            return redirect()->intended(route('seller.dashboard', absolute: false));
+            // Regenerate session
+            $request->session()->regenerate();
+
+            // Show success alert
+            Alert::success('Success', 'You have successfully logged in!');
+
+            // Redirect based on user role
+            if ($request->user()->role === "seller") {
+                return redirect()->intended(route('seller.dashboard', absolute: false));
+            }
+
+            return redirect()->intended(route('user.dashboard', absolute: false));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Log authentication failure
+            Log::warning('Authentication failed', [
+                'email' => $request->email,
+                'error' => $e->getMessage()
+            ]);
+
+            // Show error alert
+            Alert::error('Error', 'Invalid email or password.');
+
+            // Redirect back to login page with input (except password)
+            return redirect()->back()->withInput($request->only('email'));
         }
-
-        return redirect()->intended(route('user.dashboard', absolute: false));
     }
 
     /**

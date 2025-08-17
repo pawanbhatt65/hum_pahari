@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-12 col-lg-6 offset-lg-3">
                     <div class="form-card">
-                        <form action="{{ route('register') }}" method="POST">
+                        <form action="{{ route('register') }}" method="POST" name="registrationFormHandler" novalidate>
                             @csrf
                             <div class="mb-3 d-flex justify-content-center align-items-center">
                                 <div class="register">
@@ -27,20 +27,32 @@
                             <div class="mb-3">
                                 <label for="" class="form-label">Name</label>
                                 <input type="text" class="form-control" name="name" required>
+                                <p class="error" id="name-error"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Mobile</label>
+                                <input type="text" class="form-control" name="mobile" maxlength="10" required>
+                                <p class="error" id="mobile-error"></p>
                             </div>
                             <div class="mb-3">
                                 <label for="" class="form-label">Email address</label>
                                 <input type="email" class="form-control" name="email" required>
+                                <p class="error" id="email-error"></p>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3 position-relative">
                                 <label for="" class="form-label">Password</label>
-                                <input type="password" class="form-control" name="password" required>
+                                <input type="password" class="form-control password-input" name="password" required>
+                                <p class="error" id="password-error"></p>
+                                <p class="eye"><i class="fa-solid fa-eye"></i></p>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3 position-relative">
                                 <label for="" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" name="password_confirmation" required>
+                                <input type="password" class="form-control password-input" name="password_confirmation"
+                                    required>
+                                <p class="error" id="cPassword-error"></p>
+                                <p class="eye"><i class="fa-solid fa-eye"></i></p>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Sign up</button>
                             <a href="{{ route('login') }}" class="text-primary ms-2">
                                 Already registered?
                             </a>
@@ -53,5 +65,5 @@
 @endsection
 
 @section('scripts')
-
+    <script src="{{ asset('assets/frontend/js/auth.js') }}" defer></script>
 @endsection

@@ -12,6 +12,11 @@ Route::get('/products/details', [HomeController::class, 'productDetail'])->name(
 Route::get('/blogs', [HomeController::class, 'blogs'])->name('blogs');
 Route::get('/blog/detail', [HomeController::class, 'blogDetail'])->name('blogDetail');
 
+Route::get('/test-logging', function () {
+    \Illuminate\Support\Facades\Log::info('This is a test log message');
+    return 'Check your logs!';
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

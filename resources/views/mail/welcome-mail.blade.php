@@ -20,11 +20,12 @@
         }
     @endphp
     <p style="margin-top: 20px;">Hello {{ $user['name'] }},</p>
+    <p style="margin-top: 10px;">Your Phone number is: {{ $user['mobile'] }}</p>
 
     <p style="margin-top: 10px;">You have been successfully registered with us as a {{ $role }}!</p>
     <p style="margin-top: 20px;">Please verify your email. <a
             href="{{ URL::temporarySignedRoute('verification.verify', now()->addMinutes(60), ['id' => $user['id'], 'hash' => sha1($user['email'])]) }}">Click
-            Here</a>!</p>
+            here to verify</a></p>
 </body>
 
 </html>

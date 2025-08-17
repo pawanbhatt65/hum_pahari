@@ -1,30 +1,78 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 
 class VerifyEmailController extends Controller
 {
-    /**
-     * Mark the authenticated user's email address as verified.
-     */
-    public function __invoke(EmailVerificationRequest $request): RedirectResponse
+    public function __invoke(Request $request): RedirectResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            Log::info("user", ['is_user' => $request->user()]);
-            return redirect()->intended(route('login', absolute: false));
-        }
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        Log::debug('Email verification request', [
+            'request' => $request->all(),
+        ]);
+
+        // Validate the signed URL
+        if (! URL::hasValidSignature($request)) {
+            Log::warning('Invalid or expired verification link', [
+                'id'   => $request->route('id'),
+                'hash' => $request->route('hash'),
+            ]);
+            return redirect()->route('login')->with('error', 'Invalid or expired verification link.');
         }
 
-        if ($request->user()->role === 'seller') {
-            return redirect()->route('seller.dashboard');
+        // Retrieve user by ID from the URL
+        $user = User::findOrFail($request->route('id'));
+
+        // Verify the email hash
+        if (! hash_equals((string) $request->route('hash'), sha1($user->email))) {
+            Log::warning('Invalid email hash', ['user_id' => $user->id]);
+            return redirect()->route('login')->with('error', 'Invalid verification link.');
         }
-        return redirect()->intended(route('user.dashboard', absolute: false));
+
+        Log::debug('Email verification initiated', [
+            'user_id'          => $user->id,
+            'email'            => $user->email,
+            'already_verified' => $user->hasVerifiedEmail(),
+            'time'             => now()->toDateTimeString(),
+        ]);
+
+        // Check if email is already verified
+        if ($user->hasVerifiedEmail()) {
+            Log::info('Email already verified', ['user_id' => $user->id]);
+            return $this->redirectBasedOnAuth($request->user(), $user);
+        }
+
+        // Mark email as verified
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+            Log::info('Email verified successfully', ['user_id' => $user->id]);
+        }
+
+        return $this->redirectBasedOnAuth($request->user(), $user);
+    }
+
+    protected function redirectBasedOnAuth($authUser, $user): RedirectResponse
+    {
+        // If user is authenticated, redirect to their dashboard
+        if ($authUser) {
+            return redirect()->intended($this->redirectPath($user));
+        }
+
+        // If not authenticated, redirect to login with success message
+        return redirect()->route('login')->with('status', 'Your email has been verified. Please log in.');
+    }
+
+    protected function redirectPath($user): string
+    {
+        return match ($user->role) {
+            'seller' => route('seller.dashboard'),
+            default => route('user.dashboard'),
+        };
     }
 }

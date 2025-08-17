@@ -33,10 +33,12 @@ class RegisteredUserController extends Controller
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'name'     => ['required', 'string', 'max:255'],
+            'mobile'   => ['required', 'numeric', 'digits:10'],
             'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role'     => ['required', 'string'],
+            'role'     => ['required', 'string', 'in:user,seller,admin'],
         ]);
+        // Log::info("Validation", ['validator' => $request->all()]);
 
         if ($validator->fails()) {
             Log::info("Validation errors", ['errors' => $validator->errors()->toArray()]);
@@ -44,17 +46,27 @@ class RegisteredUserController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role,
-        ]);
+        try {
+            $user = User::create([
+                'name'     => $request->name,
+                'mobile'   => $request->mobile,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+                'role'     => $request->role,
+            ]);
 
-        event(new Registered($user));
+            event(new Registered($user));
 
-        Alert::success('Success', 'You are registered successfully!', 5000);
+            // Log::info("User registered successfully", ['user_id' => $user->id]);
 
-        return redirect(route('home', absolute: false));
+            Alert::success('Success', 'You are registered successfully!');
+
+            return redirect()->route('home');
+
+        } catch (\Exception $e) {
+            Log::error("Registration failed", ['error' => $e->getMessage()]);
+            Alert::error('Error', 'Registration failed. Please try again.');
+            return back()->withInput();
+        }
     }
 }
