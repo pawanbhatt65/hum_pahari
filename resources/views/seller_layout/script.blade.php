@@ -32,6 +32,8 @@
 <script
     src="{{ asset('assets/frontend/logged_seller/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}">
 </script>
+<!-- dropzonejs -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/dropzone/min/dropzone.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('assets/frontend/logged_seller/dist/js/adminlte.js') }}"></script>
 <!-- jsGrid -->
