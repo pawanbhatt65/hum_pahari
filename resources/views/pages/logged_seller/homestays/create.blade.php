@@ -5,6 +5,27 @@
 @endsection
 
 @section('styles')
+    <style>
+        .error {
+            color: rgb(204, 14, 14);
+        }
+
+        #check_in_time-error,
+        #check_out_time-error {
+            flex-basis: 100%
+        }
+
+        .multiple-files {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            visibility: hidden;
+        }
+    </style>
 @endsection
 
 @section('contents')
@@ -40,29 +61,20 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form id="quickForm" class="">
+                            <form id="quickForm" method="POST" action="{{ route('homestays.store') }}"
+                                enctype="multipart/form-data">
+                                @csrf
                                 <div class="card-body">
-                                    {{-- about-homestays --}}
+                                    {{-- about-Homestay --}}
                                     <div class="row">
                                         <div class="col-12">
                                             <h3>Basic Details</h3>
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
-                                            <label for="homeStaysName">HomeStays Name</label>
+                                            <label for="homeStaysName">Homestay Name</label>
                                             <input type="text" name="name" class="form-control" id="homeStaysName"
-                                                placeholder="Enter HomeStays Name">
+                                                placeholder="Enter Homestay Name">
                                         </div>
-                                        {{-- <div class="form-group">
-                                            <label>Type</label>
-                                            <div class="select2-purple select2">
-                                                <select class="select2" multiple="multiple" data-placeholder="Select a State"
-                                                    data-dropdown-css-class="select2-purple" style="width: 100%;">
-                                                    <option>Single Bedroom Type</option>
-                                                    <option>Double Bedroom Type</option>
-                                                    <option>Both</option>
-                                                </select>
-                                            </div>
-                                        </div> --}}
                                         <div class="form-group col-12 col-lg-4">
                                             <label>Room Type</label>
                                             <select class="form-control" name="roomType" style="width: 100%;">
@@ -91,8 +103,7 @@
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
                                             <label>Number of Single Bedrooms</label>
-                                            <select class="form-control" name="num_single_room"
-                                                style="width: 100%;">
+                                            <select class="form-control" name="num_single_room" style="width: 100%;">
                                                 <option selected="selected">1</option>
                                                 <option>2</option>
                                                 <option>3</option>
@@ -103,8 +114,7 @@
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
                                             <label>Number of Double Bedrooms</label>
-                                            <select class="form-control" name="num_double_room"
-                                                style="width: 100%;">
+                                            <select class="form-control" name="num_double_room" style="width: 100%;">
                                                 <option selected="selected">1</option>
                                                 <option>2</option>
                                                 <option>3</option>
@@ -115,10 +125,10 @@
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
                                             <label for="">Food Allowed</label>
-                                            <div class="">
+                                            <div class="mt-2">
                                                 <div class="icheck-primary d-inline mr-3">
                                                     <input type="radio" id="yes_food_allowed" name="food_allowed"
-                                                        value="yes">
+                                                        value="yes" checked>
                                                     <label for="yes_food_allowed">
                                                         Yes
                                                     </label>
@@ -145,52 +155,45 @@
                                             <h3>Address Details</h3>
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
-                                            <label for="exampleInputState1">State</label>
-                                            <select class="form-control select2" name="state_id" style="width: 100%;">
-                                                <option selected="selected">1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
+                                            <label for="state">State</label>
+                                            <select class="form-control select2" id="state" name="state_id"
+                                                style="width: 100%;">
+                                                <option value="" selected="selected">Select State</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
-                                            <label for="exampleInputEmail1">District</label>
-                                            <select class="form-control select2" name="district_id" style="width: 100%;">
-                                                <option selected="selected">1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
+                                            <label for="district">District</label>
+                                            <select class="form-control select2" id="district" name="district_id"
+                                                style="width: 100%;">
+                                                <option value="" selected="selected">Select District</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
-                                            <label for="exampleInputEmail1">City</label>
-                                            <select class="form-control select2" name="city_id" style="width: 100%;">
-                                                <option selected="selected">1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                            </select>
+                                            <label for="city">City</label>
+                                            <input type="text" name="city_id" class="form-control" id="city"
+                                                placeholder="Enter Homestay City">
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
-                                            <label for="exampleInputAddress1">Address</label>
-                                            <input type="text" name="address" class="form-control"
-                                                id="exampleInputAddress1" placeholder="Enter Address">
+                                            <label for="address">Address</label>
+                                            <input type="text" name="address" class="form-control" id="address"
+                                                placeholder="Enter Address">
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
-                                            <label for="exampleInputPin1">Pin Code</label>
-                                            <input type="text" name="pin" class="form-control"
-                                                id="exampleInputPin1" placeholder="Enter Pin Code" maxlength="6">
+                                            <label for="pin">Pin Code</label>
+                                            <input type="text" name="pin" class="form-control" id="pin"
+                                                placeholder="Enter Pin Code" maxlength="6">
                                         </div>
                                     </div>
 
                                     {{-- capacity --}}
                                     <div class="row">
                                         <div class="col-12">
-                                            <h3>Homestays Capacity</h3>
+                                            <h3>Homestay Capacity</h3>
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
-                                            <label for="exampleInputEmail1">Number of Adult</label>
-                                            <select class="form-control select2" name="num_adult" style="width: 100%;">
+                                            <label for="num_adult">Number of Adult</label>
+                                            <select class="form-control select2" id="num_adult" name="num_adult"
+                                                style="width: 100%;">
                                                 <option selected="selected">1</option>
                                                 <option>2</option>
                                                 <option>3</option>
@@ -198,8 +201,8 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
-                                            <label for="exampleInputEmail1">Number of Children</label>
-                                            <select class="form-control select2" name="num_children"
+                                            <label for="num_children">Number of Children</label>
+                                            <select class="form-control select2" id="num_children" name="num_children"
                                                 style="width: 100%;">
                                                 <option selected="selected">1</option>
                                                 <option>2</option>
@@ -218,7 +221,7 @@
                                             <label for="">Check In Time</label>
                                             <div class="input-group date" id="checkInTime" data-target-input="nearest">
                                                 <input type="text" class="form-control datetimepicker-input"
-                                                    data-target="#checkInTime" name="checkInTime" />
+                                                    data-target="#checkInTime" name="check_in_time" />
                                                 <div class="input-group-append" data-target="#checkInTime"
                                                     data-toggle="datetimepicker">
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -229,7 +232,7 @@
                                             <label for="">Checkout Time</label>
                                             <div class="input-group date" id="checkOutTime" data-target-input="nearest">
                                                 <input type="text" class="form-control datetimepicker-input"
-                                                    data-target="#checkOutTime" name="checkOutTime" />
+                                                    data-target="#checkOutTime" name="check_out_time" />
                                                 <div class="input-group-append" data-target="#checkOutTime"
                                                     data-toggle="datetimepicker">
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -243,137 +246,130 @@
                                         <div class="col-12">
                                             <h3>Room & Spaces</h3>
                                         </div>
-                                        <div class="form-group col-12 col-lg-3">
+                                        <div class="form-group col-12 col-lg-6">
                                             <label for="area_sqft">Area (sq.ft)</label>
                                             <input type="text" name="area" class="form-control" id="area_sqft"
                                                 placeholder="Enter Area (sq.ft)">
                                         </div>
-                                        <div class="form-group col-12 col-lg-3">
+                                        <div class="form-group col-12 col-lg-6">
                                             <label for="">Guest Access</label>
-                                            <div class="icheck-primary d-inline">
-                                                <input type="radio" id="yes_guest_access" name="guest_access"
-                                                    value="yes">
-                                                <label for="yes_guest_access">
-                                                    Yes
-                                                </label>
-                                            </div>
-                                            <div class="icheck-primary d-inline">
-                                                <input type="radio" id="no_guest_access" name="guest_access"
-                                                    value="no">
-                                                <label for="no_guest_access">
-                                                    No
-                                                </label>
+                                            <div class="mt-2">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="yes_guest_access" name="guest_access"
+                                                        value="yes" checked>
+                                                    <label for="yes_guest_access">
+                                                        Yes
+                                                    </label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="no_guest_access" name="guest_access"
+                                                        value="no">
+                                                    <label for="no_guest_access">
+                                                        No
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-12 col-lg-3">
+                                        <div class="form-group col-12 col-lg-6">
                                             <label for="">Mountain View</label>
-                                            <div class="icheck-primary d-inline">
-                                                <input type="radio" id="yes_mountain_view" name="mountain_view"
-                                                    value="yes">
-                                                <label for="yes_mountain_view">
-                                                    Yes
-                                                </label>
-                                            </div>
-                                            <div class="icheck-primary d-inline">
-                                                <input type="radio" id="no_mountain_view" name="mountain_view"
-                                                    value="no">
-                                                <label for="no_mountain_view">
-                                                    No
-                                                </label>
+                                            <div class="mt-2">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="yes_mountain_view" name="mountain_view"
+                                                        value="yes" checked>
+                                                    <label for="yes_mountain_view">
+                                                        Yes
+                                                    </label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="no_mountain_view" name="mountain_view"
+                                                        value="no">
+                                                    <label for="no_mountain_view">
+                                                        No
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-12 col-lg-3">
+                                        <div class="form-group col-12 col-lg-6">
                                             <label for="room_image">Room Image</label>
-                                            <input type="file" name="room_image" class="form-control"
-                                                id="room_image">
+                                            <input type="file" name="room_image" class="form-control" id="room_image"
+                                                accept="image/*">
                                         </div>
                                     </div>
 
-                                    {{-- benefits --}}
-                                    <div class="benefits-container">
+                                    <!-- Benefits -->
+                                    <div class="benefits-container mb-3">
                                         <div class="col-12">
                                             <h3>Benefits</h3>
                                         </div>
                                         <div class="elms row">
                                             <div class="form-group col-12 col-lg-4">
-                                                <label for="benefits_0">Benefits</label>
-                                                <input type="text" name="benefit" class="form-control"
+                                                <input type="text" name="benefit[]" class="form-control"
                                                     id="benefits_0" placeholder="Enter Benefit">
                                             </div>
-                                            <div class="button-container">
-                                                <button type="button" class="btn btn-block btn-primary btn-sm">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-block btn-danger btn-sm">
-                                                    <i class="fa fa-minus"></i>
-                                                </button>
-                                            </div>
+                                        </div>
+                                        <div class="button-container col-auto d-flex align-items-end">
+                                            <button type="button" class="btn btn-primary btn-sm add-benefit mr-2"><i
+                                                    class="fa fa-plus"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm remove-benefit"><i
+                                                    class="fa fa-minus"></i></button>
                                         </div>
                                     </div>
 
-                                    {{-- common space --}}
-                                    <div class="benefits-container">
+                                    <!-- Common Space -->
+                                    <div class="common-space-container mb-3">
                                         <div class="col-12">
                                             <h3>Common Space</h3>
                                         </div>
                                         <div class="elms row">
                                             <div class="form-group col-12 col-lg-4">
-                                                <label for="common_space">Common Space</label>
-                                                <input type="text" name="common_space" class="form-control"
-                                                    id="common_space" placeholder="Enter Common Space">
+                                                <input type="text" name="common_space[]" class="form-control"
+                                                    id="common_space_0" placeholder="Enter Common Space">
                                             </div>
-                                            <div class="button-container">
-                                                <button type="button" class="btn btn-block btn-primary btn-sm">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-block btn-danger btn-sm">
-                                                    <i class="fa fa-minus"></i>
-                                                </button>
-                                            </div>
+                                        </div>
+                                        <div class="button-container col-auto d-flex align-items-end">
+                                            <button type="button" class="btn btn-primary btn-sm add-benefit mr-2"><i
+                                                    class="fa fa-plus"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm remove-benefit"><i
+                                                    class="fa fa-minus"></i></button>
                                         </div>
                                     </div>
 
                                     {{-- property-amenities --}}
-                                    {{-- Safety & Security --}}
-                                    <div class="benefits-container">
+                                    <!-- Safety & Security -->
+                                    <div class="safety-security-container mb-3">
                                         <div class="col-12">
                                             <h3>Safety & Security</h3>
                                         </div>
                                         <div class="elms row">
                                             <div class="form-group col-12 col-lg-4">
-                                                {{-- <label for="safety_security">Safety & Security</label> --}}
-                                                <input type="text" name="safety_security" class="form-control"
-                                                    id="safety_security" placeholder="Enter Safety & Security">
-                                            </div>
-                                            <div class="button-container">
-                                                <button type="button" class="btn btn-block btn-primary btn-sm">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-block btn-danger btn-sm">
-                                                    <i class="fa fa-minus"></i>
-                                                </button>
+                                                <input type="text" name="safety_security[]" class="form-control"
+                                                    id="safety_security_0" placeholder="Enter Safety & Security">
                                             </div>
                                         </div>
+                                        <div class="button-container col-auto d-flex align-items-end">
+                                            <button type="button" class="btn btn-primary btn-sm add-benefit mr-2"><i
+                                                    class="fa fa-plus"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm remove-benefit"><i
+                                                    class="fa fa-minus"></i></button>
+                                        </div>
                                     </div>
-                                    {{-- Bedding --}}
-                                    <div class="benefits-container">
+
+                                    <!-- Bedding -->
+                                    <div class="bedding-container mb-3">
+                                        <div class="col-12">
+                                            <h3>Bedding</h3>
+                                        </div>
                                         <div class="elms row">
-                                            <div class="col-12">
-                                                <h3>Bedding</h3>
-                                            </div>
                                             <div class="form-group col-12 col-lg-4">
-                                                {{-- <label for="bedding">Bedding</label> --}}
-                                                <input type="text" name="bedding" class="form-control" id="bedding"
-                                                    placeholder="Enter Bedding">
+                                                <input type="text" name="bedding[]" class="form-control"
+                                                    id="bedding_0" placeholder="Enter Bedding">
                                             </div>
-                                            <div class="button-container">
-                                                <button type="button" class="btn btn-block btn-primary btn-sm">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-block btn-danger btn-sm">
-                                                    <i class="fa fa-minus"></i>
-                                                </button>
-                                            </div>
+                                        </div>
+                                        <div class="button-container col-auto d-flex align-items-end">
+                                            <button type="button" class="btn btn-primary btn-sm add-benefit mr-2"><i
+                                                    class="fa fa-plus"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm remove-benefit"><i
+                                                    class="fa fa-minus"></i></button>
                                         </div>
                                     </div>
 
@@ -449,15 +445,9 @@
                                                                 <span class="btn btn-success col fileinput-button">
                                                                     <i class="fas fa-plus"></i>
                                                                     <span>Add files</span>
+                                                                    <input type="file" name="images[]" multiple
+                                                                        class="multiple-files" accept="image/*" style="z-index: 3;">
                                                                 </span>
-                                                                {{-- <button type="submit" class="btn btn-primary col start">
-                                                                    <i class="fas fa-upload"></i>
-                                                                    <span>Start upload</span>
-                                                                </button>
-                                                                <button type="reset" class="btn btn-warning col cancel">
-                                                                    <i class="fas fa-times-circle"></i>
-                                                                    <span>Cancel upload</span>
-                                                                </button> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6 d-flex align-items-center">
@@ -496,14 +486,6 @@
                                                             </div>
                                                             <div class="col-auto d-flex align-items-center">
                                                                 <div class="btn-group">
-                                                                    {{-- <button class="btn btn-primary start">
-                                                                        <i class="fas fa-upload"></i>
-                                                                        <span>Start</span>
-                                                                    </button>
-                                                                    <button data-dz-remove class="btn btn-warning cancel">
-                                                                        <i class="fas fa-times-circle"></i>
-                                                                        <span>Cancel</span>
-                                                                    </button> --}}
                                                                     <button data-dz-remove class="btn btn-danger delete">
                                                                         <i class="fas fa-trash"></i>
                                                                         <span>Delete</span>
@@ -523,13 +505,15 @@
                                     {{-- price --}}
                                     <div class="row">
                                         <div class="form-group col-12 col-lg-6">
-                                            <label for="location">Location</label>
-                                            <input type="text" name="email" class="form-control" id="location"
-                                                placeholder="Enter Checkout Time">
+                                            <label for="location">Location (Lat, Long)</label>
+                                            <input type="text" name="location" class="form-control" id="location"
+                                                placeholder="Click to get geolocation" readonly>
+                                            <button type="button" id="getLocation" class="btn btn-primary mt-2">Get
+                                                Current Location</button>
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="one_night_price">One Night Price With Taxes</label>
-                                            <input type="text" name="email" class="form-control"
+                                            <input type="text" name="one_night_price" class="form-control"
                                                 id="one_night_price" placeholder="Enter One Night Price With Taxes">
                                         </div>
                                     </div>
@@ -553,6 +537,8 @@
 
 
 @section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
     <script>
         // function for dropdown
         $(function() {
@@ -629,49 +615,281 @@
         // DropzoneJS Demo Code End
 
         // function for validation
-        $(function() {
-            $.validator.setDefaults({
-                submitHandler: function() {
-                    alert("Form successful submitted!");
+        $('#quickForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 80,
+                    pattern: /^[a-zA-Z0-9\s-]+$/
+                },
+                room_type: {
+                    required: true
+                },
+                bedroom_type: {
+                    required: true
+                },
+                num_room: {
+                    required: true
+                },
+                num_single_room: {
+                    required: true
+                },
+                num_double_room: {
+                    required: true
+                },
+                food_allowed: {
+                    required: true
+                },
+                note: {
+                    pattern: /^[a-zA-Z0-9\s-$&@#+.]+$/
+                },
+                state_id: {
+                    required: true
+                },
+                district_id: {
+                    required: true
+                },
+                city_id: {
+                    required: true
+                },
+                address: {
+                    required: true,
+                    pattern: /^[a-zA-Z0-9\s,-]+$/
+                },
+                pin: {
+                    required: true,
+                    digits: true,
+                    minlength: 6,
+                    maxlength: 6
+                },
+                num_adult: {
+                    required: true
+                },
+                num_children: {
+                    required: true
+                },
+                check_in_time: {
+                    required: true
+                },
+                check_out_time: {
+                    required: true
+                },
+                area: {
+                    number: true,
+                    min: 0
+                },
+                guest_access: {
+                    required: true
+                },
+                mountain_view: {
+                    required: true
+                },
+                room_image: {
+                    required: true,
+                    accept: "image/*",
+                    maxsize: 2097152
+                }, // 2MB
+                'images[]': {
+                    required: true,
+                    accept: "image/*",
+                    maxsize: 819200
+                }, // 800KB
+                'benefit[]': {
+                    required: function(element) {
+                        return $(element).val() !== '' || $('input[name="benefit[]"]').length > 1;
+                    }
+                },
+                location: {
+                    required: true
+                },
+                one_night_price: {
+                    required: true,
+                    number: true,
+                    min: 0
+                }
+            },
+            messages: {
+                name_error: {
+                    required: "Please enter homestay name",
+                    maxlength: "Name cannot exceed 80 characters",
+                    pattern: "Name can only contain letters, digits, hyphens, and spaces"
+                },
+                note_error: {
+                    pattern: "Note can only contain letters, digits, hyphens, spaces, $, &, @, #, +, ."
+                },
+                address_error: {
+                    pattern: "Address can only contain letters, digits, hyphens, commas, and spaces"
+                },
+                pin_error: {
+                    digits: "Pin code must be 6 digits",
+                    minlength: "Pin code must be 6 digits"
+                },
+                check_in_time_error: {
+                    required: "Please select check-in time"
+                },
+                room_image_error: {
+                    maxsize: "Room image must be less than 2MB"
+                },
+                'images[]': {
+                    maxsize: "Each image must be less than 800KB"
+                }
+            },
+            errorPlacement: function(error, element) {
+                // console.log("element.attr('name'): ", element.attr("name"));
+                if (element.attr("name") === "images[]") {
+                    // console.log("element.parent().parent(): ", element.parent().parent());
+                    error.insertAfter(element.parent().parent())
+                } else {
+                    error.appendTo(element.parent());
+                }
+                error.addClass('d-block');
+            }
+        });
+
+        // Custom validation method for file size
+        $.validator.addMethod('maxsize', function(value, element, param) {
+            return this.optional(element) || (element.files[0] && element.files[0].size <= param);
+        }, 'File size must be less than {0} bytes');
+
+        // Room count validation
+        $('#num_room, #num_single_room, #num_double_room').on('change', function() {
+            const numRoom = parseInt($('#num_room').val()) || 0;
+            const numSingle = parseInt($('#num_single_room').val()) || 0;
+            const numDouble = parseInt($('#num_double_room').val()) || 0;
+            if (numSingle + numDouble > numRoom) {
+                $('#num_single_room').addClass('error');
+                $('#num_double_room').addClass('error');
+                $('#num_single_room').after(
+                    '<label class="error">Total single and double bedrooms cannot exceed total rooms.</label>');
+            } else {
+                $('#num_single_room, #num_double_room').removeClass('error');
+                $('#num_single_room, #num_double_room').parent().find('.error').remove();
+            }
+        });
+
+        // Load states and districts using Axios
+        async function loadStates() {
+            try {
+                const response = await axios.get('/states');
+                const select = document.getElementById('state');
+                response.data.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state.id;
+                    option.textContent = state.name;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading states:', error);
+            }
+        }
+        loadStates();
+
+        // state change event
+        $('#state').on('change', function() {
+            const stateId = $(this).val();
+            if (stateId) {
+                // remove state error message if exists
+                $(this).parent().find("#state-error").remove();
+                $.ajax({
+                    url: `/states/${stateId}/districts`,
+                    type: 'GET',
+                    success: function(data) {
+                        const districtSelect = $('#district');
+                        districtSelect.empty();
+                        districtSelect.append('<option value="">Select District</option>');
+                        data.forEach(function(district) {
+                            districtSelect.append(
+                                `<option value="${district.id}">${district.name}</option>`);
+                        });
+                        districtSelect.prop('disabled', false);
+                    },
+                    error: function() {
+                        alert('Error loading districts. Please try again.');
+                    }
+                });
+            } else {
+                $('#district').empty().append('<option value="">Select District</option>').prop('disabled', true);
+            }
+        });
+
+        // district change event
+        $('#district').on('change', function() {
+            const districtId = $(this).val();
+            if (districtId) {
+                // remove district error message if exists
+                $(this).parent().find("#district-error").remove();
+            }
+        });
+
+        // if room_image have a value error message will be removed else error message will be shown
+        $('#room_image').on('change', function() {
+            if ($(this).val()) {
+                $(this).parent().find('#room_image-error').remove();
+            } else {
+                // $(this).after('<label id="room_image-error" class="error" for="room_image">Please upload a room image.</label>');
+            }
+        });
+
+        // Dynamic fields
+        function addDynamicField(containerClass, fieldName, idPrefix) {
+            $(`.${containerClass} .add-benefit`).click(function() {
+                const count = $(`.${containerClass} .elms .form-group`).length;
+                const html = `
+                        <div class="form-group col-12 col-lg-4">
+                            <input type="text" name="${fieldName}[]" class="form-control" id="${idPrefix}_${count}" placeholder="Enter ${fieldName.replace('-', ' ')}">
+                        </div>`;
+                $(`.${containerClass} .elms`).append(html);
+                // Re-validate the form
+                // $('#quickForm').validate().element(`#${idPrefix}_${count}`);
+            });
+
+            $(`.${containerClass} .remove-benefit`).click(function() {
+                const formGroups = $(`.${containerClass} .elms .form-group`);
+                if (formGroups.length > 1) {
+                    formGroups.last().remove();
                 }
             });
-            $('#quickForm').validate({
-                rules: {
-                    email: {
-                        required: true,
-                        email: true,
-                    },
-                    password: {
-                        required: true,
-                        minlength: 5
-                    },
-                    terms: {
-                        required: true
-                    },
-                },
-                messages: {
-                    email: {
-                        required: "Please enter a email address",
-                        email: "Please enter a valid email address"
-                    },
-                    password: {
-                        required: "Please provide a password",
-                        minlength: "Your password must be at least 5 characters long"
-                    },
-                    terms: "Please accept our terms"
-                },
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
+        }
+
+        addDynamicField('benefits-container', 'benefit', 'benefits');
+        addDynamicField('common-space-container', 'common-space', 'common_space');
+        addDynamicField('safety-security-container', 'safety-security', 'safety_security');
+        addDynamicField('bedding-container', 'bedding', 'bedding');
+
+        // Image count validation
+        $('input[name="images[]"]').on('change', function() {
+            const files = this.files;
+            if (files.length < 1 || files.length > 10) {
+                $(this).after('<label class="error">Please upload between 1 and 10 images.</label>');
+            } else {
+                $(this).parent().find('.error').remove();
+            }
+            for (let file of files) {
+                if (file.size > 819200) {
+                    $(this).after(`<label class="error">${file.name} exceeds 800KB.</label>`);
                 }
-            });
+            }
+        });
+
+        // Geolocation
+        $('#getLocation').click(function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude.toFixed(6);
+                    const lng = position.coords.longitude.toFixed(6);
+                    const locationVal = $('#location').val(`${lat}, ${lng}`);
+                    if (locationVal) {
+                        $('#location-error').remove(); // Remove any existing error message
+                        $('#location').removeClass('error'); // Remove error class if exists
+                    } else {
+                        $('#location').after('<label id="location-error" class="error">Please click to Get Current Location button.</label>');
+                    }
+                }, function(error) {
+                    alert('Geolocation failed: ' + error.message);
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
         });
     </script>
 @endsection
