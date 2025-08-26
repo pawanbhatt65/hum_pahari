@@ -33,15 +33,11 @@
         <section class="content">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-between">
                         <h3 class="card-title">HomeStays List</h3>
-                        <ul class="d-flex align-items-center list-group list-group-horizontal">
-                            <li class="list-group-item">
-                                <a href="{{ route('homestays.create') }}">
-                                    + Add New HomeStays
-                                </a>
-                            </li>
-                        </ul>
+                        <a href="{{ route('homestays.create') }}" class="btn btn-primary btn-sm">
+                            + Add New HomeStays
+                        </a>
                     </div>
                 </div>
                 <!-- /.card-header -->
@@ -67,7 +63,7 @@
                 sorting: true,
                 paging: true,
 
-                data: db.clients,
+                data: homestays,
 
                 fields: [{
                         name: "Name",

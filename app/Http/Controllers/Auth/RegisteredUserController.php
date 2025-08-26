@@ -59,7 +59,7 @@ class RegisteredUserController extends Controller
 
             // Log::info("User registered successfully", ['user_id' => $user->id]);
 
-            Alert::success('Success', 'You are registered successfully!');
+            Alert::success('Success', 'You are registered successfully, please check your email!');
 
             return redirect()->route('home');
 

@@ -27,6 +27,7 @@
         href="{{ asset('assets/frontend/logged_seller/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <!-- dropzonejs -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/logged_seller/plugins/dropzone/min/dropzone.min.css') }}">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" rel="stylesheet"> --}}
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/logged_seller/dist/css/adminlte.min.css') }}">
     <!-- overlayScrollbars -->

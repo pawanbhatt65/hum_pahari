@@ -34,6 +34,7 @@
 </script>
 <!-- dropzonejs -->
 <script src="{{ asset('assets/frontend/logged_seller/plugins/dropzone/min/dropzone.min.js') }}"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script> --}}
 <!-- AdminLTE App -->
 <script src="{{ asset('assets/frontend/logged_seller/dist/js/adminlte.js') }}"></script>
 <!-- jsGrid -->
@@ -44,6 +45,6 @@
 <script src="{{ asset('assets/frontend/logged_seller/plugins/jquery-validation/additional-methods.min.js') }}">
 </script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ asset('assets/frontend/logged_seller/dist/js/demo.js') }}"></script>
+{{-- <script src="{{ asset('assets/frontend/logged_seller/dist/js/demo.js') }}"></script> --}}
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('assets/frontend/logged_seller/dist/js/pages/dashboard.js') }}"></script>

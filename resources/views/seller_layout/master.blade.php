@@ -4,6 +4,7 @@
 @include('seller_layout.head')
 
 <body class="hold-transition sidebar-mini layout-fixed">
+
     <div class="wrapper">
 
         @include('seller_layout.navbar')
@@ -22,6 +23,7 @@
 
     @yield('scripts')
 
+    @include('sweetalert::alert')
 </body>
 
 </html>
