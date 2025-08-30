@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class HomeStayeController extends Controller
 {
@@ -17,10 +18,50 @@ class HomeStayeController extends Controller
      */
     public function index()
     {
-        $user      = Auth::user();
-        $homestays = HomeStay::where('user_id', $user->id)->get();
-        // dd($homestays);
-        return view('pages.logged_seller.homestays.index', compact('homestays'));
+        return view('pages.logged_seller.homestays.index');
+    }
+
+    // homestay list data
+    public function homeStayList(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+                $user = Auth::user();
+                if (! $user) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+
+                $homestays = HomeStay::where('user_id', $user->id)
+                    ->select(['id', 'name', 'city', 'is_approved']);
+
+                $data = DataTables::of($homestays)
+                    ->addIndexColumn()
+                    ->addColumn('approve', function ($row) {
+                        $checked = $row->is_approved ? 'checked' : '';
+                        return '<input type="checkbox" class="approve-checkbox" data-id="' . $row->id . '" ' . $checked . '>';
+                    })
+                    ->addColumn('show', function ($row) {
+                        $btn = '<button type="button" class="btn btn-default show-btn" data-id="' . $row->id . '" data-toggle="modal" data-target="#modal-lg"><i class="fas fa-eye"></i></button>';
+                        return $btn;
+                    })
+                    ->addColumn('edit', function ($row) {
+                        return '<a href="' . route('homestays.edit', $row->id) . '" class="btn btn-primary btn-sm"><i class="fas fa-pen-fancy"></i></a>';
+                    })
+                    ->addColumn('delete', function ($row) {
+                        return '<button type="button" class="btn btn-danger btn-sm delete-btn" data-id="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                    })
+                    ->rawColumns(['approve', 'show', 'edit', 'delete'])
+                    ->make(true);
+
+                // Log::info("data", ['datatable' => $data]);
+                return $data;
+            } catch (\Exception $e) {
+                Log::error('DataTables error: ' . $e->getMessage());
+                return response()->json(['error' => 'Server error occurred'], 500);
+            }
+        }
+
+        return view('pages.logged_seller.homestays.index');
     }
 
     /**
@@ -236,6 +277,13 @@ class HomeStayeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $homestay = HomeStay::where('user_id', Auth::user()->id)->findOrFail($id);
+            $homestay->delete();
+            return response()->json(['success' => true, 'message' => 'Homestay deleted']);
+        } catch (\Exception $e) {
+            Log::error('Delete error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to delete homestay'], 500);
+        }
     }
 }

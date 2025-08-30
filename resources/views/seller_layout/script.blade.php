@@ -8,6 +8,29 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('assets/frontend/logged_seller/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+{{-- DataTables  & Plugins-start --}}
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}">
+</script>
+<script
+    src="{{ asset('assets/frontend/logged_seller/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}">
+</script>
+<script
+    src="{{ asset('assets/frontend/logged_seller/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}">
+</script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}">
+</script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}">
+</script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/buttons.colVis.min.js') }}">
+</script>
+{{-- DataTables  & Plugins-end --}}
+
 <!-- Select2 -->
 <script src="{{ asset('assets/frontend/logged_seller/plugins/select2/js/select2.full.min.js') }}"></script>
 <!-- ChartJS -->
@@ -39,7 +62,7 @@
 <script src="{{ asset('assets/frontend/logged_seller/dist/js/adminlte.js') }}"></script>
 <!-- jsGrid -->
 <script src="{{ asset('assets/frontend/logged_seller/plugins/jsgrid/demos/db.js') }}"></script>
-<script src="{{ asset('assets/frontend/logged_seller/plugins/jsgrid/jsgrid.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/frontend/logged_seller/plugins/jsgrid/jsgrid.min.js') }}"></script> --}}
 <!-- jquery-validation -->
 <script src="{{ asset('assets/frontend/logged_seller/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('assets/frontend/logged_seller/plugins/jquery-validation/additional-methods.min.js') }}">
@@ -47,4 +70,4 @@
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="{{ asset('assets/frontend/logged_seller/dist/js/demo.js') }}"></script> --}}
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('assets/frontend/logged_seller/dist/js/pages/dashboard.js') }}"></script>
+{{-- <script src="{{ asset('assets/frontend/logged_seller/dist/js/pages/dashboard.js') }}"></script> --}}

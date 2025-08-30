@@ -6,5 +6,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'seller', 'middleware' => ['auth', 'verified', 'role:seller']], function () {
     Route::get('/dashboard', [SellerController::class, 'getDashboard'])->name('seller.dashboard');
+    // home stay list data route
+    Route::get('/homestays/home-stay-list', [HomeStayeController::class, 'homeStayList'])->name('homestays.homeStayList');
+    Route::put('/homestays/{id}/approve', [HomeStayeController::class, 'updateApproval'])->name('homestays.approve');
     Route::resource('/homestays', HomeStayeController::class);
 });
