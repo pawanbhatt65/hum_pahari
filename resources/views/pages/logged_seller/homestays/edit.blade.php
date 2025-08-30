@@ -1,7 +1,7 @@
 @extends('seller_layout.master')
 
 @section('title')
-    Add HomeStays
+    HomeStays: Edit
 @endsection
 
 @section('styles')
@@ -27,7 +27,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Add Homestay</h1>
+                        <h1>Edit Homestay</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -36,7 +36,7 @@
                                     Home
                                 </a>
                             </li>
-                            <li class="breadcrumb-item active">Add Homestay</li>
+                            <li class="breadcrumb-item active">Edit Homestay</li>
                         </ol>
                     </div>
                 </div>
@@ -50,14 +50,13 @@
                     <!-- left column -->
                     <div class="col-md-12">
                         <!-- jquery validation -->
-                        <div class="card card-primary">
+                        <div class="card card-primary mb-3">
                             <div class="card-header">
-                                <h3 class="card-title">Add <small>Stays</small></h3>
+                                <h3 class="card-title">Update <small>Homestay</small></h3>
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form id="quickForm" method="POST" action="{{ route('homestays.store') }}"
-                                enctype="multipart/form-data">
+                            <form id="quickForm" method="POST" action="{{ route('homestays.update', $listing->id) }}">
                                 @csrf
                                 <div class="card-body">
                                     {{-- about-Homestay --}}
@@ -69,14 +68,17 @@
                                         <div class="form-group col-12 col-lg-4">
                                             <label for="homeStaysName">Homestay Name</label>
                                             <input type="text" name="name" class="form-control" id="homeStaysName"
-                                                value="{{ old('name') }}" placeholder="Enter Homestay Name">
+                                                value="{{ $listing->name }}" placeholder="Enter Homestay Name">
                                             <div class="text-danger error"></div>
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
                                             <label>Room Type</label>
                                             <select class="form-control" name="roomType" style="width: 100%;"
-                                                value="{{ old('roomType') }}">
-                                                <option value="Standard" selected="selected">Standard</option>
+                                                value="{{ $listing->room_type }}">
+                                                <option value="{{ $listing->room_type }}" selected="selected">
+                                                    {{ $listing->room_type }}
+                                                </option>
+                                                <option value="Standard">Standard</option>
                                                 <option value="Deluxe">Deluxe</option>
                                             </select>
                                             <div class="text-danger error"></div>
@@ -84,8 +86,11 @@
                                         <div class="form-group col-12 col-lg-4">
                                             <label>Bedroom Type</label>
                                             <select class="form-control" name="bedroomType" style="width: 100%;"
-                                                value="{{ old('bedroomType') }}">
-                                                <option value="Single Bedroom" selected="selected">Single Bedroom</option>
+                                                value="{{ $listing->bedroom_type }}">
+                                                <option value="{{ $listing->bedroom_type }}" selected="selected">
+                                                    {{ $listing->bedroom_type }}
+                                                </option>
+                                                <option value="Single Bedroom">Single Bedroom</option>
                                                 <option value="Double Bedroom">Double Bedroom</option>
                                                 <option value="Both">Both</option>
                                             </select>
@@ -93,8 +98,11 @@
                                         <div class="form-group col-12 col-lg-4">
                                             <label>Number of Bedrooms</label>
                                             <select class="form-control" name="num_room" id="num_room" style="width: 100%;"
-                                                value="{{ old('num_room') }}">
-                                                <option value="1" selected="selected">1</option>
+                                                value="{{ $listing->number_of_rooms }}">
+                                                <option value="{{ $listing->number_of_rooms }}" selected="selected">
+                                                    {{ $listing->number_of_rooms }}
+                                                </option>
+                                                <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
                                                 <option value="4">4</option>
@@ -111,8 +119,11 @@
                                         <div class="form-group col-12 col-lg-4">
                                             <label>Number of Single Bedrooms</label>
                                             <select class="form-control" name="num_single_room" id="num_single_room"
-                                                value="{{ old('num_single_room') }}" style="width: 100%;">
-                                                <option value="0" selected="selected">0</option>
+                                                value="{{ $listing->number_of_single_rooms }}" style="width: 100%;">
+                                                <option value="{{ $listing->number_of_single_rooms }}" selected="selected">
+                                                    {{ $listing->number_of_single_rooms }}
+                                                </option>
+                                                <option value="0">0</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -125,7 +136,10 @@
                                             <label>Number of Double Bedrooms</label>
                                             <select class="form-control" name="num_double_room" id="num_double_room"
                                                 value="{{ old('num_double_room') }}" style="width: 100%;">
-                                                <option value="0" selected="selected">0</option>
+                                                <option value="{{ $listing->number_of_double_rooms }}" selected="selected">
+                                                    {{ $listing->number_of_double_rooms }}
+                                                </option>
+                                                <option value="0">0</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -140,14 +154,15 @@
                                                 <div class="icheck-primary d-inline mr-3">
                                                     <input type="radio" id="yes_food_allowed" name="food_allowed"
                                                         value="yes"
-                                                        {{ old('food_allowed', 'yes') == 'yes' ? 'checked' : '' }}>
+                                                        {{ $listing->food_allowed === 'yes' ? 'checked' : '' }}>
                                                     <label for="yes_food_allowed">
                                                         Yes
                                                     </label>
                                                 </div>
                                                 <div class="icheck-primary d-inline">
                                                     <input type="radio" id="no_food_allowed" name="food_allowed"
-                                                        value="no" {{ old('food_allowed') == 'no' ? 'checked' : '' }}>
+                                                        value="no"
+                                                        {{ $listing->food_allowed === 'no' ? 'checked' : '' }}>
                                                     <label for="no_food_allowed">
                                                         No
                                                     </label>
@@ -157,7 +172,7 @@
                                         <div class="form-group col-12 col-lg-4">
                                             <label for="add_note">Add Note</label>
                                             <input type="text" name="note" class="form-control" id="add_note"
-                                                value="{{ old('note') }}" placeholder="Enter Note">
+                                                value="{{ $listing->note }}" placeholder="Enter Note">
                                         </div>
                                     </div>
 
@@ -170,32 +185,37 @@
                                         <div class="form-group col-12 col-lg-4">
                                             <label for="state">State</label>
                                             <select class="form-control select2" id="state" name="state_id"
-                                                style="width: 100%;" value="{{ old('state_id') }}">
-                                                <option value="" selected="selected">Select State</option>
+                                                style="width: 100%;" value="{{ $listing->state->id }}">
+                                                <option value="{{ $listing->state->id }}" selected="selected">
+                                                    {{ $listing->state->name }}
+                                                </option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
                                             <label for="district">District</label>
                                             <select class="form-control select2" id="district" name="district_id"
-                                                value="{{ old('district_id') }}" style="width: 100%;">
-                                                <option value="" selected="selected">Select District</option>
+                                                value="{{ $listing->district->id }}" style="width: 100%;">
+                                                <option value="{{ $listing->district->id }}" selected="selected">
+                                                    {{ $listing->district->name }}
+                                                </option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
                                             <label for="city">City</label>
                                             <input type="text" name="city" class="form-control" id="city"
-                                                value="{{ old('city') }}" placeholder="Enter Homestay City">
+                                                value="{{ $listing->city }}" placeholder="Enter Homestay City">
                                             <div class="text-danger error"></div>
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
                                             <label for="address">Address</label>
                                             <input type="text" name="address" class="form-control" id="address"
-                                                value="{{ old('address') }}" placeholder="Enter Address">
+                                                value="{{ $listing->address }}" placeholder="Enter Address">
                                         </div>
                                         <div class="form-group col-12 col-lg-4">
                                             <label for="pin">Pin Code</label>
                                             <input type="text" name="pin" class="form-control" id="pin"
-                                                value="{{ old('pin') }}" placeholder="Enter Pin Code" maxlength="6">
+                                                value="{{ $listing->pincode }}" placeholder="Enter Pin Code"
+                                                maxlength="6">
                                         </div>
                                     </div>
 
@@ -208,8 +228,11 @@
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="num_adult">Number of Adult</label>
                                             <select class="form-control" id="num_adult" name="num_adult"
-                                                style="width: 100%;" value="{{ old('num_adult') }}">
-                                                <option value="1" selected="selected">1</option>
+                                                style="width: 100%;" value="{{ $listing->number_of_adults }}">
+                                                <option value="{{ $listing->number_of_adults }}" selected="selected">
+                                                    {{ $listing->number_of_adults }}
+                                                </option>
+                                                <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
                                                 <option value="4">4</option>
@@ -226,8 +249,11 @@
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="num_children">Number of Children</label>
                                             <select class="form-control" id="num_children" name="num_children"
-                                                value="{{ old('num_children') }}" style="width: 100%;">
-                                                <option value="1" selected="selected">1</option>
+                                                value="{{ $listing->number_of_children }}" style="width: 100%;">
+                                                <option value="{{ $listing->number_of_children }}" selected="selected">
+                                                    {{ $listing->number_of_children }}
+                                                </option>
+                                                <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
                                                 <option value="4">4</option>
@@ -254,7 +280,7 @@
                                             <div class="input-group date" id="checkInTime" data-target-input="nearest">
                                                 <input type="text" class="form-control datetimepicker-input"
                                                     data-target="#checkInTime" name="check_in_time"
-                                                    value="{{ old('check_in_time') }}" />
+                                                    value="{{ $listing->check_in_time }}" />
                                                 <div class="input-group-append" data-target="#checkInTime"
                                                     data-toggle="datetimepicker">
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -266,7 +292,7 @@
                                             <div class="input-group date" id="checkOutTime" data-target-input="nearest">
                                                 <input type="text" class="form-control datetimepicker-input"
                                                     data-target="#checkOutTime" name="check_out_time"
-                                                    value="{{ old('check_out_time') }}" />
+                                                    value="{{ $listing->check_out_time }}" />
                                                 <div class="input-group-append" data-target="#checkOutTime"
                                                     data-toggle="datetimepicker">
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -278,28 +304,26 @@
                                     {{-- rooms & spaces --}}
                                     <div class="row">
                                         <div class="col-12">
-                                            <label for="">Homestay <small><em>Room & Spaces</em>
-                                                </small></label>
+                                            <label for="">Homestay <small><em>Room & Spaces</em></small></label>
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="area_sqft">Area (sq.ft)</label>
                                             <input type="text" name="area" class="form-control" id="area_sqft"
-                                                value="{{ old('area') }}" placeholder="Enter Area (sq.ft)">
+                                                value="{{ $listing->area }}" placeholder="Enter Area (sq.ft)">
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="">Guest Access</label>
                                             <div class="mt-2">
                                                 <div class="icheck-primary d-inline">
                                                     <input type="radio" id="yes_guest_access" name="guest_access"
-                                                        value="yes"
-                                                        {{ old('guest_access', 'yes') == 'yes' ? 'checked' : '' }}>
+                                                        value="yes" {{ $listing->guest === 'yes' ? 'checked' : '' }}>
                                                     <label for="yes_guest_access">
                                                         Yes
                                                     </label>
                                                 </div>
                                                 <div class="icheck-primary d-inline">
                                                     <input type="radio" id="no_guest_access" name="guest_access"
-                                                        value="no" {{ old('guest_access') == 'no' ? 'checked' : '' }}>
+                                                        value="no" {{ $listing->guest === 'no' ? 'checked' : '' }}>
                                                     <label for="no_guest_access">
                                                         No
                                                     </label>
@@ -312,7 +336,7 @@
                                                 <div class="icheck-primary d-inline">
                                                     <input type="radio" id="yes_mountain_view" name="mountain_view"
                                                         value="yes"
-                                                        {{ old('mountain_view', 'yes') == 'yes' ? 'checked' : '' }}>
+                                                        {{ $listing->mountain_view === 'yes' ? 'checked' : '' }}>
                                                     <label for="yes_mountain_view">
                                                         Yes
                                                     </label>
@@ -320,19 +344,148 @@
                                                 <div class="icheck-primary d-inline">
                                                     <input type="radio" id="no_mountain_view" name="mountain_view"
                                                         value="no"
-                                                        {{ old('mountain_view') == 'no' ? 'checked' : '' }}>
+                                                        {{ $listing->mountain_view === 'no' ? 'checked' : '' }}>
                                                     <label for="no_mountain_view">
                                                         No
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-12 col-lg-6">
-                                            <label for="room_image">Room Image</label>
-                                            <input type="file" name="room_image" class="form-control" id="room_image"
-                                                value="{{ old('room_image') }}" accept="image/*">
+                                    </div>
+
+                                    {{-- rules & policies --}}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label for="">Homestay <small><em>Rules & Policies</em>
+                                                </small></label>
+                                        </div>
+                                        <div class="form-group col-12 col-lg-4">
+                                            <label for="up_to_3_days_prior">Up to 3 days Prior</label>
+                                            <select class="form-control" name="up_to_3_days_prior" style="width: 100%;"
+                                                value="{{ $listing->upto_3days_prior }}">
+                                                <option value="{{ $listing->upto_3days_prior }}" selected="selected">
+                                                    {{ $listing->upto_3days_prior }}
+                                                </option>
+                                                <option value="No Refund">No Refund</option>
+                                                <option value="5%">₹5%</option>
+                                                <option value="10%">₹10%</option>
+                                                <option value="15%">₹15%</option>
+                                                <option value="20%">₹20%</option>
+                                                <option value="25%">₹25%</option>
+                                                <option value="30%">₹30%</option>
+                                                <option value="35%">₹35%</option>
+                                                <option value="40%">₹40%</option>
+                                                <option value="45%">₹45%</option>
+                                                <option value="50%">₹50%</option>
+                                                <option value="Full Refund">Full Refund</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12 col-lg-4">
+                                            <label for="up_to_2_days_prior">Up to 2 days Prior</label>
+                                            <select class="form-control" name="up_to_2_days_prior" style="width: 100%;"
+                                                value="{{ old('up_to_2_days_prior') }}">
+                                                <option value="{{ $listing->upto_2days_prior }}" selected="selected">
+                                                    {{ $listing->upto_2days_prior }}
+                                                </option>
+                                                <option value="No Refund">No Refund</option>
+                                                <option value="5%">₹5%</option>
+                                                <option value="10%">₹10%</option>
+                                                <option value="15%">₹15%</option>
+                                                <option value="20%">₹20%</option>
+                                                <option value="25%">₹25%</option>
+                                                <option value="30%">₹30%</option>
+                                                <option value="35%">₹35%</option>
+                                                <option value="40%">₹40%</option>
+                                                <option value="45%">₹45%</option>
+                                                <option value="50%">₹50%</option>
+                                                <option value="Full Refund">Full Refund</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12 col-lg-4">
+                                            <label for="up_to_1_day_prior">Up to 1 days Prior</label>
+                                            <select class="form-control" name="up_to_1_day_prior" style="width: 100%;"
+                                                value="{{ old('up_to_1_day_prior') }}">
+                                                <option value="{{ $listing->{"1day_prior"} }}" selected="selected">
+                                                    {{ $listing->{"1day_prior"} }}
+                                                </option>
+                                                <option value="No Refund">No Refund</option>
+                                                <option value="5%">₹5%</option>
+                                                <option value="10%">₹10%</option>
+                                                <option value="15%">₹15%</option>
+                                                <option value="20%">₹20%</option>
+                                                <option value="25%">₹25%</option>
+                                                <option value="30%">₹30%</option>
+                                                <option value="35%">₹35%</option>
+                                                <option value="40%">₹40%</option>
+                                                <option value="45%">₹45%</option>
+                                                <option value="50%">₹50%</option>
+                                                <option value="Full Refund">Full Refund</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12 col-lg-4">
+                                            <label for="check_in_day">On the day of check-in</label>
+                                            <select class="form-control" name="check_in_day" style="width: 100%;"
+                                                value="{{ old('check_in_day') }}">
+                                                <option value="{{ $listing->same_day_cancellation }}"
+                                                    selected="selected">
+                                                    {{ $listing->same_day_cancellation }}
+                                                </option>
+                                                <option value="No Refund">No Refund</option>
+                                                <option value="5%">₹5%</option>
+                                                <option value="10%">₹10%</option>
+                                                <option value="15%">₹15%</option>
+                                                <option value="20%">₹20%</option>
+                                                <option value="25%">₹25%</option>
+                                                <option value="30%">₹30%</option>
+                                                <option value="35%">₹35%</option>
+                                                <option value="40%">₹40%</option>
+                                                <option value="45%">₹45%</option>
+                                                <option value="50%">₹50%</option>
+                                                <option value="Full Refund">Full Refund</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12 col-lg-4">
+                                            <label for="no_show">No show</label>
+                                            <select class="form-control" name="no_show" style="width: 100%;"
+                                                value="{{ old('no_show') }}">
+                                                <option value="{{ $listing->no_show }}" selected="selected">
+                                                    {{ $listing->no_show }}
+                                                </option>
+                                                <option value="No Refund">No Refund</option>
+                                                <option value="5%">₹5%</option>
+                                                <option value="10%">₹10%</option>
+                                                <option value="15%">₹15%</option>
+                                                <option value="20%">₹20%</option>
+                                                <option value="25%">₹25%</option>
+                                                <option value="30%">₹30%</option>
+                                                <option value="35%">₹35%</option>
+                                                <option value="40%">₹40%</option>
+                                                <option value="45%">₹45%</option>
+                                                <option value="50%">₹50%</option>
+                                                <option value="Full Refund">Full Refund</option>
+                                            </select>
                                         </div>
                                     </div>
+
+                                    {{-- location & price --}}
+                                    <div class="row">
+                                        <div class="form-group col-12 col-lg-6">
+                                            <label for="location">Location (Lat, Long)</label>
+                                            <input type="text" name="location" class="form-control" id="location"
+                                                placeholder="Click to get geolocation" value="{{ $listing->location }}"
+                                                readonly>
+                                            <button type="button" id="getLocation" class="btn btn-primary mt-2">Get
+                                                Current Location</button>
+                                        </div>
+                                        <div class="form-group col-12 col-lg-6">
+                                            <label for="one_night_price">Price <small>Between Check In to Check Out
+                                                    Time</small></label>
+                                            <input type="text" name="one_night_price" value="{{ $listing->price }}"
+                                                class="form-control" id="one_night_price"
+                                                placeholder="Enter Price (Between Check In to Check Out Time)">
+                                        </div>
+                                    </div>
+
 
                                     <!-- Benefits -->
                                     <div class="benefits-container mb-3">
@@ -419,104 +572,6 @@
                                         </div>
                                     </div>
 
-                                    {{-- rules & policies --}}
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label for="">Homestay <small><em>Rules & Policies</em>
-                                                </small></label>
-                                        </div>
-                                        <div class="form-group col-12 col-lg-4">
-                                            <label for="up_to_3_days_prior">Up to 3 days Prior</label>
-                                            <select class="form-control" name="up_to_3_days_prior" style="width: 100%;"
-                                                value="{{ old('up_to_3_days_prior') }}">
-                                                <option value="No Refund" selected="selected">No Refund</option>
-                                                <option value="5%">₹5%</option>
-                                                <option value="10%">₹10%</option>
-                                                <option value="15%">₹15%</option>
-                                                <option value="20%">₹20%</option>
-                                                <option value="25%">₹25%</option>
-                                                <option value="30%">₹30%</option>
-                                                <option value="35%">₹35%</option>
-                                                <option value="40%">₹40%</option>
-                                                <option value="45%">₹45%</option>
-                                                <option value="50%">₹50%</option>
-                                                <option value="Full Refund">Full Refund</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-12 col-lg-4">
-                                            <label for="up_to_2_days_prior">Up to 2 days Prior</label>
-                                            <select class="form-control" name="up_to_2_days_prior" style="width: 100%;"
-                                                value="{{ old('up_to_2_days_prior') }}">
-                                                <option value="No Refund" selected="selected">No Refund</option>
-                                                <option value="5%">₹5%</option>
-                                                <option value="10%">₹10%</option>
-                                                <option value="15%">₹15%</option>
-                                                <option value="20%">₹20%</option>
-                                                <option value="25%">₹25%</option>
-                                                <option value="30%">₹30%</option>
-                                                <option value="35%">₹35%</option>
-                                                <option value="40%">₹40%</option>
-                                                <option value="45%">₹45%</option>
-                                                <option value="50%">₹50%</option>
-                                                <option value="Full Refund">Full Refund</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-12 col-lg-4">
-                                            <label for="up_to_1_day_prior">Up to 1 days Prior</label>
-                                            <select class="form-control" name="up_to_1_day_prior" style="width: 100%;"
-                                                value="{{ old('up_to_1_day_prior') }}">
-                                                <option value="No Refund" selected="selected">No Refund</option>
-                                                <option value="5%">₹5%</option>
-                                                <option value="10%">₹10%</option>
-                                                <option value="15%">₹15%</option>
-                                                <option value="20%">₹20%</option>
-                                                <option value="25%">₹25%</option>
-                                                <option value="30%">₹30%</option>
-                                                <option value="35%">₹35%</option>
-                                                <option value="40%">₹40%</option>
-                                                <option value="45%">₹45%</option>
-                                                <option value="50%">₹50%</option>
-                                                <option value="Full Refund">Full Refund</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-12 col-lg-4">
-                                            <label for="check_in_day">On the day of check-in</label>
-                                            <select class="form-control" name="check_in_day" style="width: 100%;"
-                                                value="{{ old('check_in_day') }}">
-                                                <option value="No Refund" selected="selected">No Refund</option>
-                                                <option value="5%">₹5%</option>
-                                                <option value="10%">₹10%</option>
-                                                <option value="15%">₹15%</option>
-                                                <option value="20%">₹20%</option>
-                                                <option value="25%">₹25%</option>
-                                                <option value="30%">₹30%</option>
-                                                <option value="35%">₹35%</option>
-                                                <option value="40%">₹40%</option>
-                                                <option value="45%">₹45%</option>
-                                                <option value="50%">₹50%</option>
-                                                <option value="Full Refund">Full Refund</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-12 col-lg-4">
-                                            <label for="no_show">No show</label>
-                                            <select class="form-control" name="no_show" style="width: 100%;"
-                                                value="{{ old('no_show') }}">
-                                                <option value="No Refund" selected="selected">No Refund</option>
-                                                <option value="5%">₹5%</option>
-                                                <option value="10%">₹10%</option>
-                                                <option value="15%">₹15%</option>
-                                                <option value="20%">₹20%</option>
-                                                <option value="25%">₹25%</option>
-                                                <option value="30%">₹30%</option>
-                                                <option value="35%">₹35%</option>
-                                                <option value="40%">₹40%</option>
-                                                <option value="45%">₹45%</option>
-                                                <option value="50%">₹50%</option>
-                                                <option value="Full Refund">Full Refund</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
                                     <!-- /.row images -->
                                     <div class="row">
                                         <div class="form-group col-md-12">
@@ -527,34 +582,117 @@
                                         </div>
                                     </div>
                                     <!-- /.row -->
-
-                                    {{-- location & price --}}
-                                    <div class="row">
-                                        <div class="form-group col-12 col-lg-6">
-                                            <label for="location">Location (Lat, Long)</label>
-                                            <input type="text" name="location" class="form-control" id="location"
-                                                placeholder="Click to get geolocation" value="{{ old('location') }}"
-                                                readonly>
-                                            <button type="button" id="getLocation" class="btn btn-primary mt-2">Get
-                                                Current Location</button>
-                                        </div>
-                                        <div class="form-group col-12 col-lg-6">
-                                            <label for="one_night_price">Price <small>Between Check In to Check Out
-                                                    Time</small></label>
-                                            <input type="text" name="one_night_price"
-                                                value="{{ old('one_night_price') }}" class="form-control"
-                                                id="one_night_price"
-                                                placeholder="Enter Price (Between Check In to Check Out Time)">
-                                        </div>
-                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
                             </form>
                         </div>
                         <!-- /.card -->
+
+                        {{-- update room-image-start --}}
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Update <small>Image</small></h3>
+                            </div>
+                            <form action="" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <div class="card-body row">
+                                    <div class="form-group col-12 col-lg-6">
+                                        <label for="room_image">Room Image</label>
+                                        <input type="file" name="room_image" class="form-control" id="room_image"
+                                            accept="image/*">
+                                        <div class="text-danger error"></div>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <div class="d-flex justify-content-end align-items-center">
+                                            <img src="{{ asset('storage/' . $listing->room_image) }}"
+                                                alt="{{ $listing->name }}" style="max-width: 200px;" class="img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer col-12">
+                                    <button type="submit" class="btn btn-primary">Update Image</button>
+                                </div>
+                            </form>
+                        </div>
+                        {{-- update room-image-end --}}
+
+                        <div class="row">
+                            {{-- update-benefits-start --}}
+                            <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Update <small>Benefits</small></h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <a href="{{ route('homestays.benefits', $listing->id) }}"
+                                            class="btn btn-secondary">
+                                            Benefits
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- update-benefits-end --}}
+                            {{-- update-common-space-start --}}
+                            <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Update <small>Common Space</small></h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <a href="" class="btn btn-secondary">
+                                            Common Space
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- update-common-space-end --}}
+                            {{-- update-safety-security-start --}}
+                            <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Update <small>Safety & Security</small></h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <a href="" class="btn btn-secondary">
+                                            Safety & Security
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- update-safety-security-end --}}
+                            {{-- update-Bedding-start --}}
+                            <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Update <small>Bedding</small></h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <a href="" class="btn btn-secondary">
+                                            Bedding
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- update-Bedding-end --}}
+                            {{-- update-images-start --}}
+                            <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Update <small>Images</small></h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <a href="" class="btn btn-secondary">
+                                            Images
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- update-images-end --}}
+                        </div>
                     </div>
                     <!--/.col (left) -->
                 </div>
@@ -617,7 +755,7 @@
                     const response = await axios.get('/states');
                     // console.log("States loaded:", response);
                     const select = $('#state');
-                    select.append('<option value="">Select State</option>');
+                    // select.append('<option value="">Select State</option>');
                     // console.log("select element:", select);
                     response.data.forEach(state => {
                         // console.log("Adding state:", state);
@@ -639,8 +777,8 @@
                         url: `/states/${stateId}/districts`,
                         type: 'GET',
                         success: function(data) {
-                            districtSelect.empty().append(
-                                '<option value="">Select District</option>');
+                            // districtSelect.empty().append(
+                            //     '<option value="">Select District</option>');
                             data.forEach(district => {
                                 districtSelect.append(
                                     `<option value="${district.id}">${district.name}</option>`

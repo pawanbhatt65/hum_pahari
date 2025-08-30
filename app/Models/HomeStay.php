@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HomeStay extends Model
 {
-    protected $table    = 'home_stays';
+    protected $table = 'home_stays';
 
     public static array $is_approved = [true, false];
 
@@ -17,6 +17,16 @@ class HomeStay extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function state(): BelongsTo
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
     }
 
     // One-to-Many Relationships

@@ -91,7 +91,7 @@
         {{-- modal view for details-start --}}
         <div class="modal fade" id="modal-lg">
             <div class="modal-dialog modal-lg">
-                <div class="modal-content">
+                <div class="modal-content" id="homestay-details">
                     <div class="modal-header">
                         <h4 class="modal-title">Large Modal</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -99,7 +99,91 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>One fine body&hellip;</p>
+                        <div class="invoice p-3 mb-3">
+                            <!-- title row -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <input type="hidden" id="appointment_id" name="appointment_id" value="">
+                                    <h4>
+                                        <i class="fa fa-user"></i> : &nbsp;<span class="text-capitalize" id="name">Full
+                                            Name</span>
+                                        <small class="float-right">Date: <span id="date">2/10/2014</span></small>
+                                    </h4>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- Table row -->
+                            <div class="row">
+                                <div class="col-12 table-responsive">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>Email Address</th>
+                                            <td><span id="email"></span></td>
+                                            <th>Phone Number</th>
+                                            <td><span id="phone"></span></td>
+                                            <th>Gender</th>
+                                            <td id="gender"> </td>
+                                        </tr>
+                                        <tr>
+                                            <th>ID Proof</th>
+                                            <td id="idProof"> </td>
+                                            <th>ID Number</th>
+                                            <td id="idProofNumber"> </td>
+                                            <th>Age</th>
+                                            <td id="age"> </td>
+
+                                        </tr>
+                                        <tr>
+                                            <th>Speciality</th>
+                                            <td id="speciality"> </td>
+                                            <th>Doctor</th>
+                                            <td id="specialist"> </td>
+                                            <th>Add Doctor</th>
+                                            <td id="new_doctor">
+                                                {{-- <input type="text" name="add_doctor" id="add_doctor" > --}}
+                                                <select id="add_doctor" name="add_doctor" placeholder="Select doctor...">
+
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Message</th>
+                                            <td id="message"> </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+
+                            <div class="row files_section">
+                                <div class="col-12">
+                                    <p class="lead">Files:
+                                    <div id="appointment_files">
+                                    </div>
+                                    </p>
+                                </div>
+                                <div class="col-12">
+                                    {{-- <p class="lead" >Audio: <span id="audio"><a href="" target="_blank">click here to play</a></span></p> --}}
+                                    <p class="lead">Audio: <span>
+                                            <audio id="audio" controls>
+                                                <source id="audio_src" src="" type="audio/wav">
+                                                Your browser does not support the audio tag.
+                                            </audio>
+                                        </span></p>
+                                </div>
+                                <div class="col-12">
+                                    {{-- <p class="lead">Video: <span id="video"><a src="">click here to play</a></span></p> --}}
+                                    <p class="lead">Video: <span>
+                                            <video id="video" width="320" height="240" controls>
+                                                <source id="src" src="" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </span></p>
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -136,7 +220,7 @@
                 serverSide: true,
                 scrollX: true,
                 order: [
-                    [1, 'desc']
+                    [1, 'asc']
                 ], // Sort by 'id' column (index 1) in descending order
                 ajax: {
                     url: "{{ route('homestays.homeStayList') }}",
@@ -159,7 +243,7 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
-                    }, 
+                    },
                     {
                         data: 'name',
                         name: 'name'
@@ -195,16 +279,41 @@
                 ]
             }).buttons().container().appendTo('#homestays_list_wrapper .col-md-6:eq(0)');
 
-            // Show homestay details
+            // Show homestay details: when show button clicked
             window.showHomeStayFunction = function(button) {
-                const row = $(button).closest('tr');
-                const data = tables.row(row).data();
-                $('#homestay-details').html(`
-                    <p><strong>ID:</strong> ${data.id}</p>
-                    <p><strong>Name:</strong> ${data.name}</p>
-                    <p><strong>City:</strong> ${data.city}</p>
-                    <p><strong>Approved:</strong> ${data.is_approved ? 'Yes' : 'No'}</p>
-                `);
+                const id = $(button).data("id"); // Use .data() for cleaner attribute access
+                console.log("id is: ", id);
+
+                // Fetch modal data and show in modal
+                $.ajax({
+                    url: "{{ route('homestays.show', ':id') }}".replace(':id',
+                    id), // Dynamically replace :id
+                    type: "GET",
+                    success: function(data) {
+                        if (data.error) {
+                            console.error('Error fetching homestay:', data.error);
+                            alert('Error: ' + data.error);
+                            return;
+                        }
+
+                        const user_data = data.data_row;
+                        console.log('Fetched data:', user_data);
+
+                        // Update modal content (adjust selectors and fields as per your modal structure)
+                        $("#modal-lg #homestayName").text(user_data.name || 'N/A');
+                        $("#modal-lg #homestayCity").text(user_data.city || 'N/A');
+                        $("#modal-lg #homestayId").text(user_data.id || 'N/A');
+                        // Example: $("#modal-lg #idProof").text(user_data.id_type || 'N/A'); // If id_type exists in your model
+
+                        // Show the modal
+                        $("#modal-lg").modal("show");
+                    },
+                    error: function(xhr) {
+                        console.error('AJAX error:', xhr.responseJSON);
+                        alert('Error fetching homestay data: ' + (xhr.responseJSON?.error ||
+                            'Unknown error'));
+                    }
+                });
             };
 
             // Approve checkbox toggle
