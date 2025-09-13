@@ -1,7 +1,7 @@
 @extends('seller_layout.master')
 
 @section('title')
-    HomeStays: Benefits
+    HomeStays: Bedding
 @endsection
 
 @section('styles')
@@ -24,7 +24,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Benefits</h1>
+                        <h1>Bedding</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -33,7 +33,7 @@
                                     Home
                                 </a>
                             </li>
-                            <li class="breadcrumb-item active">Benefits</li>
+                            <li class="breadcrumb-item active">Bedding</li>
                         </ol>
                     </div>
                 </div>
@@ -49,15 +49,15 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-between">
-                                    <h3 class="card-title">Benefits List</h3>
-                                    <a href="" id="add-new-benefit" class="btn btn-primary btn-sm">
-                                        + Add New Benefit
+                                    <h3 class="card-title">Bedding List</h3>
+                                    <a href="" id="add-new-bedding" class="btn btn-primary btn-sm">
+                                        + Add New Bedding
                                     </a>
                                 </div>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="benefit_list" class="table table-bordered table-striped">
+                                <table id="bedding_list" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
@@ -94,8 +94,8 @@
     {{-- modal view for details-start --}}
     <div class="modal fade" id="editModal">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content" id="benefit-details">
-                <form id="editBenefitForm" action="" method="POST">
+            <div class="modal-content">
+                <form id="editBeddingForm" action="" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-header">
@@ -111,8 +111,8 @@
                                 <!-- /.col -->
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <label for="name">Benefit</label>
-                                        <input type="text" name="name" id="name" placeholder="Enter Benefit"
+                                        <label for="name">Bedding</label>
+                                        <input type="text" name="name" id="name" placeholder="Enter Bedding"
                                             value="" class="form-control">
                                     </div>
                                 </div>
@@ -146,13 +146,13 @@
             let url = window.location.href.split('/').slice(-2)[0];
             // console.log("url is: ", url);
 
-            // add action parameter on add new benefit link
-            var routeTemplate = "{{ route('homestays.getAddNewBenefit', ':id') }}";
+            // add action parameter on add new bedding link
+            var routeTemplate = "{{ route('homestays.getAddNewBedding', ':id') }}";
             var fullUrl = routeTemplate.replace(':id', url);
-            $("#add-new-benefit").attr("href", fullUrl);
+            $("#add-new-bedding").attr("href", fullUrl);
 
             // show list table data
-            let tables = $("#benefit_list").DataTable({
+            let tables = $("#bedding_list").DataTable({
                 responsive: true,
                 lengthChange: true, // Enable page length menu
                 lengthMenu: [10, 15, 20], // Options for rows per page
@@ -166,7 +166,7 @@
                     [1, 'desc']
                 ], // Sort by 'id' column (index 1) in descending order
                 ajax: {
-                    url: '{{ route('homestays.benefits', ':id') }}'.replace(':id', url),
+                    url: '{{ route('homestays.beddings', ':id') }}'.replace(':id', url),
                     type: 'GET',
                     dataSrc: function(json) {
                         if (!json || json.error) {
@@ -174,12 +174,12 @@
                             alert('Error loading data: ' + (json?.error || 'Invalid response'));
                             return [];
                         }
-                        // console.log("json.data: ", json.data);
+                        // console.log("json data: ", json.data)
                         return json.data;
                     },
                     error: function(xhr, error, thrown) {
                         console.error('DataTables AJAX error:', xhr.responseText, error, thrown);
-                        alert('Failed to load benefits data: ' + xhr.status + ' ' + xhr.statusText);
+                        alert('Failed to load Bedding data: ' + xhr.status + ' ' + xhr.statusText);
                     }
                 },
                 columns: [{
@@ -207,17 +207,17 @@
                 ]
             });
             // Now chain buttons separately on the API instance to avoid overwriting 'tables'
-            tables.buttons().container().appendTo('#benefit_list_wrapper .col-md-6:eq(0)');
+            tables.buttons().container().appendTo('#bedding_list_wrapper .col-md-6:eq(0)');
 
             // Handle edit button click
-            $('#benefit_list').on('click', '.edit_btn', function(e) {
+            $('#bedding_list').on('click', '.edit_btn', function(e) {
                 e.preventDefault(); // Prevent default button behavior
                 // console.log('Edit button clicked'); // Debug
                 const homestayId = $(this).data('homestay-id');
-                const benefitId = $(this).data('benefit-id');
-                // console.log('Homestay ID:', homestayId, 'Benefit ID:', benefitId); // Debug
+                const beddingId = $(this).data('bedding-id');
+                // console.log('Homestay ID:', homestayId, 'bedding ID:', beddingId); // Debug
 
-                const ajaxUrl = `/seller/homestays/${homestayId}/benefit/edit/${benefitId}`;
+                const ajaxUrl = `/seller/homestays/${homestayId}/bedding/edit/${beddingId}`;
 
                 // console.log('AJAX URL:', ajaxUrl); // Debug
 
@@ -227,7 +227,7 @@
                     success: function(data) {
                         // console.log('AJAX success:', data); // Debug
                         if (data.error) {
-                            console.error('Error fetching benefit:', data.error);
+                            console.error('Error fetching bedding:', data.error);
                             alert('Error: ' + data.error);
                             return;
                         }
@@ -236,27 +236,27 @@
                         // console.log('Fetched data:', user_data);
 
                         // Populate modal form
-                        $('#editBenefitForm').attr('action',
-                            "{{ route('homestays.putEditBenefit', ['id' => ':id', 'benefit_id' => ':benefit_id']) }}"
+                        $('#editBeddingForm').attr('action',
+                            "{{ route('homestays.putEditBedding', ['id' => ':id', 'bedding_id' => ':bedding_id']) }}"
                             .replace(':id', homestayId)
-                            .replace(':benefit_id', benefitId));
+                            .replace(':bedding_id', beddingId));
                         $('#editModal #name').val(user_data.name || '');
                         $('#editModal .modal-title').text((user_data.home_stay.name || '') +
-                            ' Homestay Benefit Edit');
+                            ' Bedding Edit');
 
                         // Show modal
                         $('#editModal').modal('show');
                     },
                     error: function(xhr) {
                         console.error('AJAX error:', xhr.responseJSON);
-                        alert('Error fetching benefit data: ' + (xhr.responseJSON?.error ||
+                        alert('Error fetching bedding data: ' + (xhr.responseJSON?.error ||
                             'Unknown error'));
                     }
                 });
             });
 
             // Handle form submission
-            $('#editBenefitForm').on('submit', function(e) {
+            $('#editBeddingForm').on('submit', function(e) {
                 e.preventDefault();
                 const form = $(this);
                 const url = form.attr('action');
@@ -279,7 +279,7 @@
                     },
                     error: function(xhr) {
                         console.error('AJAX error:', xhr.responseJSON);
-                        alert('Error updating benefit: ' + (xhr.responseJSON?.error ||
+                        alert('Error updating bedding: ' + (xhr.responseJSON?.error ||
                             'Unknown error'));
                     }
                 });
@@ -287,15 +287,15 @@
 
 
             // Handle delete button click
-            $('#benefit_list').on('click', '.delete-btn', function() {
+            $('#bedding_list').on('click', '.delete-btn', function() {
                 const homestayId = $(this).data('homestay-id');
-                const benefitId = $(this).data('benefit-id');
+                const beddingId = $(this).data('bedding-id');
 
-                if (confirm('Are you sure you want to delete this benefit?')) {
+                if (confirm('Are you sure you want to delete this bedding?')) {
                     $.ajax({
-                        url: '{{ route('homestays.deleteBenefit', ['id' => ':homestay_id', 'benefit_id' => ':benefit_id']) }}'
+                        url: '{{ route('homestays.deleteBedding', ['id' => ':homestay_id', 'bedding_id' => ':bedding_id']) }}'
                             .replace(':homestay_id', homestayId)
-                            .replace(':benefit_id', benefitId),
+                            .replace(':bedding_id', beddingId),
                         type: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -310,7 +310,8 @@
                         },
                         error: function(xhr) {
                             console.error('AJAX error:', xhr.responseText);
-                            alert('Error deleting benefit: ' + (xhr.responseJSON?.error ||
+                            alert('Error deleting safety security: ' + (xhr.responseJSON
+                                ?.error ||
                                 'Unknown error'));
                         }
                     });

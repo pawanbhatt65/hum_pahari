@@ -55,9 +55,20 @@
                                 <h3 class="card-title">Update <small>Homestay</small></h3>
                             </div>
                             <!-- /.card-header -->
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{$error}}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @endif
                             <!-- form start -->
                             <form id="quickForm" method="POST" action="{{ route('homestays.update', $listing->id) }}">
                                 @csrf
+                                @method('PUT')
                                 <div class="card-body">
                                     {{-- about-Homestay --}}
                                     <div class="row">
@@ -136,7 +147,8 @@
                                             <label>Number of Double Bedrooms</label>
                                             <select class="form-control" name="num_double_room" id="num_double_room"
                                                 value="{{ old('num_double_room') }}" style="width: 100%;">
-                                                <option value="{{ $listing->number_of_double_rooms }}" selected="selected">
+                                                <option value="{{ $listing->number_of_double_rooms }}"
+                                                    selected="selected">
                                                     {{ $listing->number_of_double_rooms }}
                                                 </option>
                                                 <option value="0">0</option>
@@ -280,7 +292,7 @@
                                             <div class="input-group date" id="checkInTime" data-target-input="nearest">
                                                 <input type="text" class="form-control datetimepicker-input"
                                                     data-target="#checkInTime" name="check_in_time"
-                                                    value="{{ $listing->check_in_time }}" />
+                                                    value="{{ date('Y-m-d', strtotime($listing->check_in_time)) }}" />
                                                 <div class="input-group-append" data-target="#checkInTime"
                                                     data-toggle="datetimepicker">
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -485,102 +497,6 @@
                                                 placeholder="Enter Price (Between Check In to Check Out Time)">
                                         </div>
                                     </div>
-
-
-                                    <!-- Benefits -->
-                                    <div class="benefits-container mb-3">
-                                        <div class="col-12">
-                                            <label for="">Homestay <small><em>Benefits</em>
-                                                </small></label>
-                                        </div>
-                                        <div class="elms row">
-                                            <div class="form-group col-12 col-lg-4">
-                                                <input type="text" name="benefit[]" class="form-control"
-                                                    id="benefits_0" placeholder="Enter Benefit"
-                                                    value="{{ old('benefit.0') }}">
-                                            </div>
-                                        </div>
-                                        <div class="button-container col-auto d-flex align-items-end">
-                                            <button type="button" class="btn btn-primary btn-sm add-benefit mr-2"><i
-                                                    class="fa fa-plus"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm remove-benefit"><i
-                                                    class="fa fa-minus"></i></button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Common Space -->
-                                    <div class="common-space-container mb-3">
-                                        <div class="col-12">
-                                            <label for="">Homestay <small><em>Common Space</em>
-                                                </small></label>
-                                        </div>
-                                        <div class="elms row">
-                                            <div class="form-group col-12 col-lg-4">
-                                                <input type="text" name="common_space[]" class="form-control"
-                                                    id="common_space_0" placeholder="Enter Common Space"
-                                                    value="{{ old('common_space.0') }}">
-                                            </div>
-                                        </div>
-                                        <div class="button-container col-auto d-flex align-items-end">
-                                            <button type="button" class="btn btn-primary btn-sm add-benefit mr-2"><i
-                                                    class="fa fa-plus"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm remove-benefit"><i
-                                                    class="fa fa-minus"></i></button>
-                                        </div>
-                                    </div>
-
-                                    {{-- property-amenities --}}
-                                    <!-- Safety & Security -->
-                                    <div class="safety-security-container mb-3">
-                                        <div class="col-12">
-                                            <label for="">Homestay <small><em>Safety & Security</em>
-                                                </small></label>
-                                        </div>
-                                        <div class="elms row">
-                                            <div class="form-group col-12 col-lg-4">
-                                                <input type="text" name="safety_security[]" class="form-control"
-                                                    id="safety_security_0" placeholder="Enter Safety & Security"
-                                                    value="{{ old('safety_security.0') }}">
-                                            </div>
-                                        </div>
-                                        <div class="button-container col-auto d-flex align-items-end">
-                                            <button type="button" class="btn btn-primary btn-sm add-benefit mr-2"><i
-                                                    class="fa fa-plus"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm remove-benefit"><i
-                                                    class="fa fa-minus"></i></button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Bedding -->
-                                    <div class="bedding-container mb-3">
-                                        <div class="col-12">
-                                            <label for="">Homestay <small><em>Bedding</em>
-                                                </small></label>
-                                        </div>
-                                        <div class="elms row">
-                                            <div class="form-group col-12 col-lg-4">
-                                                <input type="text" name="bedding[]" class="form-control"
-                                                    id="bedding_0" placeholder="Enter Bedding"
-                                                    value="{{ old('bedding.0') }}">
-                                            </div>
-                                        </div>
-                                        <div class="button-container col-auto d-flex align-items-end">
-                                            <button type="button" class="btn btn-primary btn-sm add-benefit mr-2"><i
-                                                    class="fa fa-plus"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm remove-benefit"><i
-                                                    class="fa fa-minus"></i></button>
-                                        </div>
-                                    </div>
-
-                                    <!-- /.row images -->
-                                    <div class="row">
-                                        <div class="form-group col-md-12">
-                                            <label for="images">HomeStay <small><em>Image Upload</em></small></label>
-                                            <input type="file" name="images[]" multiple
-                                                class="multiple-files form-control" accept="image/*" id="images">
-                                            <div id="imgs-error-messages" class="text-danger"></div>
-                                        </div>
-                                    </div>
                                     <!-- /.row -->
                                 </div>
                                 <!-- /.card-body -->
@@ -629,7 +545,7 @@
                                     </div>
                                     <div class="card-body">
                                         <a href="{{ route('homestays.benefits', $listing->id) }}"
-                                            class="btn btn-secondary">
+                                            class="btn btn-secondary" id="get-benefits">
                                             Benefits
                                         </a>
                                     </div>
@@ -643,7 +559,8 @@
                                         <h3 class="card-title">Update <small>Common Space</small></h3>
                                     </div>
                                     <div class="card-body">
-                                        <a href="" class="btn btn-secondary">
+                                        <a href="{{ route('homestays.commonSpaceses', $listing->id) }}"
+                                            class="btn btn-secondary">
                                             Common Space
                                         </a>
                                     </div>
@@ -657,7 +574,8 @@
                                         <h3 class="card-title">Update <small>Safety & Security</small></h3>
                                     </div>
                                     <div class="card-body">
-                                        <a href="" class="btn btn-secondary">
+                                        <a href="{{ route('homestays.safetySecurities', $listing->id) }}"
+                                            class="btn btn-secondary">
                                             Safety & Security
                                         </a>
                                     </div>
@@ -671,7 +589,8 @@
                                         <h3 class="card-title">Update <small>Bedding</small></h3>
                                     </div>
                                     <div class="card-body">
-                                        <a href="" class="btn btn-secondary">
+                                        <a href="{{ route('homestays.beddings', $listing->id) }}"
+                                            class="btn btn-secondary">
                                             Bedding
                                         </a>
                                     </div>
@@ -685,7 +604,8 @@
                                         <h3 class="card-title">Update <small>Images</small></h3>
                                     </div>
                                     <div class="card-body">
-                                        <a href="" class="btn btn-secondary">
+                                        <a href="{{ route('homestays.images', $listing->id) }}"
+                                            class="btn btn-secondary">
                                             Images
                                         </a>
                                     </div>
@@ -773,6 +693,8 @@
                 const districtSelect = $('#district');
                 if (stateId) {
                     $(this).parent().find('#state-error').remove();
+                    districtSelect.empty().append('<option value="">Select District</option>').prop(
+                        'disabled', true);
                     $.ajax({
                         url: `/states/${stateId}/districts`,
                         type: 'GET',
@@ -808,33 +730,6 @@
                     $(this).parent().find('#room_image-error').remove();
                 }
             });
-
-            // Dynamic fields
-            function addDynamicField(containerClass, fieldName, idPrefix) {
-                $(`.${containerClass} .add-benefit`).click(function() {
-                    const count = $(`.${containerClass} .elms .form-group`).length;
-                    const html = `
-                <div class="form-group col-12 col-lg-4">
-                    <input type="text" name="${fieldName}[]" class="form-control" id="${idPrefix}_${count}" placeholder="Enter ${fieldName.replace(/[-_]/g, ' ')}">
-                    <label class="error text-danger" for="${idPrefix}_${count}"></label>
-                </div>`;
-                    $(`.${containerClass} .elms`).append(html);
-                    $('#quickForm').validate().element(`#${idPrefix}_${count}`);
-                });
-
-                $(`.${containerClass} .remove-benefit`).click(function() {
-                    const formGroups = $(`.${containerClass} .elms .form-group`);
-                    if (formGroups.length > 1) {
-                        formGroups.last().remove();
-                    }
-                });
-            }
-
-            addDynamicField('benefits-container', 'benefit', 'benefits');
-            addDynamicField('common-space-container', 'common_space', 'common_space');
-            addDynamicField('safety-security-container', 'safety_security', 'safety_security');
-            addDynamicField('bedding-container', 'bedding', 'bedding');
-
 
             // Geolocation
             $('#getLocation').click(function() {
@@ -970,32 +865,6 @@
                     mountain_view: {
                         required: true
                     },
-                    room_image: {
-                        required: true,
-                        accept: "image/*",
-                        maxsize: 2097152 // 2MB
-                    },
-                    'images[]': {
-                        required: true,
-                        accept: "image/*",
-                        maxsize: 819200, // 800KB
-                        filecount: {
-                            min: 1,
-                            max: 10
-                        }
-                    },
-                    'benefit[]': {
-                        pattern: /^[a-zA-Z0-9\s-]*$/
-                    },
-                    'common_space[]': {
-                        pattern: /^[a-zA-Z0-9\s-]*$/
-                    },
-                    'safety_security[]': {
-                        pattern: /^[a-zA-Z0-9\s-]*$/
-                    },
-                    'bedding[]': {
-                        pattern: /^[a-zA-Z0-9\s-]*$/
-                    },
                     location: {
                         required: true,
                         pattern: /^-?\d+\.\d{6}, -?\d+\.\d{6}$/
@@ -1074,29 +943,6 @@
                     },
                     guest_access: "Please select guest access option",
                     mountain_view: "Please select mountain view option",
-                    room_image: {
-                        required: "Please upload a room image",
-                        accept: "Only image files are allowed",
-                        maxsize: "Room image must be less than 2MB"
-                    },
-                    'images[]': {
-                        required: "Please upload at least one image",
-                        accept: "Only image files are allowed",
-                        maxsize: "Each image must be less than 800KB",
-                        filecount: "Please upload between 1 to 10 images"
-                    },
-                    'benefit[]': {
-                        pattern: "Benefits can only contain letters, digits, hyphens, and spaces"
-                    },
-                    'common_space[]': {
-                        pattern: "Common spaces can only contain letters, digits, hyphens, and spaces"
-                    },
-                    'safety_security[]': {
-                        pattern: "Safety & security items can only contain letters, digits, hyphens, and spaces"
-                    },
-                    'bedding[]': {
-                        pattern: "Bedding items can only contain letters, digits, hyphens, and spaces"
-                    },
                     location: {
                         required: "Please click to get geolocation",
                         pattern: "Location must be in the format: latitude, longitude (e.g., 12.345678, 76.543210)"
@@ -1113,14 +959,7 @@
                     no_show: "Please select a refund policy"
                 },
                 errorPlacement: function(error, element) {
-                    if (element.attr('name') === 'images[]') {
-                        error.appendTo('#imgs-error-messages');
-                    } else if (['benefit[]', 'common_space[]', 'safety_security[]', 'bedding[]']
-                        .includes(element.attr('name'))) {
-                        error.insertAfter(element);
-                    } else {
-                        error.appendTo(element.parent());
-                    }
+                    error.appendTo(element.parent());
                     error.addClass('d-block text-danger');
                 },
                 highlight: function(element) {
@@ -1130,20 +969,6 @@
                     $(element).removeClass('error');
                 },
                 submitHandler: function(form) {
-                    // Ensure at least one benefit, common_space, etc., is non-empty
-                    const dynamicFields = ['benefit[]', 'common_space[]', 'safety_security[]',
-                        'bedding[]'
-                    ];
-                    let hasValidDynamicField = false;
-                    dynamicFields.forEach(field => {
-                        const values = $(`input[name="${field}"]`).map(function() {
-                            return $(this).val();
-                        }).get();
-                        if (values.some(val => val.trim() !== '')) {
-                            hasValidDynamicField = true;
-                        }
-                    });
-
                     // Check room count equality
                     const numRoom = parseInt($('#num_room').val()) || 0;
                     const numSingle = parseInt($('#num_single_room').val()) || 0;
@@ -1153,12 +978,6 @@
                         return;
                     }
 
-                    if (!hasValidDynamicField) {
-                        alert(
-                            'Please provide at least one benefit, common space, safety & security, or bedding item.'
-                        );
-                        return false;
-                    }
                     form.submit();
                 }
             });

@@ -287,7 +287,7 @@
                 // Fetch modal data and show in modal
                 $.ajax({
                     url: "{{ route('homestays.show', ':id') }}".replace(':id',
-                    id), // Dynamically replace :id
+                        id), // Dynamically replace :id
                     type: "GET",
                     success: function(data) {
                         if (data.error) {

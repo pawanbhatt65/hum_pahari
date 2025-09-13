@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use App\Models\Bedding;
 use App\Models\Benefit;
+use App\Models\CommonSpace;
 use App\Models\HomeStay;
+use App\Models\HomeStayImages;
+use App\Models\SafetySecurity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -373,6 +377,7 @@ class HomeStayeController extends Controller
             ->where('id', $id)
             ->where('user_id', $user->id)
             ->first();
+        // Log::info("listing", ['listing'=> $listing]);
         return view('pages.logged_seller.homestays.edit', compact('listing'));
     }
 
@@ -381,7 +386,99 @@ class HomeStayeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        Log::info("Log before validation");
+        // Validate request
+        $rules = [
+            'name'               => 'required|string|max:80|regex:/^[a-zA-Z0-9\s\-]+$/',
+            'roomType'           => 'required|in:Standard,Deluxe',
+            'bedroomType'        => 'required|in:Single Bedroom,Double Bedroom,Both',
+            'num_room'           => 'required|integer|min:1|max:12',
+            'num_single_room'    => 'required|integer|min:0|max:6',
+            'num_double_room'    => 'required|integer|min:0|max:6',
+            'food_allowed'       => 'required|in:yes,no',
+            'note'               => 'nullable|string|regex:/^[a-zA-Z0-9\s\-$&@#+.]+$/',
+            'state_id'           => 'required|exists:states,id',
+            'district_id'        => 'required|exists:districts,id',
+            'city'               => 'required|string|max:255',
+            'address'            => 'required|string|regex:/^[a-zA-Z0-9\s,\-]+$/',
+            'pin'                => 'required|digits:6',
+            'num_adult'          => 'required|integer|min:1|max:12',
+            'num_children'       => 'required|integer|min:1|max:12',
+            'check_in_time'      => 'required|date_format:Y-m-d',
+            'check_out_time'     => 'required|date_format:Y-m-d|after:check_in_time',
+            'area'               => 'required|numeric|min:0',
+            'guest_access'       => 'required|in:yes,no',
+            'mountain_view'      => 'required|in:yes,no',
+            'location'           => 'required|string|regex:/^-?\d+\.\d{6},\s*-?\d+\.\d{6}$/',
+            'one_night_price'    => 'required|numeric|min:0',
+            'up_to_3_days_prior' => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
+            'up_to_2_days_prior' => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
+            'up_to_1_day_prior'  => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
+            'check_in_day'       => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
+            'no_show'            => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
+        ];
+
+        $messages = [
+            'check_in_time.date_format' => 'Check In Time must be Y-m-d format',
+            'check_out_time.after'      => 'Check Out Time should be after Check In Time',
+            'location.regex'            => 'Location must be in the format: latitude, longitude (e.g., 12.345678, 76.543210).',
+            'name.regex'                => 'Name can only contain letters, digits, spaces, and hyphens.',
+            'note.regex'                => 'Note can only contain letters, digits, spaces, and special characters (-, $, &, @, #, +, .).',
+            'address.regex'             => 'Address can only contain letters, digits, spaces, commas, and hyphens.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        // Step 2: Check for validation failure
+        // if ($validator->fails()) {
+        //     // Step 3: Loop through errors and show an alert for each
+        //     // foreach ($validator->errors()->all() as $error) {
+        //     //     Alert::error('Error', $error);
+        //     // }
+        //     return back()->withInput();
+        // }
+
+        Log::info("data after validation");
+
+        $homeStay = HomeStayImages::find($id);
+
+        if (! $homeStay) {
+            Alert::error('Error', 'Home stay image not found.');
+            return back();
+        }
+
+        $homeStay->update([
+            "name"                   => $rules["name"],
+            "room_type"              => $rules["roomType"],
+            "bedroom_type"           => $rules["bedroomType"],
+            "number_of_rooms"        => $rules["num_room"],
+            "number_of_single_rooms" => $rules["num_single_room"],
+            "number_of_double_rooms" => $rules["num_double_room"],
+            "food_allowed"           => $rules["food_allowed"],
+            "note"                   => $rules["note"],
+            "state_id "              => $rules["state_id"],
+            "district_id"            => $rules["district_id"],
+            "city"                   => $rules["city"],
+            "address"                => $rules["address"],
+            "pincode"                => $rules["pin"],
+            "number_of_adults"       => $rules["num_adult"],
+            "number_of_children"     => $rules["num_children"],
+            "check_in_time"          => $rules["check_in_time"],
+            "check_out_time"         => $rules["check_out_time"],
+            "area"                   => $rules["area"],
+            "guest"                  => $rules["guest_access"],
+            "mountain_view"          => $rules["mountain_view"],
+            "location"               => $rules["location"],
+            "price"                  => $rules["one_night_price"],
+            "upto_3days_prior"       => $rules["up_to_3_days_prior"],
+            "upto_2days_prior"       => $rules["up_to_2_days_prior"],
+            "1day_prior"             => $rules["up_to_1_day_prior"],
+            "same_day_cancellation"  => $rules["check_in_day"],
+            "no_show"                => $rules["no_show"],
+        ]);
+
+        Alert::success('Success', 'Home stay updated successfully.', 3500);
+        return redirect()->route('homestays.index');
     }
 
     /**
@@ -411,24 +508,56 @@ class HomeStayeController extends Controller
                     return response()->json(['error' => 'User not authenticated'], 401);
                 }
 
-                $benefits = Benefit::where('home_stay_id', $id)
-                    ->whereHas('homeStay', function ($query) use ($user) {
-                        $query->where('user_id', $user->id);
-                    })
-                    ->select(['id', 'name', 'home_stay_id']); // Added 'id'
+                $query = Benefit::where('home_stay_id', $id)
+                    ->whereHas('homeStay', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    });
 
-                $data = DataTables::of($benefits)
-                    ->addIndexColumn()
-                    ->addColumn('edit', function ($row) {
-                        return '<button type="button" class="btn btn-secondary btn-sm edit_btn"  data-homestay-id="' . $row->home_stay_id . '" data-benefit-id="' . $row->id . '"  data-toggle="modal" data-target="#editModal"><i class="fas fa-pen-fancy"></i></button>';
-                    })
-                    ->addColumn('delete', function ($row) {
-                        return '<button type="button" class="btn btn-danger btn-sm delete-btn" data-homestay-id="' . $row->home_stay_id . '" data-benefit-id="' . $row->id . '"><i class="fas fa-trash"></i></button>';
-                    })
-                    ->rawColumns(['edit', 'delete'])
-                    ->make(true);
+                // Total records without filtering
+                $totalRecords = $query->count();
 
-                return $data;
+                // Apply search (if any)
+                if ($request->has('search') && $request->search['value']) {
+                    $searchValue = $request->search['value'];
+                    $query->where('name', 'like', "%{$searchValue}%");
+                }
+
+                $filteredRecords = $query->count();
+
+                // Log::info("request is: ", ['isRequest'=> $request]);
+                // Apply ordering
+                if ($request->has('order')) {
+                    $orderColumn = $request->order[0]['column']; // Index of column
+                    $orderDir    = $request->order[0]['dir'];
+                    $columns     = ['id', 'name']; // Map to your DB columns (skip index/edit/delete)
+                    if (isset($columns[$orderColumn])) {
+                        $query->orderBy($columns[$orderColumn], $orderDir);
+                    }
+                }
+
+                // Pagination
+                $start  = $request->get('start', 0);
+                $length = $request->get('length', 10);
+                $query->offset($start)->limit($length);
+
+                $benefits = $query->select(['id', 'name', 'home_stay_id'])->get();
+                // Log::info("benefits", ['benefits'=> $benefits]);
+
+                // Add DT_RowIndex and action columns (as in your original)
+                $data = $benefits->map(function ($row, $index) use ($start) {
+                    $row->DT_RowIndex = $start + $index + 1;
+                    $row->edit        = '<button type="button" class="btn btn-secondary btn-sm edit_btn" data-homestay-id="' . $row->home_stay_id . '" data-benefit-id="' . $row->id . '" data-toggle="modal" data-target="#editModal"><i class="fas fa-pen-fancy"></i></button>';
+                    $row->delete      = '<button type="button" class="btn btn-danger btn-sm delete-btn" data-homestay-id="' . $row->home_stay_id . '" data-benefit-id="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                    return $row;
+                });
+                // Log::info("benefit_data", ['benefit_data'=> $data]);
+
+                return response()->json([
+                    'recordsTotal'    => $totalRecords,
+                    'recordsFiltered' => $filteredRecords,
+                    'data'            => $data,
+                ]);
+
             } catch (\Exception $e) {
                 Log::error('DataTables error: ' . $e->getMessage());
                 return response()->json(['error' => 'Server error occurred'], 500);
@@ -439,12 +568,46 @@ class HomeStayeController extends Controller
     }
 
     /**
+     * add a new benefit
+     */
+    public function getAddNewBenefit(Request $request, string $id)
+    {
+        return view('pages.logged_seller.homestays.add-brnefit', compact('id'));
+    }
+
+    /**
+     * store new benefit
+     */
+    public function postAddNewBenefit(Request $request, string $id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            $data = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+            Benefit::create([
+                'name'         => $data['name'],
+                'home_stay_id' => $id,
+            ]);
+            Alert::success('Success', 'Benefit added successfully.');
+            return redirect()->route('homestays.benefits', $id);
+        } catch (\Throwable $th) {
+            Log::error('DataTables error: ' . $th->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    /**
      * get specific benefit data for edit
      */
 
     public function getEditBenefit(Request $request, string $id, string $benefit_id)
     {
-        Log::info('request: ', ['home_stay_id' => $id, 'benefit_id' => $benefit_id]);
+        // Log::info('request: ', ['home_stay_id' => $id, 'benefit_id' => $benefit_id]);
         try {
             if ($request->ajax()) {
                 $user = Auth::user();
@@ -461,13 +624,13 @@ class HomeStayeController extends Controller
                     Log::info("error", ['error' => 'Homestay not found or you do not have access']);
                     return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
                 }
-                Log::info('homestay', ['homestay' => $homestay]);
+                // Log::info('homestay', ['homestay' => $homestay]);
 
                 // Fetch benefit
                 $benefit = Benefit::where('id', $benefit_id)
                     ->where('home_stay_id', $id)
                     ->with('homeStay')
-                    ->select(['id', 'home_stay_id', 'name', 'homeStay'])
+                    ->select(['id', 'home_stay_id', 'name'])
                     ->first();
 
                 if (! $benefit) {
@@ -475,7 +638,7 @@ class HomeStayeController extends Controller
                     return response()->json(['error' => 'Benefit not found'], 404);
                 }
 
-                Log::info('Fetched benefit', ['home_stay_id' => $id, 'benefit_id' => $benefit_id, "benefit" => $benefit]);
+                // Log::info('Fetched benefit', ['home_stay_id' => $id, 'benefit_id' => $benefit_id, "benefit" => $benefit]);
 
                 return response()->json([
                     'success' => true,
@@ -526,8 +689,7 @@ class HomeStayeController extends Controller
             }
 
             $validated = $request->validate([
-                'name'        => 'required|string|max:255',
-                'description' => 'nullable|string',
+                'name' => 'required|string|max:255',
             ]);
 
             $benefit->update($validated);
@@ -546,6 +708,7 @@ class HomeStayeController extends Controller
         }
     }
 
+    // delete a benefit
     public function deleteBenefit(Request $request, string $id, string $benefit_id)
     {
         try {
@@ -575,6 +738,869 @@ class HomeStayeController extends Controller
             return response()->json(['success' => 'Benefit deleted successfully'], 200);
         } catch (\Exception $e) {
             Log::error('Delete Benefit error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    /**
+     * start common-space functions
+     */
+    // common-space list page
+    public function commonSpaceses(Request $request, string $id)
+    {
+        // Log::info("calling");
+        if ($request->ajax()) {
+            // Log::info("calling inside ajax");
+            try {
+                $user = Auth::user();
+                if (! $user) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+
+                $query = CommonSpace::where('home_stay_id', $id)
+                    ->whereHas('homeStay', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    });
+                // Log::info("query data: ", ['query' => $query]);
+
+                // Total records without filtering
+                $totalRecords = $query->count();
+
+                // Apply search (if any)
+                if ($request->has('search') && $request->search['value']) {
+                    $searchValue = $request->search['value'];
+                    $query->where('name', 'like', "%{$searchValue}%");
+                }
+
+                $filteredRecords = $query->count();
+
+                // Apply ordering
+                if ($request->has('order')) {
+                    $orderColumn = $request->order[0]['column']; // Index of column
+                    $orderDir    = $request->order[0]['dir'];
+                    $columns     = ['id', 'name']; // Map to your DB columns (skip index/edit/delete)
+                    if (isset($columns[$orderColumn])) {
+                        $query->orderBy($columns[$orderColumn], $orderDir);
+                    }
+                }
+
+                // Pagination
+                $start  = $request->get('start', 0);
+                $length = $request->get('length', 10);
+                $query->offset($start)->limit($length);
+
+                $commonSpaces = $query->select(['id', 'name', 'home_stay_id'])->get();
+
+                // Add DT_RowIndex and action columns (as in your original)
+                $data = $commonSpaces->map(function ($row, $index) use ($start) {
+                    $row->DT_RowIndex = $start + $index + 1;
+                    $row->edit        = '<button type="button" class="btn btn-secondary btn-sm edit_btn" data-homestay-id="' . $row->home_stay_id . '" data-common-space-id="' . $row->id . '" data-toggle="modal" data-target="#editModal"><i class="fas fa-pen-fancy"></i></button>';
+                    $row->delete      = '<button type="button" class="btn btn-danger btn-sm delete-btn" data-homestay-id="' . $row->home_stay_id . '" data-common-space-id="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                    return $row;
+                });
+
+                return response()->json([
+                    'recordsTotal'    => $totalRecords,
+                    'recordsFiltered' => $filteredRecords,
+                    'data'            => $data,
+                ]);
+
+            } catch (\Exception $e) {
+                Log::error('DataTables error: ' . $e->getMessage());
+                return response()->json(['error' => 'Server error occurred'], 500);
+            }
+        }
+        return view('pages.logged_seller.homestays.common-space.index');
+    }
+
+    // get specific common space data for edit
+    public function getEditCommonSpace(Request $request, string $id, string $common_spaces_id)
+    {
+        // Log::info('request: ', ['home_stay_id' => $id, 'common_spaces_id' => $common_spaces_id]);
+        try {
+            if ($request->ajax()) {
+                $user = Auth::user();
+                if (! $user) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+
+                // Validate homestay
+                $homestay = HomeStay::where('id', $id)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+                if (! $homestay) {
+                    Log::info("error", ['error' => 'Homestay not found or you do not have access']);
+                    return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+                }
+                // Log::info('homestay', ['homestay' => $homestay]);
+
+                // Fetch common_space
+                $common_space = CommonSpace::where('id', $common_spaces_id)
+                    ->where('home_stay_id', $id)
+                    ->with('homeStay')
+                    ->select(['id', 'home_stay_id', 'name'])
+                    ->first();
+
+                if (! $common_space) {
+                    Log::info("error", ['error' => 'Common Space not found']);
+                    return response()->json(['error' => 'Common Space not found'], 404);
+                }
+
+                // Log::info('Fetched common_space', ['home_stay_id' => $id, 'common_spaces_id' => $common_spaces_id, "common_space" => $common_space]);
+
+                return response()->json([
+                    'success' => true,
+                    'data'    => $common_space,
+                ], 200);
+            }
+
+            // Non-AJAX: Redirect to edit form (optional)
+            return redirect()->route('homestays.commonSpaceses', ['id' => $id, 'common_spaces_id' => $common_spaces_id]);
+        } catch (\Exception $e) {
+            Log::error('Get Edit Benefit error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    // Add putEditCommonSpace and common space from previous responses
+    public function putEditCommonSpace(Request $request, string $id, string $common_spaces_id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+                return redirect()->route('login')->with('error', 'Please log in to edit benefits.');
+            }
+
+            $homestay = HomeStay::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (! $homestay) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+                }
+                return redirect()->back()->with('error', 'Homestay not found or you do not have access.');
+            }
+
+            $common_space = CommonSpace::where('id', $common_spaces_id)
+                ->where('home_stay_id', $id)
+                ->first();
+
+            if (! $common_space) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'Common Space not found'], 404);
+                }
+                return redirect()->back()->with('error', 'Common Space not found.');
+            }
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+
+            $common_space->update($validated);
+
+            if ($request->ajax()) {
+                return response()->json(['success' => 'Common Space updated successfully'], 200);
+            }
+
+            return redirect()->back()->with('success', 'Common Space updated successfully.');
+        } catch (\Exception $e) {
+            Log::error('Edit Common Space error: ' . $e->getMessage());
+            if ($request->ajax()) {
+                return response()->json(['error' => 'Server error occurred'], 500);
+            }
+            return redirect()->back()->with('error', 'An error occurred while updating the Common Space.');
+        }
+    }
+
+    /**
+     * add a new common space
+     */
+    public function getAddNewCommonSpace(Request $request, string $id)
+    {
+        return view('pages.logged_seller.homestays.common-space.create', compact('id'));
+    }
+
+    /**
+     * store new common space
+     */
+    public function postAddNewCommonSpace(Request $request, string $id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            $data = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+            CommonSpace::create([
+                'name'         => $data['name'],
+                'home_stay_id' => $id,
+            ]);
+            Alert::success('Success', 'Common Space added successfully.');
+            return redirect()->route('homestays.commonSpaceses', $id);
+        } catch (\Throwable $th) {
+            Log::error('DataTables error: ' . $th->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    // delete a common space
+    public function deleteCommonSpace(Request $request, string $id, string $common_spaces_id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            $homestay = HomeStay::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (! $homestay) {
+                return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+            }
+
+            $commonSpace = CommonSpace::where('id', $common_spaces_id)
+                ->where('home_stay_id', $id)
+                ->first();
+
+            if (! $commonSpace) {
+                return response()->json(['error' => 'Common Space not found'], 404);
+            }
+
+            $commonSpace->delete();
+
+            return response()->json(['success' => 'Common Space deleted successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error('Delete Common Space error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    /**
+     * start safety & securities functions
+     */
+    // safety & securities list page
+    public function safetySecurities(Request $request, string $id)
+    {
+        // Log::info("calling");
+        if ($request->ajax()) {
+            // Log::info("calling inside ajax");
+            try {
+                $user = Auth::user();
+                if (! $user) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+
+                $query = SafetySecurity::where('home_stay_id', $id)
+                    ->whereHas('homeStay', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    });
+                // Log::info("query data: ", ['query' => $query]);
+
+                // Total records without filtering
+                $totalRecords = $query->count();
+
+                // Apply search (if any)
+                if ($request->has('search') && $request->search['value']) {
+                    $searchValue = $request->search['value'];
+                    $query->where('name', 'like', "%{$searchValue}%");
+                }
+
+                $filteredRecords = $query->count();
+
+                // Apply ordering
+                if ($request->has('order')) {
+                    $orderColumn = $request->order[0]['column']; // Index of column
+                    $orderDir    = $request->order[0]['dir'];
+                    $columns     = ['id', 'name']; // Map to your DB columns (skip index/edit/delete)
+                    if (isset($columns[$orderColumn])) {
+                        $query->orderBy($columns[$orderColumn], $orderDir);
+                    }
+                }
+
+                // Pagination
+                $start  = $request->get('start', 0);
+                $length = $request->get('length', 10);
+                $query->offset($start)->limit($length);
+
+                $safetySecurity = $query->select(['id', 'name', 'home_stay_id'])->get();
+
+                // Add DT_RowIndex and action columns (as in your original)
+                $data = $safetySecurity->map(function ($row, $index) use ($start) {
+                    $row->DT_RowIndex = $start + $index + 1;
+                    $row->edit        = '<button type="button" class="btn btn-secondary btn-sm edit_btn" data-homestay-id="' . $row->home_stay_id . '" data-safety-security-id="' . $row->id . '" data-toggle="modal" data-target="#editModal"><i class="fas fa-pen-fancy"></i></button>';
+                    $row->delete      = '<button type="button" class="btn btn-danger btn-sm delete-btn" data-homestay-id="' . $row->home_stay_id . '" data-safety-security-id="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                    return $row;
+                });
+
+                return response()->json([
+                    'recordsTotal'    => $totalRecords,
+                    'recordsFiltered' => $filteredRecords,
+                    'data'            => $data,
+                ]);
+
+            } catch (\Exception $e) {
+                Log::error('DataTables error: ' . $e->getMessage());
+                return response()->json(['error' => 'Server error occurred'], 500);
+            }
+        }
+        return view('pages.logged_seller.homestays.safety-security.index');
+    }
+
+    // get specific common space data for edit
+    public function getEditSafetySecurity(Request $request, string $id, string $safety_security_id)
+    {
+        // Log::info('request: ', ['home_stay_id' => $id, 'safety_security_id' => $safety_security_id]);
+        try {
+            if ($request->ajax()) {
+                $user = Auth::user();
+                if (! $user) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+
+                // Validate homestay
+                $homestay = HomeStay::where('id', $id)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+                if (! $homestay) {
+                    Log::info("error", ['error' => 'Homestay not found or you do not have access']);
+                    return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+                }
+                // Log::info('homestay', ['homestay' => $homestay]);
+
+                // Fetch safety_security
+                $safety_security = SafetySecurity::where('id', $safety_security_id)
+                    ->where('home_stay_id', $id)
+                    ->with('homeStay')
+                    ->select(['id', 'home_stay_id', 'name'])
+                    ->first();
+
+                if (! $safety_security) {
+                    Log::info("error", ['error' => 'Safety & Security not found']);
+                    return response()->json(['error' => 'Safety & Security not found'], 404);
+                }
+
+                // Log::info('Fetched safety_security', ['home_stay_id' => $id, 'safety_security_id' => $safety_security_id, "safety_security" => $safety_security]);
+
+                return response()->json([
+                    'success' => true,
+                    'data'    => $safety_security,
+                ], 200);
+            }
+
+            // Non-AJAX: Redirect to edit form (optional)
+            return redirect()->route('homestays.commonSpaceses', ['id' => $id, 'safety_security_id' => $safety_security_id]);
+        } catch (\Exception $e) {
+            Log::error('Get Edit Benefit error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    // Add putEditSafetySecurity and Safety & Security from previous responses
+    public function putEditSafetySecurity(Request $request, string $id, string $safety_security_id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+                return redirect()->route('login')->with('error', 'Please log in to edit benefits.');
+            }
+
+            $homestay = HomeStay::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (! $homestay) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+                }
+                return redirect()->back()->with('error', 'Homestay not found or you do not have access.');
+            }
+
+            $safety_security = SafetySecurity::where('id', $safety_security_id)
+                ->where('home_stay_id', $id)
+                ->first();
+
+            if (! $safety_security) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'Safety & Security not found'], 404);
+                }
+                return redirect()->back()->with('error', 'Safety & Security not found.');
+            }
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+
+            $safety_security->update($validated);
+
+            if ($request->ajax()) {
+                return response()->json(['success' => 'Safety & Security updated successfully'], 200);
+            }
+
+            return redirect()->back()->with('success', 'Safety & Security updated successfully.');
+        } catch (\Exception $e) {
+            Log::error('Edit Safety & Security error: ' . $e->getMessage());
+            if ($request->ajax()) {
+                return response()->json(['error' => 'Server error occurred'], 500);
+            }
+            return redirect()->back()->with('error', 'An error occurred while updating the Safety & Security.');
+        }
+    }
+
+    /**
+     * add a new Safety & Security
+     */
+    public function getAddNewSafetySecurity(Request $request, string $id)
+    {
+        return view('pages.logged_seller.homestays.safety-security.create', compact('id'));
+    }
+
+    /**
+     * store new Safety & Security
+     */
+    public function postAddNewSafetySecurity(Request $request, string $id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            $data = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+            SafetySecurity::create([
+                'name'         => $data['name'],
+                'home_stay_id' => $id,
+            ]);
+            Alert::success('Success', 'Safety & Security added successfully.');
+            return redirect()->route('homestays.safetySecurities', $id);
+        } catch (\Throwable $th) {
+            Log::error('DataTables error: ' . $th->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    // delete a Safety & Security
+    public function deleteSafetySecurity(Request $request, string $id, string $safety_security_id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            $homestay = HomeStay::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (! $homestay) {
+                return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+            }
+
+            $safetySecurity = SafetySecurity::where('id', $safety_security_id)
+                ->where('home_stay_id', $id)
+                ->first();
+
+            if (! $safetySecurity) {
+                return response()->json(['error' => 'Safety & Security not found'], 404);
+            }
+
+            $safetySecurity->delete();
+
+            return response()->json(['success' => 'Safety & Security deleted successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error('Delete Safety & Security error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    /**
+     * start beddings functions
+     */
+    // bedding list page
+    public function beddings(Request $request, string $id)
+    {
+        // Log::info("calling");
+        if ($request->ajax()) {
+            // Log::info("calling inside ajax");
+            try {
+                $user = Auth::user();
+                if (! $user) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+
+                $query = Bedding::where('home_stay_id', $id)
+                    ->whereHas('homeStay', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    });
+                // Log::info("query data: ", ['query' => $query]);
+
+                // Total records without filtering
+                $totalRecords = $query->count();
+
+                // Apply search (if any)
+                if ($request->has('search') && $request->search['value']) {
+                    $searchValue = $request->search['value'];
+                    $query->where('name', 'like', "%{$searchValue}%");
+                }
+
+                $filteredRecords = $query->count();
+
+                // Apply ordering
+                if ($request->has('order')) {
+                    $orderColumn = $request->order[0]['column']; // Index of column
+                    $orderDir    = $request->order[0]['dir'];
+                    $columns     = ['id', 'name']; // Map to your DB columns (skip index/edit/delete)
+                    if (isset($columns[$orderColumn])) {
+                        $query->orderBy($columns[$orderColumn], $orderDir);
+                    }
+                }
+
+                // Pagination
+                $start  = $request->get('start', 0);
+                $length = $request->get('length', 10);
+                $query->offset($start)->limit($length);
+
+                $beddings = $query->select(['id', 'name', 'home_stay_id'])->get();
+
+                // Add DT_RowIndex and action columns (as in your original)
+                $data = $beddings->map(function ($row, $index) use ($start) {
+                    $row->DT_RowIndex = $start + $index + 1;
+                    $row->edit        = '<button type="button" class="btn btn-secondary btn-sm edit_btn" data-homestay-id="' . $row->home_stay_id . '" data-bedding-id="' . $row->id . '" data-toggle="modal" data-target="#editModal"><i class="fas fa-pen-fancy"></i></button>';
+                    $row->delete      = '<button type="button" class="btn btn-danger btn-sm delete-btn" data-homestay-id="' . $row->home_stay_id . '" data-bedding-id="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                    return $row;
+                });
+
+                return response()->json([
+                    'recordsTotal'    => $totalRecords,
+                    'recordsFiltered' => $filteredRecords,
+                    'data'            => $data,
+                ]);
+
+            } catch (\Exception $e) {
+                Log::error('DataTables error: ' . $e->getMessage());
+                return response()->json(['error' => 'Server error occurred'], 500);
+            }
+        }
+        return view('pages.logged_seller.homestays.bedding.index');
+    }
+
+    // get specific bedding data for edit
+    public function getEditBedding(Request $request, string $id, string $bedding_id)
+    {
+        // Log::info('request: ', ['home_stay_id' => $id, 'bedding_id' => $bedding_id]);
+        try {
+            if ($request->ajax()) {
+                $user = Auth::user();
+                if (! $user) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+
+                // Validate homestay
+                $homestay = HomeStay::where('id', $id)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+                if (! $homestay) {
+                    Log::info("error", ['error' => 'Homestay not found or you do not have access']);
+                    return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+                }
+                // Log::info('homestay', ['homestay' => $homestay]);
+
+                // Fetch bedding
+                $bedding = Bedding::where('id', $bedding_id)
+                    ->where('home_stay_id', $id)
+                    ->with('homeStay')
+                    ->select(['id', 'home_stay_id', 'name'])
+                    ->first();
+
+                if (! $bedding) {
+                    Log::info("error", ['error' => 'Safety & Security not found']);
+                    return response()->json(['error' => 'Safety & Security not found'], 404);
+                }
+
+                // Log::info('Fetched bedding', ['home_stay_id' => $id, 'bedding_id' => $bedding_id, "bedding" => $bedding]);
+
+                return response()->json([
+                    'success' => true,
+                    'data'    => $bedding,
+                ], 200);
+            }
+
+            // Non-AJAX: Redirect to edit form (optional)
+            return redirect()->route('homestays.beddings', ['id' => $id, 'bedding_id' => $bedding_id]);
+        } catch (\Exception $e) {
+            Log::error('Get Edit Benefit error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    // Add putEditBedding and bedding from previous responses
+    public function putEditBedding(Request $request, string $id, string $bedding_id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+                return redirect()->route('login')->with('error', 'Please log in to edit benefits.');
+            }
+
+            $homestay = HomeStay::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (! $homestay) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+                }
+                return redirect()->back()->with('error', 'Homestay not found or you do not have access.');
+            }
+
+            $bedding = Bedding::where('id', $bedding_id)
+                ->where('home_stay_id', $id)
+                ->first();
+
+            if (! $bedding) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'Bedding not found'], 404);
+                }
+                return redirect()->back()->with('error', 'Bedding not found.');
+            }
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+
+            $bedding->update($validated);
+
+            if ($request->ajax()) {
+                return response()->json(['success' => 'Bedding updated successfully'], 200);
+            }
+
+            return redirect()->back()->with('success', 'Bedding updated successfully.');
+        } catch (\Exception $e) {
+            Log::error('Edit Bedding error: ' . $e->getMessage());
+            if ($request->ajax()) {
+                return response()->json(['error' => 'Server error occurred'], 500);
+            }
+            return redirect()->back()->with('error', 'An error occurred while updating the Bedding.');
+        }
+    }
+
+    /**
+     * add a new bedding
+     */
+    public function getAddNewBedding(Request $request, string $id)
+    {
+        return view('pages.logged_seller.homestays.bedding.create', compact('id'));
+    }
+
+    /**
+     * store new bedding
+     */
+    public function postAddNewBedding(Request $request, string $id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            $data = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+            Bedding::create([
+                'name'         => $data['name'],
+                'home_stay_id' => $id,
+            ]);
+            Alert::success('Success', 'Bedding added successfully.');
+            return redirect()->route('homestays.beddings', $id);
+        } catch (\Throwable $th) {
+            Log::error('DataTables error: ' . $th->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    // delete a bedding
+    public function deleteBedding(Request $request, string $id, string $bedding_id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            $homestay = HomeStay::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (! $homestay) {
+                return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+            }
+
+            $bedding = Bedding::where('id', $bedding_id)
+                ->where('home_stay_id', $id)
+                ->first();
+
+            if (! $bedding) {
+                return response()->json(['error' => 'Bedding not found'], 404);
+            }
+
+            $bedding->delete();
+
+            return response()->json(['success' => 'Bedding deleted successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error('Delete Bedding error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    /**
+     * start images functions
+     */
+    // images list page
+    public function images(Request $request, string $id)
+    {
+        // Log::info("calling");
+        if ($request->ajax()) {
+            // Log::info("calling inside ajax");
+            try {
+                $user = Auth::user();
+                if (! $user) {
+                    return response()->json(['error' => 'User not authenticated'], 401);
+                }
+
+                $query = HomeStayImages::where('home_stay_id', $id)
+                    ->whereHas('homeStay', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    });
+                // Log::info("query data: ", ['query' => $query]);
+
+                // Total records without filtering
+                $totalRecords = $query->count();
+
+                $filteredRecords = $query->count();
+
+                // Apply ordering
+                if ($request->has('order')) {
+                    $orderColumn = $request->order[0]['column']; // Index of column
+                    $orderDir    = $request->order[0]['dir'];
+                    $columns     = ['id', 'image_path']; // Map to your DB columns (skip index/edit/delete)
+                    if (isset($columns[$orderColumn])) {
+                        $query->orderBy("id", "DESC");
+                    }
+                }
+
+                // Pagination
+                $start  = $request->get('start', 0);
+                $length = $request->get('length', 10);
+                $query->offset($start)->limit($length);
+
+                $images = $query->select(['id', 'image_path', 'home_stay_id'])->get();
+
+                // Add DT_RowIndex and action columns (as in your original)
+                $data = $images->map(function ($row, $index) use ($start) {
+                    $row->DT_RowIndex = $start + $index + 1;
+                    $row->image       = '<img src="' . env('APP_URL') . "/storage/" . $row->image_path . '" alt="Image" style="width: 100px; height: 100px;" />';
+                    $row->delete      = '<button type="button" class="btn btn-danger btn-sm delete-btn" data-homestay-id="' . $row->home_stay_id . '" data-image-id="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                    return $row;
+                });
+
+                return response()->json([
+                    'recordsTotal'    => $totalRecords,
+                    'recordsFiltered' => $filteredRecords,
+                    'data'            => $data,
+                ]);
+
+            } catch (\Exception $e) {
+                Log::error('DataTables error: ' . $e->getMessage());
+                return response()->json(['error' => 'Server error occurred'], 500);
+            }
+        }
+        return view('pages.logged_seller.homestays.image.index');
+    }
+
+    /**
+     * add a new image
+     */
+    public function getAddNewImage(Request $request, string $id)
+    {
+        return view('pages.logged_seller.homestays.image.create', compact('id'));
+    }
+
+    /**
+     * store new image
+     */
+    public function postAddNewImage(Request $request, string $id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            $data = $request->validate([
+                'image' => 'required|image|max:800',
+            ]);
+            $roomImagePath = $request->file('image')->store('homestays/images', 'public');
+            HomeStayImages::create([
+                'image_path'   => $roomImagePath,
+                'home_stay_id' => $id,
+            ]);
+            Alert::success('Success', 'Image added successfully.');
+            return redirect()->route('homestays.images', $id);
+        } catch (\Throwable $th) {
+            Log::error('DataTables error: ' . $th->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    // delete a image
+    public function deleteImage(Request $request, string $id, string $image_id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            $homestay = HomeStay::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (! $homestay) {
+                return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+            }
+
+            $image = HomeStayImages::where('id', $image_id)
+                ->where('home_stay_id', $id)
+                ->first();
+
+            if (! $image) {
+                return response()->json(['error' => 'Image not found'], 404);
+            }
+
+            $image->delete();
+
+            return response()->json(['success' => 'Image deleted successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error('Delete Image error: ' . $e->getMessage());
             return response()->json(['error' => 'Server error occurred'], 500);
         }
     }
