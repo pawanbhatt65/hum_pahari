@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -386,9 +385,9 @@ class HomeStayeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Log::info("Log before validation");
+        // Log::info("Log before validation");
         // Validate request
-        $rules = [
+        $rules = $request->validate([
             'name'               => 'required|string|max:80|regex:/^[a-zA-Z0-9\s\-]+$/',
             'roomType'           => 'required|in:Standard,Deluxe',
             'bedroomType'        => 'required|in:Single Bedroom,Double Bedroom,Both',
@@ -416,31 +415,18 @@ class HomeStayeController extends Controller
             'up_to_1_day_prior'  => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
             'check_in_day'       => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
             'no_show'            => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
-        ];
-
-        $messages = [
+        ], [
             'check_in_time.date_format' => 'Check In Time must be Y-m-d format',
             'check_out_time.after'      => 'Check Out Time should be after Check In Time',
             'location.regex'            => 'Location must be in the format: latitude, longitude (e.g., 12.345678, 76.543210).',
             'name.regex'                => 'Name can only contain letters, digits, spaces, and hyphens.',
             'note.regex'                => 'Note can only contain letters, digits, spaces, and special characters (-, $, &, @, #, +, .).',
             'address.regex'             => 'Address can only contain letters, digits, spaces, commas, and hyphens.',
-        ];
+        ]);
 
-        $validator = Validator::make($request->all(), $rules, $messages);
+        // Log::info("data after validation");
 
-        // Step 2: Check for validation failure
-        // if ($validator->fails()) {
-        //     // Step 3: Loop through errors and show an alert for each
-        //     // foreach ($validator->errors()->all() as $error) {
-        //     //     Alert::error('Error', $error);
-        //     // }
-        //     return back()->withInput();
-        // }
-
-        Log::info("data after validation");
-
-        $homeStay = HomeStayImages::find($id);
+        $homeStay = HomeStay::findOrFail($id);
 
         if (! $homeStay) {
             Alert::error('Error', 'Home stay image not found.');
@@ -456,7 +442,7 @@ class HomeStayeController extends Controller
             "number_of_double_rooms" => $rules["num_double_room"],
             "food_allowed"           => $rules["food_allowed"],
             "note"                   => $rules["note"],
-            "state_id "              => $rules["state_id"],
+            "state_id"              => $rules["state_id"],
             "district_id"            => $rules["district_id"],
             "city"                   => $rules["city"],
             "address"                => $rules["address"],
@@ -476,6 +462,8 @@ class HomeStayeController extends Controller
             "same_day_cancellation"  => $rules["check_in_day"],
             "no_show"                => $rules["no_show"],
         ]);
+
+        $homeStay->refresh();
 
         Alert::success('Success', 'Home stay updated successfully.', 3500);
         return redirect()->route('homestays.index');
