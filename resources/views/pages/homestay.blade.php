@@ -57,85 +57,51 @@
     <section class="tourist-places">
         <div class="container-lg container-fluid">
             <div class="row g-3" id="homeStaysImagesRow">
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
+                @forelse ($homestay as $index => $item)
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card card-more">
+                            <div class="images">
+                                <div class="single-img">
+                                    <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
+                                        class="card-img-top" alt="...">
+                                </div>
+                                <div class="more-imgs">
+                                    <div class="single-img-box">
+                                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                            alt="" class="img-fluid">
+                                    </div>
+                                    <div class="single-img-box">
+                                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                            alt="" class="img-fluid">
+                                    </div>
+                                    <div class="single-img-box">
+                                        <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                            alt="" class="img-fluid">
+                                    </div>
+                                    <div class="single-img-box">
+                                        <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                            alt="" class="img-fluid">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Pine View Studio Cottage</h5>
+                                <p class="card-text">
+                                    Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
+                                </p>
+                                <p class="card-text">
+                                    <strong>₹ 1671</strong> /night
+                                </p>
+                                <a href="{{ route('homeStayDetail', 3) }}" class="btn btn-primary btn-sm mt-2">
+                                    View Deal
+                                </a>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="{{route('homeStayDetail')}}" class="btn btn-primary btn-sm mt-2">
-                                View Deal
-                            </a>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
-                            </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
+                @empty
+                @endforelse
+
+                {{-- <div class="col-12 col-sm-6 col-xl-3">
                     <div class="card card-more">
                         <div class="images">
                             <div class="single-img">
@@ -172,197 +138,7 @@
                             <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
-                            </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
-                            </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
-                            </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
-                            </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
-                            </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
-                        </div>
-                    </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>

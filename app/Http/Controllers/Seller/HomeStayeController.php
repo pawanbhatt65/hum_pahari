@@ -100,8 +100,8 @@ class HomeStayeController extends Controller
                 'pin'                => 'required|digits:6',
                 'num_adult'          => 'required|integer|min:1|max:12',
                 'num_children'       => 'required|integer|min:1|max:12',
-                'check_in_time'      => 'required|date_format:Y-m-d',
-                'check_out_time'     => 'required|date_format:Y-m-d|after:check_in_time',
+                'check_in_time'      => 'required|date_format:Y-m-d H:i',
+                'check_out_time'     => 'required|date_format:Y-m-d H:i|after:check_in_time',
                 'area'               => 'required|numeric|min:0',
                 'guest_access'       => 'required|in:yes,no',
                 'mountain_view'      => 'required|in:yes,no',
@@ -120,6 +120,8 @@ class HomeStayeController extends Controller
                 'check_in_day'       => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
                 'no_show'            => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
             ], [
+                'check_in_time.date_format' => 'Check In Time must be Y-m-d H:i format',
+                'check_out_time.after'      => 'Check Out Time should be after Check In Time',
                 'room_image.max'          => 'Room image must be less than 2MB.',
                 'images.*.max'            => 'Each image must be less than 800KB.',
                 'images.min'              => 'Please upload at least one image.',
@@ -403,8 +405,8 @@ class HomeStayeController extends Controller
             'pin'                => 'required|digits:6',
             'num_adult'          => 'required|integer|min:1|max:12',
             'num_children'       => 'required|integer|min:1|max:12',
-            'check_in_time'      => 'required|date_format:Y-m-d',
-            'check_out_time'     => 'required|date_format:Y-m-d|after:check_in_time',
+            'check_in_time'      => 'required|date_format:Y-m-d H:i',
+            'check_out_time'     => 'required|date_format:Y-m-d H:i|after:check_in_time',
             'area'               => 'required|numeric|min:0',
             'guest_access'       => 'required|in:yes,no',
             'mountain_view'      => 'required|in:yes,no',
@@ -416,7 +418,7 @@ class HomeStayeController extends Controller
             'check_in_day'       => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
             'no_show'            => 'required|in:No Refund,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,Full Refund',
         ], [
-            'check_in_time.date_format' => 'Check In Time must be Y-m-d format',
+            'check_in_time.date_format' => 'Check In Time must be Y-m-d H:i format',
             'check_out_time.after'      => 'Check Out Time should be after Check In Time',
             'location.regex'            => 'Location must be in the format: latitude, longitude (e.g., 12.345678, 76.543210).',
             'name.regex'                => 'Name can only contain letters, digits, spaces, and hyphens.',
@@ -442,7 +444,7 @@ class HomeStayeController extends Controller
             "number_of_double_rooms" => $rules["num_double_room"],
             "food_allowed"           => $rules["food_allowed"],
             "note"                   => $rules["note"],
-            "state_id"              => $rules["state_id"],
+            "state_id"               => $rules["state_id"],
             "district_id"            => $rules["district_id"],
             "city"                   => $rules["city"],
             "address"                => $rules["address"],
@@ -477,7 +479,8 @@ class HomeStayeController extends Controller
         try {
             $homestay = HomeStay::where('user_id', Auth::user()->id)->findOrFail($id);
             $homestay->delete();
-            return response()->json(['success' => true, 'message' => 'Homestay deleted']);
+            // Alert::success('Success', 'Homestay deleted successfully.', 4000);
+            return response()->json(['success' => true, 'message' => 'Homestay deleted successfully.'], 200);
         } catch (\Exception $e) {
             Log::error('Delete error: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to delete homestay'], 500);
@@ -1589,6 +1592,84 @@ class HomeStayeController extends Controller
             return response()->json(['success' => 'Image deleted successfully'], 200);
         } catch (\Exception $e) {
             Log::error('Delete Image error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error occurred'], 500);
+        }
+    }
+
+    // update room image
+    public function putRoomImage(Request $request, string $id)
+    {
+        $user = Auth::user();
+        if (! $user) {
+            Alert::error('Error', 'Please log in to edit room image.');
+            return redirect()->route('login')->with('error', 'Please log in to edit room image.');
+        }
+
+        $homestay = HomeStay::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (! $homestay) {
+            Alert::error('Error', 'Homestay not found or you do not have access.');
+            return redirect()->back()->with('error', 'Homestay not found or you do not have access.');
+        }
+
+        if (! $request->hasFile('room_image')) {
+            Alert::error('Error', 'No image file provided.');
+            return redirect()->back()->with('error', 'No image file provided.');
+        }
+        // Store room image
+        $roomImagePath = $request->file('room_image')->store('homestays/rooms', 'public');
+
+        $homestay->room_image = $roomImagePath;
+        $homestay->save();
+
+        $listing = HomeStay::with([
+            'state'            => fn($query)            => $query->select('id', 'name'),
+            'district'         => fn($query)         => $query->select('id', 'name'),
+            'beddings'         => fn($query)         => $query->select('id', 'home_stay_id', 'name'),
+            'benefits'         => fn($query)         => $query->select('id', 'home_stay_id', 'name'),
+            'commonSpaces'     => fn($query)     => $query->select('id', 'home_stay_id', 'name'),
+            'images'           => fn($query)           => $query->select('id', 'home_stay_id', 'image_path'),
+            'safetySecurities' => fn($query) => $query->select('id', 'home_stay_id', 'name'),
+        ])
+            ->where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        return view('pages.logged_seller.homestays.edit', compact('listing'));
+    }
+
+    /**
+     * home stay status update
+     */
+    public function updateApproval(Request $request, string $id)
+    {
+        try {
+            $user = Auth::user();
+            if (! $user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+            $homestay = HomeStay::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+            if (! $homestay) {
+                return response()->json(['error' => 'Homestay not found or you do not have access'], 404);
+            }
+            $data = $request->validate([
+                'is_approved' => 'required',
+            ]);
+            // Log::info('Updating Homestay status', ['home_stay_id' => $id, 'new_status' => $data['is_approved']]);
+            if ($data['is_approved']==="true" || $data['is_approved']===true) {
+                $data['is_approved'] = 1;
+            } else {
+                $data['is_approved'] = 0;
+            }
+            $homestay->is_approved = $data['is_approved'];
+            $homestay->save();
+            return response()->json(['success' => 'Homestay status updated successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error('Update Homestay Status error: ' . $e->getMessage());
             return response()->json(['error' => 'Server error occurred'], 500);
         }
     }

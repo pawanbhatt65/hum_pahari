@@ -48,5 +48,8 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth', 'verified', 'role:s
     Route::post('/homestays/{id}/image/add', [HomeStayeController::class, 'postAddNewImage'])->name('homestays.postAddNewImage');
     Route::delete('/homestays/{id}/image/delete/{image_id}', [HomeStayeController::class, 'deleteImage'])->name('homestays.deleteImage');
 
+    // homestay: rooms image
+    Route::put('/homestays/{id}/room-image', [HomeStayeController::class, 'putRoomImage'])->name('homestays.roomImage');
+
     Route::resource('/homestays', HomeStayeController::class);
 });

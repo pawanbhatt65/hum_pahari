@@ -2,12 +2,11 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/homestays', [HomeController::class, 'homestays'])->name('homestays');
-Route::get('/homestays/detail', [HomeController::class, 'homeStayDetail'])->name('homeStayDetail');
+Route::get('/homestays/detail/{id}', [HomeController::class, 'homeStayDetail'])->name('homeStayDetail');
 Route::get('/products', [HomeController::class, 'products'])->name('products');
 Route::get('/products/details', [HomeController::class, 'productDetail'])->name('productDetail');
 Route::get('/blogs', [HomeController::class, 'blogs'])->name('blogs');

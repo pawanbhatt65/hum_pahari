@@ -7,6 +7,9 @@
 @section('styles')
     <style>
         /* top-image-slider-css-start */
+        .top-box-image {
+            max-width: 400px;
+        }
         .product-image-thumbs {
             position: relative;
             scroll-behavior: smooth;
@@ -140,7 +143,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-sm-6">
-                            <div class="col-12">
+                            <div class="col-12 top-box-image">
                                 @if ($listing->images && $listing->images->isNotEmpty())
                                     <img src="{{ asset('storage/' . $listing->images[0]->image_path) }}"
                                         class="product-image" alt="Homestay Image">

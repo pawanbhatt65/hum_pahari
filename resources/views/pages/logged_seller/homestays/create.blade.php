@@ -540,7 +540,7 @@
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="one_night_price">Price <small>Between Check In to Check Out
-                                                    Time</small></label>
+                                                    Time, with Tax</small></label>
                                             <input type="text" name="one_night_price"
                                                 value="{{ old('one_night_price') }}" class="form-control"
                                                 id="one_night_price"
@@ -576,14 +576,14 @@
 
             // Date picker for check-in and check-out (format Y-m-d to match backend)
             $('#checkInTime').datetimepicker({
-                format: 'YYYY-MM-DD',
+                format: 'YYYY-MM-DD HH:mm',
                 useCurrent: false,
                 minDate: moment() // prevent past date selection
                 // minDate: moment().add(1, 'days') // uncomment to enforce at least one day in advance
             });
 
             $('#checkOutTime').datetimepicker({
-                format: 'YYYY-MM-DD',
+                format: 'YYYY-MM-DD HH:mm',
                 useCurrent: false
             });
 

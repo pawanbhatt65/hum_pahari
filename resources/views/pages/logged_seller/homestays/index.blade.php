@@ -277,7 +277,13 @@
                         searchable: false
                     }
                 ]
-            }).buttons().container().appendTo('#homestays_list_wrapper .col-md-6:eq(0)');
+            })
+            // .buttons().container().appendTo('#homestays_list_wrapper .col-md-6:eq(0)');
+            // Append DataTable buttons
+            tables.buttons().container().appendTo('#homestays_list_wrapper .col-md-6:eq(0)');
+
+            // Debug: Log the DataTable instance to ensure it's valid
+            console.log('DataTable instance after init:', tables);
 
             // Show homestay details: when show button clicked
             window.showHomeStayFunction = function(button) {
@@ -297,7 +303,7 @@
                         }
 
                         const user_data = data.data_row;
-                        console.log('Fetched data:', user_data);
+                        // console.log('Fetched data:', user_data);
 
                         // Update modal content (adjust selectors and fields as per your modal structure)
                         $("#modal-lg #homestayName").text(user_data.name || 'N/A');
@@ -320,6 +326,7 @@
             $('#homestays_list').on('click', '.approve-checkbox', function() {
                 const id = $(this).data('id');
                 const isApproved = $(this).is(':checked');
+                // console.log('Toggling approval for ID:', id, 'to', isApproved);
                 $.ajax({
                     url: '{{ route('homestays.approve', ':id') }}'.replace(':id', id),
                     type: 'PUT',
@@ -327,7 +334,7 @@
                         is_approved: isApproved
                     },
                     success: function(response) {
-                        alert(response.message);
+                        alert(response.success);
                     },
                     error: function(xhr) {
                         console.error('Approval error:', xhr.responseText);
@@ -341,12 +348,27 @@
             $('#homestays_list').on('click', '.delete-btn', function() {
                 if (confirm('Are you sure you want to delete this homestay?')) {
                     const id = $(this).data('id');
+                    // Debug: Log the table instance before delete
+                    // console.log('Table instance before delete:', tables);
+
                     $.ajax({
                         url: '{{ route('homestays.destroy', ':id') }}'.replace(':id', id),
                         type: 'DELETE',
                         success: function(response) {
-                            tables.ajax.reload();
-                            alert(response.message);
+                            // console.log('Delete response:', response); // Debug: Log delete response
+
+                            // Check if tables is a valid DataTable instance
+                            if (tables && typeof tables.ajax === 'object' && typeof tables.ajax.reload === 'function') {
+                                tables.ajax.reload(function(json) {
+                                    // console.log('Reload success response:', json); // Debug: Log reload response
+                                    alert(response.message || 'Homestay deleted successfully!');
+                                }, false); // false preserves paging
+                            } else {
+                                console.error('Invalid DataTable instance:', tables);
+                                alert('Error: Unable to reload table. Please refresh the page.');
+                                // Optional: Attempt to reinitialize or redirect
+                                window.location.reload(); // Fallback to page refresh
+                            }
                         },
                         error: function(xhr) {
                             console.error('Delete error:', xhr.responseText);

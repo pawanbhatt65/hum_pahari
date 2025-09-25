@@ -14,12 +14,12 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{route('homestays')}}">HomeStay</a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="{{route('products')}}">Products</a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="{{route('blogs')}}">Blogs</a>
-                </li>
+                </li> --}}
             </ul>
             <ul
                 class="ms-lg-auto login-register d-block d-lg-flex justify-content-start justify-content-lg-end align-items-start align-items-lg-end gap-3 navbar-mobile-menu">

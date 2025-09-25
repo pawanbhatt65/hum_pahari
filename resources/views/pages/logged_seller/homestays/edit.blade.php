@@ -58,7 +58,7 @@
                             @if ($errors->any())
                                 @foreach ($errors->all() as $error)
                                     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                                        {{$error}}
+                                        {{ $error }}
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -491,7 +491,7 @@
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="one_night_price">Price <small>Between Check In to Check Out
-                                                    Time</small></label>
+                                                    Time, with Tax</small></label>
                                             <input type="text" name="one_night_price" value="{{ $listing->price }}"
                                                 class="form-control" id="one_night_price"
                                                 placeholder="Enter Price (Between Check In to Check Out Time)">
@@ -512,8 +512,10 @@
                             <div class="card-header">
                                 <h3 class="card-title">Update <small>Image</small></h3>
                             </div>
-                            <form action="" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('homestays.roomImage', $listing->id) }}" method="post"
+                                enctype="multipart/form-data">
                                 @csrf
+                                @method('PUT')
                                 <div class="card-body row">
                                     <div class="form-group col-12 col-lg-6">
                                         <label for="room_image">Room Image</label>
@@ -634,14 +636,14 @@
 
             // Date picker for check-in and check-out (format Y-m-d to match backend)
             $('#checkInTime').datetimepicker({
-                format: 'YYYY-MM-DD',
+                format: 'YYYY-MM-DD HH:mm',
                 useCurrent: false,
                 minDate: moment() // prevent past date selection
                 // minDate: moment().add(1, 'days') // uncomment to enforce at least one day in advance
             });
 
             $('#checkOutTime').datetimepicker({
-                format: 'YYYY-MM-DD',
+                format: 'YYYY-MM-DD HH:mm',
                 useCurrent: false
             });
 

@@ -5,6 +5,67 @@
 @section('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/homestay.css') }}">
+
+    <style>
+        /* map-section-css-start */
+        .map {
+            height: 300px;
+            width: 100%;
+        }
+
+        .map-box-large {
+            display: block;
+            position: relative;
+        }
+
+        .map-link {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .large-map-link {
+            background-color: #fff;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            margin-top: 8px;
+            margin-left: 8px;
+            padding: 10px;
+        }
+
+        .map-lan-log {
+            color: #222;
+            font-weight: 800;
+        }
+
+        .large-map-link p {
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        .large-map-link__link {
+            color: #061a3a;
+            transition: all 0.7s ease-in-out;
+        }
+
+        /* map-section-css-end */
+
+        /* carouse-arrow-start */
+        .carouse-arrow {
+            color: #fff;
+            top: 50%;
+            bottom: unset;
+            transform: translateY(-50%);
+            width: 40px;
+            background-color: rgb(255, 87, 34);
+            height: 40px;
+        }
+
+        /* carouse-arrow-end */
+    </style>
+
+    {{-- show google map --}}
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAt5DYIAisGK-fooNcWeIlp3snMUkqhhFA&libraries=places"></script>
 @endsection
 
 @section('content')
@@ -12,112 +73,122 @@
         <div class="container-fluid container-lg">
             <div class="row">
                 {{-- search-box-start --}}
-                <div class="col-12">
-                    <div class="search-box">
-                        <form action="" method="post">
-                            @csrf
-                            <div class="form-group-container position-relative form-group-location">
-                                <div class="icon">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                </div>
-                                <input type="text" name="location" id="placeLocation" class="form-control">
-                            </div>
-                            <div class="form-group-container position-relative form-group-check-in">
-                                <div class="icon">
-                                    <i class="fa-regular fa-calendar-days"></i>
-                                </div>
-                                <input type="text" name="check_in" id="check_in" class="form-control">
-                            </div>
-                            <div class="form-group-container position-relative form-group-check-out">
-                                <div class="icon">
-                                    <i class="fa-regular fa-calendar-days"></i>
-                                </div>
-                                <input type="text" name="check_out" id="check_out" class="form-control">
-                            </div>
-                            <div class="form-group-container position-relative form-group-search">
-                                <button type="submit">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                {{-- @include('components.homestay_search') --}}
                 {{-- search-box-end --}}
                 {{-- homestay-images-start --}}
                 <div class="col-12 homestay-img-col">
                     <div class="row homestay-inner-row">
                         <div class="col-6 homestay-inner-left">
                             <div class="img">
-                                <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                                    alt="" class="img-fluid">
+                                <img src="{{ asset('storage/' . $homestay->images[0]?->image_path) }}"
+                                    alt="{{ $homestay->name }}" class="img-fluid">
                             </div>
                         </div>
                         <div class="col-6 homestay-inner-right">
                             <div class="row homestay-inner-inner-row">
                                 <div class="col-6">
                                     <div class="img">
-                                        <img src="https://static-ethics.sgp1.cdn.digitaloceanspaces.com/utdb/hs/AddPropertyPhotosdescription/2025217_154758_1_Screenshot_20250217_154635.png"
-                                            alt="" class="img-fluid">
+                                        <img src="{{ asset('storage/' . $homestay->images[1]?->image_path) }}"
+                                            alt="{{ $homestay->name }}" class="img-fluid">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="img">
-                                        <img src="https://static-ethics.sgp1.cdn.digitaloceanspaces.com/utdb/hs/AddPropertyPhotosdescription/2025217_154832_1_20210106.jpg"
-                                            alt="" class="img-fluid">
+                                        <img src="{{ asset('storage/' . $homestay->images[2]?->image_path) }}"
+                                            alt="{{ $homestay->name }}" class="img-fluid">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="img">
-                                        <img src="https://static-ethics.sgp1.cdn.digitaloceanspaces.com/utdb/hs/AddPropertyPhotosdescription/2025217_154838_1_20210122.jpg"
-                                            alt="" class="img-fluid">
+                                        <img src="{{ asset('storage/' . $homestay->images[3]?->image_path) }}"
+                                            alt="{{ $homestay->name }}" class="img-fluid">
                                     </div>
                                 </div>
                                 <div class="col-6 position-relative">
                                     <div class="img">
-                                        <img src="https://static-ethics.sgp1.cdn.digitaloceanspaces.com/utdb/hs/AddPropertyPhotosdescription/2025217_154919_1_20210103_(2).jpg"
-                                            alt="" class="img-fluid">
+                                        <img src="{{ asset('storage/' . $homestay->images[4]?->image_path) }}"
+                                            alt="{{ $homestay->name }}" class="img-fluid">
                                     </div>
-                                    <div class="backdrop view-all-backdrop position-absolute">
-                                        <i class="fa-solid fa-plus me-1"></i> View All
-                                    </div>
+                                    @if (count($homestay->images) > 4)
+                                        <div class="backdrop view-all-backdrop position-absolute" data-toggle="modal"
+                                            data-target="#modal-xl">
+                                            <i class="fa-solid fa-plus me-1"></i> View All
+                                        </div>
+                                        @include('components.homestay_image', [
+                                            'images' => $homestay->images,
+                                        ])
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 {{-- homestay-images-end --}}
-
                 {{-- homestay-basic-detail-start --}}
                 <div class="row mx-0">
                     <div class="col-xl-8 ps-lg-0 ps-md-0 ps-sm-0 col-lg-7 col-md-6 col-12 property_details_card">
                         <div class="property-name-type mx-sm-0 premium-room px-sm-3">
                             <div class="d-flex">
-                                <div class="property-name room_details">Alpine Homestay</div>
+                                <div class="property-name room_details">{{ $homestay->name }}</div>
                             </div>
-                            <div class="room-type verify_details">4 Deluxe Double Bedroom</div>
+                            <div class="room-type verify_details">
+                                {{-- 4 Deluxe Double Bedroom --}}
+                                @php
+                                    $rooms = [];
+
+                                    if ($homestay->number_of_single_rooms > 0) {
+                                        $rooms[] =
+                                            $homestay->number_of_single_rooms .
+                                            ' Single Bedroom' .
+                                            ($homestay->number_of_single_rooms > 1 ? 's' : '');
+                                    }
+
+                                    if ($homestay->number_of_double_rooms > 0) {
+                                        $rooms[] =
+                                            $homestay->number_of_double_rooms .
+                                            ' Double Bedroom' .
+                                            ($homestay->number_of_double_rooms > 1 ? 's' : '');
+                                    }
+
+                                    $numberOfRooms = implode(', ', $rooms);
+                                @endphp
+                                {{ $homestay->room_type }} Room, {{ $numberOfRooms }}
+                            </div>
                             <div class="address-mobile verify_details mt-0 d-flex py-1 mt-1">
                                 <div class="d-flex align-items-center">
                                     <i class="fa-solid fa-location-dot me-2"></i>
                                     <div>
-                                        Village Sunil<span>, </span><span>Auli Road, </span>Joshimath, 246443, Uttarakhand
+                                        {{ $homestay->address }}, {{ $homestay->city }},
+                                        {{ $homestay->district->name }}, {{ $homestay->pincode }},
+                                        {{ $homestay->state->name }}, India
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div
                                     class="col-xxl-3 col-xl-3 col-lg-4 col-6 d-flex justify-content-between border-right_check_in_out_time border_bottom_property_details ">
-                                    <div class=""><small> Check In</small><small class="text-color-blue"> 12:00
-                                            PM</small></div>
-                                    <div class="text-end"><small> Check out</small><small class="text-color-blue"> 11:00
-                                            AM</small></div>
+                                    <div class="">
+                                        <small> Check In</small>
+                                        <small class="text-color-blue">
+                                            {{ date('h:i A', strtotime($homestay->check_in_time)) }}
+                                        </small>
+                                    </div>
+                                    <div class="text-end">
+                                        <small> Check out</small>
+                                        <small class="text-color-blue">
+                                            {{ date('h:i A', strtotime($homestay->check_out_time)) }}
+                                        </small>
+                                    </div>
                                 </div>
                                 <div
                                     class="col-xxl-3 col-xl-3 col-lg-3 col-6 font-size-12 border-right-food_not text-color-blue border_bottom_property_details">
-                                    Food is allowed at an extra cost</div>
+                                    {{ $homestay->food_allowed === 'yes' ? 'Food is allowed at an extra cost' : 'No Food Allowed' }}
+                                </div>
                                 <div
                                     class="col-xxl-6 col-xl-6 col-lg-5 col-12 font-size-12 text-color-blue children_policy">
-                                    Child under the age of 12 stays free if sharing the bed with parents. Extra mattress fee
-                                    applies if required.</div>
+                                    {{ $homestay->note }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -125,17 +196,37 @@
                         <div class="premium-room py-3">
                             <div class="row mx-sm-0">
                                 <div class="col-6">
-                                    <div class="premium-room-title text-capitalize">Deluxe Double Bedroom </div>
+                                    <div class="premium-room-title text-capitalize">
+                                        {{ $homestay->room_type }}
+                                        {{ $homestay->bedroom_type === 'Both' ? 'Single & Double Bedroom' : $homestay->bedroom_type }}
+                                    </div>
                                     <div class=" guest_count room_count_guest">
                                         <div class="py-lg-1 py-md-1 py-sm-1 py-1 text-lg-start text-md-start  text-center">
-                                            4 x Adult, 2 x Children | 1 x Room</div>
+                                            @php
+                                                $persone = [];
+                                                if ($homestay->number_of_adults > 0) {
+                                                    $persone[] = $homestay->number_of_adults . ' x Adult';
+                                                }
+                                                if ($homestay->number_of_children > 0) {
+                                                    $persone[] = $homestay->number_of_children . ' x Children';
+                                                }
+                                                $numberOfPersons = implode(', ', $persone);
+                                            @endphp
+                                            {{ $numberOfPersons }} |
+                                            {{ $homestay->number_of_rooms > 1 ? $homestay->number_of_rooms . ' X Rooms' : $homestay->number_of_rooms . ' X Room' }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="text-end">
-                                        <div class="aftr-disc-price">₹4000/- </div>
-                                        <div class="taxes-fees">+₹0 Taxes &amp; Fees</div>
-                                        <div class="per-night">(Price for 1 Night)</div>
+                                        @php
+                                            $check_in_time = \Carbon\Carbon::parse($homestay->check_in_time);
+                                            $check_out_time = \Carbon\Carbon::parse($homestay->check_out_time);
+                                            $differenceInDays = floor($check_in_time->diffInDays($check_out_time));
+                                        @endphp
+                                        <div class="aftr-disc-price">₹{{ $homestay->price }}/- </div>
+                                        <div class="taxes-fees">Taxes &amp; Fees</div>
+                                        <div class="per-night">(Price for {{ $differenceInDays }} Night)</div>
                                         <div class="per-night">Refund as per policy</div>
                                     </div>
                                 </div>
@@ -143,21 +234,31 @@
                                     <div
                                         class="checkin-checkout check_in_border row mx-0 col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 ">
                                         <div class="col-12 pe-sm-2 px-0 check_in_out_title">Check In</div>
-                                        <div class="col-12 pe-2 px-0">06/04/2025</div>
+                                        <div class="col-12 pe-2 px-0">
+                                            {{ date('d M Y h:i A', strtotime($homestay->check_in_time)) }}
+                                        </div>
                                     </div>
                                     <div
                                         class="checkin-checkout row mx-0 col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 ">
                                         <div class="col-12 px-0 text-end check_in_out_title">Check Out</div>
-                                        <div class="col-12 px-0 text-end">07/04/2025</div>
+                                        <div class="col-12 px-0 text-end">
+                                            {{ date('d M Y h:i A', strtotime($homestay->check_out_time)) }}
+                                        </div>
                                     </div>
                                 </div>
+                                {{-- <div class="col-6e">
+                                    <div class="text-sm-center text-start mb-lg-2 mb-md-2 mb-sm-2 ">
+                                        <button class="btn pr-enquiry w-100 btnds detail_page_enquiry">
+                                            Enquiry
+                                        </button>
+                                    </div>
+                                </div> --}}
                                 <div class="col-6e">
-                                    <div class="text-sm-center text-start mb-lg-2 mb-md-2 mb-sm-2 "><button
-                                            class="btn pr-enquiry w-100 btnds detail_page_enquiry">Enquiry</button></div>
-                                </div>
-                                <div class="col-6e">
-                                    <div class="text-center mb-lg-2 mb-md-2 mb-sm-2"><button
-                                            class="btn pr-book-now w-100 btnds">Book Now</button></div>
+                                    <div class="text-center mb-lg-2 mb-md-2 mb-sm-2">
+                                        <a href="" class="btn pr-book-now w-100 btnds">
+                                            Book Now
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -198,41 +299,80 @@
                                             <tr class="row_hover ">
                                                 <td class="whole-property-rowspan table_room_th_td">
                                                     <div class="whole-property">
-                                                        <h3 class="property-title"> Deluxe Double Bedroom </h3>
-                                                        <div><img class="mb-3 property_detail_room_image cursor_pointer2"
-                                                                src="https://static-ethics.sgp1.cdn.digitaloceanspaces.com/utdb/hs/AddRoomsDetails/2024716_0547_1_20210103.jpg"
-                                                                alt=""></div>
+                                                        <h3 class="property-title">
+                                                            {{ $homestay->room_type }}
+                                                            {{ $homestay->bedroom_type === 'Both' ? 'Single & Double Bedroom' : $homestay->bedroom_type }}
+                                                        </h3>
+                                                        <div>
+                                                            <img class="mb-3 property_detail_room_image cursor_pointer2"
+                                                                src="{{ asset('storage/' . $homestay->room_image) }}"
+                                                                alt="{{ $homestay->name }}">
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td class="table_room_th_td"><button class="property-type-btn">Max
-                                                        Occupancy :
-                                                        2</button><button class="property-type-btn">Guest
-                                                        Access</button><button class="property-type-btn">12.00 x 10.00
-                                                        sq.ft</button><button class="property-type-btn">Double
-                                                        bed</button><button class="property-type-btn">Mountain
-                                                        View</button>
+                                                <td class="table_room_th_td">
+                                                    <button class="property-type-btn">
+                                                        Max Occupancy :
+                                                        {{ $homestay->number_of_adults + $homestay->number_of_children }}
+                                                    </button>
+                                                    @if ($homestay->guest === 'yes')
+                                                        <button class="property-type-btn">
+                                                            Guest Access
+                                                        </button>
+                                                    @endif
+
+                                                    <button class="property-type-btn">
+                                                        {{ $homestay->area }} sq.ft
+                                                    </button>
+                                                    @if ($homestay->bedroom_type != 'Both')
+                                                        <button class="property-type-btn">
+                                                            {{ $homestay->bedroom_type }}
+                                                        </button>
+                                                    @endif
+                                                    @if ($homestay->bedroom_type == 'Both')
+                                                        <button class="property-type-btn">
+                                                            Single & Double Bedroom
+                                                        </button>
+                                                    @endif
+
+                                                    @if ($homestay->mountain_view === 'yes')
+                                                        <button class="property-type-btn">
+                                                            Mountain View
+                                                        </button>
+                                                    @endif
                                                 </td>
-                                                <td class="d-xs-none table_room_th_td">
+                                                <td class="table_room_th_td">
                                                     <div class="property-only">
-                                                        <ul class="property-list-item">
-                                                            <li class=""> Charging Point </li>
-                                                            <li class=""> Chair </li>
-                                                            <li class=""> Curtains </li>
-                                                            <li class=""> Seating Area </li>
-                                                            <li class=""> Mirror </li>
-                                                            <li class=""> Dustbin </li>
-                                                            <li class=""> Western Toilet Seat </li>
-                                                            <li class=""> Geyser </li>
+                                                        <ul class="property-list-item" style="padding-left: 2rem;">
+                                                            @forelse ($homestay->benefits as $benefit)
+                                                                <li class="">{{ $benefit->name }}</li>
+                                                            @empty
+                                                                <li>No Benefit Available Yet.</li>
+                                                            @endforelse
                                                         </ul>
                                                     </div>
                                                 </td>
                                                 <td class="align-bottom ">
+                                                    @php
+                                                        $check_in_time = \Carbon\Carbon::parse(
+                                                            $homestay->check_in_time,
+                                                        );
+                                                        $check_out_time = \Carbon\Carbon::parse(
+                                                            $homestay->check_out_time,
+                                                        );
+                                                        $differenceInDays = floor(
+                                                            $check_in_time->diffInDays($check_out_time),
+                                                        );
+                                                        \Log::info('differenceInDays: ' . $differenceInDays);
+                                                    @endphp
                                                     <div class="text-end">
-                                                        <div class="aftr-disc-price">₹4000/- </div>
+                                                        <div class="aftr-disc-price">₹{{ $homestay->price }}/- </div>
                                                         <div class="taxes-fees"> +₹0 Taxes &amp; Fees</div>
-                                                        <div class="per-night">(Price for 1 Night)</div>
+                                                        <div class="per-night">(Price for
+                                                            {{ $differenceInDays > 1 ? $differenceInDays : '' }}
+                                                            night{{ $differenceInDays > 1 ? 's' : '' }})</div>
                                                         <div class="per-night text-end">Refund as per policy</div>
-                                                        <div class="text-end bfr-disc-price">Room is not available.</div>
+                                                        {{-- <div class="text-end bfr-disc-price">Room is not available.</div> --}}
                                                         <div class="text-end mt-3"><button class="btn pr-book-now btnds"
                                                                 disabled="">Book Now</button></div>
                                                     </div>
@@ -253,12 +393,15 @@
                         </div>
                         <div class="col-md-10 col-9 amenities-border-left">
                             <div class="row mx-0">
-                                <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
-                                    <div class="amenities-servise-name"> 1 Common Area/Living Room </div>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
-                                    <div class="amenities-servise-name"> 1 Balcony </div>
-                                </div>
+                                @forelse ($homestay->commonSpaces as $commonSpace)
+                                    <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
+                                        <div class="amenities-servise-name"> {{ $commonSpace->name }} </div>
+                                    </div>
+                                @empty
+                                    <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
+                                        <div class="amenities-servise-name">No Common Space Available Yet.</div>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
@@ -272,11 +415,10 @@
                         <div class="col-auto mt-2 mt-sm-0 d-flex align-items-center"><button type="button"
                                 class="google_btn btn py-auto">Direction</button></div>
                     </div>
-                    <div>
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7009.36139772129!2d77.39292534584763!3d28.549315627139475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce8c9f43a0957%3A0x823bc3320e36ec90!2sSector%2081%2C%20Noida%2C%20Uttar%20Pradesh%20201305!5e0!3m2!1sen!2sin!4v1743879463827!5m2!1sen!2sin"
-                            width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <div class="map-box-large">
+                        <div class="map" id="map" data-geo-location="{{ $homestay->location }}">
+                        </div>
+                        <div id="map-link" class="map-link"></div>
                     </div>
                 </div>
 
@@ -293,9 +435,16 @@
                             </div>
                             <div class="col-md-10 col-9 amenities-border-left">
                                 <div class="row mx-0">
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
-                                        <div class="amenities-servise-name"> Room Keys </div>
-                                    </div>
+                                    @forelse ($homestay->safetySecurities as $safetySecurity)
+                                        <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
+                                            <div class="amenities-servise-name"> {{ $safetySecurity->name }} </div>
+                                        </div>
+                                    @empty
+                                        <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
+                                            <div class="amenities-servise-name"> No Safety & Security Available Yet. </div>
+                                        </div>
+                                    @endforelse
+
                                 </div>
                             </div>
                         </div>
@@ -305,15 +454,15 @@
                             </div>
                             <div class="col-md-10 col-9 amenities-border-left">
                                 <div class="row mx-0">
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
-                                        <div class="amenities-servise-name"> Blankets </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
-                                        <div class="amenities-servise-name"> Cushions </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
-                                        <div class="amenities-servise-name"> Pillows </div>
-                                    </div>
+                                    @forelse ($homestay->beddings as $bedding)
+                                        <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
+                                            <div class="amenities-servise-name"> {{ $bedding->name }} </div>
+                                        </div>
+                                    @empty
+                                        <div class="col-lg-3 col-md-4 col-sm-4 col-auto py-1">
+                                            <div class="amenities-servise-name"> No Bedding Available Yet. </div>
+                                        </div>
+                                    @endforelse
                                 </div>
                             </div>
                         </div>
@@ -345,7 +494,9 @@
                                             <div class="data_label text-start text_16">Up to 3 days Prior</div>
                                         </div>
                                         <div class="col-6 cancellation_tabel_row_header_second_child">
-                                            <div class="data_label text-end text_16">Full Refund</div>
+                                            <div class="data_label text-end text_16">
+                                                ₹{{ $homestay->upto_3days_prior }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="cancellation_tabel_row row mx-0 ">
@@ -353,7 +504,9 @@
                                             <div class="data_label text-start text_16">Up to 2 days Prior</div>
                                         </div>
                                         <div class="col-6 cancellation_tabel_row_header_second_child">
-                                            <div class="data_label text-end text_16">₹10%</div>
+                                            <div class="data_label text-end text_16">
+                                                ₹{{ $homestay->upto_2days_prior }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="cancellation_tabel_row row mx-0 ">
@@ -361,7 +514,9 @@
                                             <div class="data_label text-start text_16">Up to 1 days Prior</div>
                                         </div>
                                         <div class="col-6 cancellation_tabel_row_header_second_child">
-                                            <div class="data_label text-end text_16">₹15%</div>
+                                            <div class="data_label text-end text_16">
+                                                ₹{{ $homestay['1day_prior'] }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="cancellation_tabel_row row mx-0 ">
@@ -369,7 +524,9 @@
                                             <div class="data_label text-start text_16">On the day of check-in</div>
                                         </div>
                                         <div class="col-6 cancellation_tabel_row_header_second_child">
-                                            <div class="data_label text-end text_16">₹20%</div>
+                                            <div class="data_label text-end text_16">
+                                                ₹{{ $homestay->same_day_cancellation }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="cancellation_tabel_row row mx-0 ">
@@ -377,7 +534,9 @@
                                             <div class="data_label text-start text_16">No show</div>
                                         </div>
                                         <div class="col-6 cancellation_tabel_row_header_second_child">
-                                            <div class="data_label text-end text_16">No Refund</div>
+                                            <div class="data_label text-end text_16">
+                                                {{ $homestay->no_show }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -390,12 +549,99 @@
         </div>
     </section>
     {{-- hire-me-start --}}
-    @include('layouts.hireMe')
+    {{-- @include('layouts.hireMe') --}}
     {{-- hire-me-end --}}
 @endsection
 
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    {{-- jQuery --}}
+    <script src="{{ asset('assets/frontend/logged_seller/plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('assets/frontend/logged_seller/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    {{-- modal-script --}}
+    <script></script>
+
+    {{-- show map --}}
+    <script>
+        function showMap(lat, lng) {
+            var coord = {
+                lat: lat,
+                lng: lng
+            };
+            var map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10,
+                center: coord,
+                disableDefaultUI: false,
+                streetViewControl: false,
+                fullscreenControl: true,
+            });
+
+            var marker = new google.maps.Marker({
+                position: coord,
+                map: map
+            });
+
+            var mapLinkUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+
+            if (google.maps.places) {
+                var service = new google.maps.places.PlacesService(map);
+                service.nearbySearch({
+                    location: coord,
+                    radius: 50
+                }, function(results, status) {
+                    if (status === google.maps.places.PlacesServiceStatus.OK && results[0]) {
+                        var placeName = results[0].name || "Place";
+                        var mapLinkContainer = document.getElementById('map-link');
+                        mapLinkContainer.innerHTML = `
+                            <div class="large-map-link">
+                                <div class="map-lan-log">${lat} ${lng}</div>
+                                <p>${placeName}</p>
+                                <a href="${mapLinkUrl}" target="_blank" class="large-map-link__link">View Large Map</a>
+                            </div>
+                        `;
+                    } else {
+                        // console.error("No place name found.");
+                        var mapLinkContainer = document.getElementById('map-link');
+                        mapLinkContainer.innerHTML = `
+                            <div class="large-map-link">
+                                <div class="map-lan-log">${lat} ${lng}</div>
+                                <a href="${mapLinkUrl}" target="_blank" class="large-map-link__link">View Large Map</a>
+                            </div>
+                        `;
+                    }
+                });
+            } else {
+                // console.error("Google Places library not loaded.");
+                var mapLinkContainer = document.getElementById('map-link');
+                mapLinkContainer.innerHTML = `
+                    <div class="large-map-link">
+                        <div class="map-lan-log">${lat} ${lng}</div>
+                        <a href="${mapLinkUrl}" target="_blank" class="large-map-link__link">View Large Map</a>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const mapId = document.getElementById('map');
+            if (mapId) {
+                var geoLocation = mapId.getAttribute('data-geo-location');
+                if (geoLocation) {
+                    var coordinates = geoLocation.split(',');
+                    var lat = parseFloat(coordinates[0]);
+                    var lng = parseFloat(coordinates[1]);
+                    showMap(lat, lng);
+                } else {
+                    console.error("No geo location data found.");
+                }
+            }
+        });
+    </script>
+
+    {{-- check-in, check-out time --}}
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             flatpickr('#check_in, #check_out', {

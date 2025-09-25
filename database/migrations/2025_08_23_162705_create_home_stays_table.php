@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('room_type');
             $table->string('bedroom_type');
-            $table->integer('number_of_rooms');
-            $table->integer('number_of_single_rooms');
-            $table->integer('number_of_double_rooms');
+            $table->integer('number_of_rooms')->default(0);
+            $table->integer('number_of_single_rooms')->default(0);
+            $table->integer('number_of_double_rooms')->default(0);
             $table->string('food_allowed');
             $table->text('note')->nullable();
             $table->foreignId('state_id')->constrained('states')->onDelete('cascade');
@@ -29,8 +29,8 @@ return new class extends Migration
             $table->string('city');
             $table->string('address');
             $table->string('pincode')->length(6);
-            $table->integer('number_of_adults');
-            $table->integer('number_of_children');
+            $table->integer('number_of_adults')->default(0);
+            $table->integer('number_of_children')->default(0);
             $table->datetime('check_in_time');
             $table->datetime('check_out_time');
             $table->string('area');
