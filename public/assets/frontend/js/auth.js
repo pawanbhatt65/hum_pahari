@@ -196,4 +196,34 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+
+
+    // Detect navigation away from login or registration pages
+    const isLoginPage = window.location.pathname.includes("/login");
+    const isRegisterPage = window.location.pathname.includes("/register");
+
+    if (isLoginPage || isRegisterPage) {
+        // Handle browser back/forward or other navigation
+        window.addEventListener("popstate", () => {
+            const newPath = window.location.pathname;
+            // Allow navigation from login to register without clearing
+            if (!(isLoginPage && newPath.includes("/register"))) {
+                localStorage.removeItem("homeStayURL");
+                console.log(
+                    "Cleared homeStayURL from localStorage due to navigation"
+                );
+            }
+        });
+
+        // Handle page unload (e.g., clicking other links)
+        window.onbeforeunload = () => {
+            const newUrl = document.referrer || window.location.href;
+            // Allow navigation from login to register
+            if (!(isLoginPage && newUrl.includes("/register"))) {
+                localStorage.removeItem("homeStayURL");
+                console.log("Cleared homeStayURL from localStorage on unload");
+            }
+        };
+    }
 });

@@ -25,7 +25,7 @@
                                     Home
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="">
                                     About
                                 </a>
@@ -39,7 +39,7 @@
                                 <a href="">
                                     Places
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="">
                                     Privacy Policy

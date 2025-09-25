@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HomeStay;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
@@ -10,6 +11,7 @@ class HomeController extends Controller
     // homepage
     public function home(Request $request)
     {
+        Log::info("auth: ", ["auth_is" => Auth::user()]);
         $homestay = HomeStay::where('is_approved', true)
         // Constrain the `images` relationship
             ->with(['images' => function ($query) {
@@ -18,7 +20,7 @@ class HomeController extends Controller
             ->take(12)
             ->orderBy('id', 'DESC')
             ->get();
-        Log::info("home stay image", ["homestay" => $homestay]);
+        // Log::info("home stay image", ["homestay" => $homestay]);
         return view('pages.home', compact('homestay'));
     }
 

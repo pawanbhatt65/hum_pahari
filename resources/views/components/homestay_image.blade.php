@@ -1,6 +1,11 @@
 <div class="modal fade" id="modal-xl">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
+            <div class="modal-header justify-content-end">
+                <button type="button" class="close btn btn-danger btn-small" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     @forelse ($images as $index => $image)

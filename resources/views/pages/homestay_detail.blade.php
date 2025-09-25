@@ -255,9 +255,17 @@
                                 </div> --}}
                                 <div class="col-6e">
                                     <div class="text-center mb-lg-2 mb-md-2 mb-sm-2">
-                                        <a href="" class="btn pr-book-now w-100 btnds">
-                                            Book Now
-                                        </a>
+                                        @if (Auth::user())
+                                            <a href="" class="btn pr-book-now w-100 btnds">
+                                                Book Now
+                                            </a>
+                                        @else
+                                            <a href="{{ route('login') }}"
+                                                class="btn pr-book-now w-100 btnds save-page-url">
+                                                Book Now
+                                            </a>
+                                        @endif
+
                                     </div>
                                 </div>
                             </div>
@@ -363,7 +371,7 @@
                                                         $differenceInDays = floor(
                                                             $check_in_time->diffInDays($check_out_time),
                                                         );
-                                                        \Log::info('differenceInDays: ' . $differenceInDays);
+                                                        // \Log::info('differenceInDays: ' . $differenceInDays);
                                                     @endphp
                                                     <div class="text-end">
                                                         <div class="aftr-disc-price">₹{{ $homestay->price }}/- </div>
@@ -373,8 +381,18 @@
                                                             night{{ $differenceInDays > 1 ? 's' : '' }})</div>
                                                         <div class="per-night text-end">Refund as per policy</div>
                                                         {{-- <div class="text-end bfr-disc-price">Room is not available.</div> --}}
-                                                        <div class="text-end mt-3"><button class="btn pr-book-now btnds"
-                                                                disabled="">Book Now</button></div>
+                                                        <div class="text-end mt-3">
+                                                            @if (Auth::user())
+                                                                <a href="" class="btn pr-book-now btnds">
+                                                                    Book Now
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('login') }}"
+                                                                    class="btn pr-book-now btnds save-page-url">
+                                                                    Book Now
+                                                                </a>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>

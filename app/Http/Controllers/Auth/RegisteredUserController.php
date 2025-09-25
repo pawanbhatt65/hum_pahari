@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -18,9 +19,11 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.register');
+        // Pass redirect URL from query parameter to the registration form
+        $redirectUrl = $request->query('redirect');
+        return view('auth.register', compact('redirectUrl'));
     }
 
     /**
@@ -61,8 +64,18 @@ class RegisteredUserController extends Controller
 
             Alert::success('Success', 'You are registered successfully, please check your email!');
 
-            return redirect()->route('home');
-
+            if ($user->role === 'user') {
+                // Log the user in and regenerate session
+                Auth::login($user);
+                $request->session()->regenerate();
+                return redirect()->intended(route('home', absolute: false));
+            } elseif ($user->role === 'seller') {
+                // Redirect to homepage without logging in
+                return redirect()->route('home');
+            } else {
+                // For other roles (e.g., admin), redirect to homepage without login
+                return redirect()->route('home');
+            }
         } catch (\Exception $e) {
             Log::error("Registration failed", ['error' => $e->getMessage()]);
             Alert::error('Error', 'Registration failed. Please try again.');
