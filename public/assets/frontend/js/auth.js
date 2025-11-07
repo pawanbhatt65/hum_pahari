@@ -197,33 +197,36 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
-
-    // Detect navigation away from login or registration pages
-    const isLoginPage = window.location.pathname.includes("/login");
-    const isRegisterPage = window.location.pathname.includes("/register");
+    // Clear localStorage when navigating away from login/register, except login-to-register
+    const isLoginPage = window.location.pathname === "/login";
+    const isRegisterPage = window.location.pathname === "/register";
 
     if (isLoginPage || isRegisterPage) {
-        // Handle browser back/forward or other navigation
+        // Store the initial URL to track navigation
+        const initialUrl = window.location.href;
+
+        // Handle navigation via links or browser buttons
         window.addEventListener("popstate", () => {
             const newPath = window.location.pathname;
-            // Allow navigation from login to register without clearing
-            if (!(isLoginPage && newPath.includes("/register"))) {
+            // Allow navigation from /login to /register
+            if (isLoginPage && newPath === "/register") {
+                console.log("Navigating from login to register, preserving homeStayURL");
+            } else {
                 localStorage.removeItem("homeStayURL");
-                console.log(
-                    "Cleared homeStayURL from localStorage due to navigation"
-                );
+                console.log("Cleared homeStayURL due to navigation to:", newPath);
             }
         });
 
-        // Handle page unload (e.g., clicking other links)
-        window.onbeforeunload = () => {
-            const newUrl = document.referrer || window.location.href;
-            // Allow navigation from login to register
-            if (!(isLoginPage && newUrl.includes("/register"))) {
+        // Handle navigation via links or page unload
+        window.addEventListener("beforeunload", (event) => {
+            // Check the next URL (if available, e.g., via click)
+            const nextUrl = event.currentTarget.location.href;
+            if (isLoginPage && nextUrl.includes("/register")) {
+                console.log("Navigating from login to register, preserving homeStayURL");
+            } else {
                 localStorage.removeItem("homeStayURL");
-                console.log("Cleared homeStayURL from localStorage on unload");
+                console.log("Cleared homeStayURL on page unload");
             }
-        };
+        });
     }
 });

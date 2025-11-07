@@ -14,6 +14,7 @@
                     <div class="form-card">
                         <form action="{{ route('register') }}" method="POST" name="registrationFormHandler" novalidate>
                             @csrf
+                            <input type="hidden" name="redirect" value="{{ $redirectUrl ?? '' }}">
                             <div class="mb-3 d-flex justify-content-center align-items-center">
                                 <div class="register">
                                     <input type="radio" name="role" value="user" id="user" checked>

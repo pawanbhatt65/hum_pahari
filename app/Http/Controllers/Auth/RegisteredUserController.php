@@ -68,13 +68,27 @@ class RegisteredUserController extends Controller
                 // Log the user in and regenerate session
                 Auth::login($user);
                 $request->session()->regenerate();
+
+                // Check for redirect URL from query parameter
+                $redirectUrl = $request->input('redirect');
+                if ($redirectUrl && filter_var($redirectUrl, FILTER_VALIDATE_URL)) {
+                    // Validate URL is within your app
+                    $parsedUrl = parse_url($redirectUrl);
+                    $host      = $parsedUrl['host'] ?? '';
+                    $appHost   = parse_url(config('app.url'))['host'];
+
+                    if ($host === $appHost && str_contains($redirectUrl, '/homestays/detail/')) {
+                        // Log::info("Redirecting to saved URL", ['url' => $redirectUrl]);
+                        return redirect()->to($redirectUrl);
+                    }
+                }
+
+                // Fallback to homepage
                 return redirect()->intended(route('home', absolute: false));
-            } elseif ($user->role === 'seller') {
-                // Redirect to homepage without logging in
-                return redirect()->route('home');
             } else {
-                // For other roles (e.g., admin), redirect to homepage without login
-                return redirect()->route('home');
+                // For seller or other roles, redirect to homepage without login
+                // Signal to clear localStorage (handled client-side)
+                return redirect()->route('home')->with('clearLocalStorage', true);
             }
         } catch (\Exception $e) {
             Log::error("Registration failed", ['error' => $e->getMessage()]);

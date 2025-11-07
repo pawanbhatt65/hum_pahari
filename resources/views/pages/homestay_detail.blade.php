@@ -260,7 +260,7 @@
                                                 Book Now
                                             </a>
                                         @else
-                                            <a href="{{ route('login') }}"
+                                            <a href="{{ route('login') }}?redirect={{ urlencode(url()->current()) }}"
                                                 class="btn pr-book-now w-100 btnds save-page-url">
                                                 Book Now
                                             </a>
@@ -387,7 +387,7 @@
                                                                     Book Now
                                                                 </a>
                                                             @else
-                                                                <a href="{{ route('login') }}"
+                                                                <a href="{{ route('login') }}?redirect={{ urlencode(url()->current()) }}"
                                                                     class="btn pr-book-now btnds save-page-url">
                                                                     Book Now
                                                                 </a>

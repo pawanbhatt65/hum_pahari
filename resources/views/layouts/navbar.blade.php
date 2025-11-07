@@ -56,7 +56,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('register') }}">
+                            <a
+                                href="{{ route('register') }}?redirect={{ urlencode(request()->query('redirect', '')) }}">
                                 Register
                             </a>
                         </li>
