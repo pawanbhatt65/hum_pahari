@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\HomeStay;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -44,7 +43,7 @@ return new class extends Migration
             $table->string('no_show');
             $table->string('location');
             $table->string('price');
-            $table->enum('is_approved', HomeStay::$is_approved)->default(false);
+            $table->boolean('is_approved')->default(false);
             $table->timestamps();
         });
     }
