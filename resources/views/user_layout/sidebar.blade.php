@@ -31,8 +31,8 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <li class="nav-item menu-open">
-                    <a href="{{ route('seller.dashboard') }}"
-                        class="nav-link {{ request()->routeIs('seller.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('user.dashboard') }}"
+                        class="nav-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -40,20 +40,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('homestays.index') }}"
-                        class="nav-link {{ request()->routeIs('homestays.index') ? 'active' : '' }}">
+                    <a href="{{ route('index') }}" class="nav-link {{ request()->routeIs('index') ? 'active' : '' }}">
                         <i class="nav-icon far fa-image"></i>
                         <p>
                             Homestays
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('registered-users.index') }}"
-                        class="nav-link {{ request()->routeIs('registered-users.index') ? 'active' : '' }}">
-                        <i class="nav-icon far fa-image"></i>
-                        <p>
-                            Registered users
                         </p>
                     </a>
                 </li>

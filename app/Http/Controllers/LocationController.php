@@ -11,7 +11,7 @@ class LocationController extends Controller
 {
     public function getStates(Request $request)
     {
-        Log::info(['states' => $request->all()]);
+        // Log::info(['states' => $request->all()]);
         return Cache::remember('states', 3600, fn() => State::all());
     }
 

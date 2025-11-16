@@ -1,0 +1,76 @@
+<!-- jQuery -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jquery/jquery.min.js') }}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+</script>
+<!-- Bootstrap 4 -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+{{-- DataTables  & Plugins-start --}}
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}">
+</script>
+<script
+    src="{{ asset('assets/frontend/logged_seller/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}">
+</script>
+<script
+    src="{{ asset('assets/frontend/logged_seller/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}">
+</script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}">
+</script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}">
+</script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/datatables-buttons/js/buttons.colVis.min.js') }}">
+</script>
+{{-- DataTables  & Plugins-end --}}
+
+<!-- Select2 -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/select2/js/select2.full.min.js') }}"></script>
+<!-- ChartJS -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/chart.js/Chart.min.js') }}"></script>
+<!-- Sparkline -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/sparklines/sparkline.js') }}"></script>
+<!-- JQVMap -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+<!-- jQuery Knob Chart -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+<!-- daterangepicker -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/daterangepicker/daterangepicker.js') }}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script
+    src="{{ asset('assets/frontend/logged_seller/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}">
+</script>
+<!-- Summernote -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/summernote/summernote-bs4.min.js') }}"></script>
+<!-- overlayScrollbars -->
+<script
+    src="{{ asset('assets/frontend/logged_seller/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}">
+</script>
+<!-- dropzonejs -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/dropzone/min/dropzone.min.js') }}"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script> --}}
+<!-- AdminLTE App -->
+<script src="{{ asset('assets/frontend/logged_seller/dist/js/adminlte.js') }}"></script>
+<!-- jsGrid -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jsgrid/demos/db.js') }}"></script>
+{{-- <script src="{{ asset('assets/frontend/logged_seller/plugins/jsgrid/jsgrid.min.js') }}"></script> --}}
+<!-- jquery-validation -->
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/logged_seller/plugins/jquery-validation/additional-methods.min.js') }}">
+</script>
+<!-- AdminLTE for demo purposes -->
+{{-- <script src="{{ asset('assets/frontend/logged_seller/dist/js/demo.js') }}"></script> --}}
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+{{-- <script src="{{ asset('assets/frontend/logged_seller/dist/js/pages/dashboard.js') }}"></script> --}}

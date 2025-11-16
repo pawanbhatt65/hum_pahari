@@ -27,6 +27,11 @@
                     @if (Auth::user())
                         @if (Auth::user()->role === 'user')
                             <li>
+                                <a href="{{ route('user.dashboard') }}">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
                                 <form action="{{ route('logout') }}" method="post" class="d-inline">
                                     @csrf
                                     <button type="submit" class="d-inline bg-transparent border-0">

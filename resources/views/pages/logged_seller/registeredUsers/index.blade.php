@@ -1,7 +1,7 @@
 @extends('seller_layout.master')
 
 @section('title')
-    HomeStays List
+    Seller | Registered User
 @endsection
 
 @section('styles')
@@ -15,7 +15,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>HomeStays</h1>
+                        <h1>Registered Users</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -29,7 +29,7 @@
                                     Dashboard
                                 </a>
                             </li>
-                            <li class="breadcrumb-item active">HomeStays</li>
+                            <li class="breadcrumb-item active">Registered Users</li>
                         </ol>
                     </div>
                 </div>
@@ -44,17 +44,17 @@
                     <div class="col-12">
 
                         <div class="card">
-                            <div class="card-header">
+                            {{-- <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-between">
                                     <h3 class="card-title">HomeStays List</h3>
                                     <a href="{{ route('homestays.create') }}" class="btn btn-primary btn-sm">
                                         + Add New HomeStays
                                     </a>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="homestays_list" class="table table-bordered table-striped">
+                                <table id="registeredUsersList" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
@@ -62,8 +62,8 @@
                                             <th>City</th>
                                             <th>Approve</th>
                                             <th>Show</th>
-                                            <th>Edit</th>
-                                            <th>Delete</th>
+                                            {{-- <th>Edit</th>
+                                            <th>Delete</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -75,8 +75,8 @@
                                             <th>City</th>
                                             <th>Approve</th>
                                             <th>Show</th>
-                                            <th>Edit</th>
-                                            <th>Delete</th>
+                                            {{-- <th>Edit</th>
+                                            <th>Delete</th> --}}
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -214,7 +214,7 @@
             });
 
             // show list table data
-            let tables = $("#homestays_list").DataTable({
+            let tables = $("#registeredUsersList").DataTable({
                 responsive: true,
                 lengthChange: true, // Enable page length menu
                 lengthMenu: [10, 15, 20], // Options for rows per page
@@ -283,9 +283,9 @@
                     }
                 ]
             })
-            // .buttons().container().appendTo('#homestays_list_wrapper .col-md-6:eq(0)');
+            // .buttons().container().appendTo('#registeredUsersList_wrapper .col-md-6:eq(0)');
             // Append DataTable buttons
-            tables.buttons().container().appendTo('#homestays_list_wrapper .col-md-6:eq(0)');
+            tables.buttons().container().appendTo('#registeredUsersList_wrapper .col-md-6:eq(0)');
 
             // Debug: Log the DataTable instance to ensure it's valid
             console.log('DataTable instance after init:', tables);
@@ -328,7 +328,7 @@
             };
 
             // Approve checkbox toggle
-            $('#homestays_list').on('click', '.approve-checkbox', function() {
+            $('#registeredUsersList').on('click', '.approve-checkbox', function() {
                 const id = $(this).data('id');
                 const isApproved = $(this).is(':checked');
                 // console.log('Toggling approval for ID:', id, 'to', isApproved);
@@ -350,7 +350,7 @@
             });
 
             // Delete homestay
-            $('#homestays_list').on('click', '.delete-btn', function() {
+            $('#registeredUsersList').on('click', '.delete-btn', function() {
                 if (confirm('Are you sure you want to delete this homestay?')) {
                     const id = $(this).data('id');
                     // Debug: Log the table instance before delete
@@ -373,7 +373,8 @@
                             } else {
                                 console.error('Invalid DataTable instance:', tables);
                                 alert(
-                                'Error: Unable to reload table. Please refresh the page.');
+                                    'Error: Unable to reload table. Please refresh the page.'
+                                );
                                 // Optional: Attempt to reinitialize or redirect
                                 window.location.reload(); // Fallback to page refresh
                             }

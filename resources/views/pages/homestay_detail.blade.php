@@ -255,7 +255,7 @@
                                 </div> --}}
                                 <div class="col-6e">
                                     <div class="text-center mb-lg-2 mb-md-2 mb-sm-2">
-                                        @if (Auth::user())
+                                        {{-- @if (Auth::user())
                                             <a href="" class="btn pr-book-now w-100 btnds">
                                                 Book Now
                                             </a>
@@ -264,8 +264,10 @@
                                                 class="btn pr-book-now w-100 btnds save-page-url">
                                                 Book Now
                                             </a>
-                                        @endif
-
+                                        @endif --}}
+                                        <a href="" class="btn pr-book-now w-100 btnds">
+                                            Book Now
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -382,7 +384,7 @@
                                                         <div class="per-night text-end">Refund as per policy</div>
                                                         {{-- <div class="text-end bfr-disc-price">Room is not available.</div> --}}
                                                         <div class="text-end mt-3">
-                                                            @if (Auth::user())
+                                                            {{-- @if (Auth::user())
                                                                 <a href="" class="btn pr-book-now btnds">
                                                                     Book Now
                                                                 </a>
@@ -391,7 +393,10 @@
                                                                     class="btn pr-book-now btnds save-page-url">
                                                                     Book Now
                                                                 </a>
-                                                            @endif
+                                                            @endif --}}
+                                                            <a href="" class="btn pr-book-now btnds">
+                                                                Book Now
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </td>

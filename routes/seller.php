@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Seller\HomeStayeController;
+use App\Http\Controllers\Seller\RegisteredUser;
 use App\Http\Controllers\Seller\SellerController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,4 +53,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth', 'verified', 'role:s
     Route::put('/homestays/{id}/room-image', [HomeStayeController::class, 'putRoomImage'])->name('homestays.roomImage');
 
     Route::resource('/homestays', HomeStayeController::class);
+
+    // handle registered users
+    Route::resource('/registered-users', RegisteredUser::class);
 });

@@ -58,41 +58,43 @@
         <div class="container-lg container-fluid">
             <div class="row g-3" id="homeStaysImagesRow">
                 @forelse ($homestay as $index => $item)
+                    @php
+                        $check_in_time = \Carbon\Carbon::parse($item->check_in_time);
+                        $check_out_time = \Carbon\Carbon::parse($item->check_out_time);
+                        $differenceInDays = floor($check_in_time->diffInDays($check_out_time)); // Use floor() to get integer
+                        // \Log::info('differenceInDays: ' . $differenceInDays);
+                    @endphp
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card card-more">
                             <div class="images">
                                 <div class="single-img">
-                                    <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                        class="card-img-top" alt="...">
+                                    @if ($item->images && $item->images->isNotEmpty())
+                                        <img src="{{ asset('storage/' . $item->images[0]->image_path) }}"
+                                            class="card-img-top" alt="{{ $item->name }}">
+                                    @endif
                                 </div>
                                 <div class="more-imgs">
-                                    <div class="single-img-box">
-                                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                            alt="" class="img-fluid">
-                                    </div>
-                                    <div class="single-img-box">
-                                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                            alt="" class="img-fluid">
-                                    </div>
-                                    <div class="single-img-box">
-                                        <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                            alt="" class="img-fluid">
-                                    </div>
-                                    <div class="single-img-box">
-                                        <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                            alt="" class="img-fluid">
-                                    </div>
+                                    @forelse ($item->images ?? [] as $index => $img)
+                                        <div class="single-img-box">
+                                            <img src="{{ asset('storage/' . $img->image_path) }}" alt=""
+                                                class="img-fluid">
+                                        </div>
+                                    @empty
+                                    @endforelse
                                 </div>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Pine View Studio Cottage</h5>
+                                <h5 class="card-title">{{ $item->name }}</h5>
                                 <p class="card-text">
-                                    Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
+                                    Apartment: <strong>{{ $item->number_of_rooms }}</strong>
+                                    <strong>{{ $item->room_type }}</strong> Bedroom
                                 </p>
                                 <p class="card-text">
-                                    <strong>₹ 1671</strong> /night
+                                    <strong>₹ {{ $item->price }}</strong>
+                                    /{{ $differenceInDays > 1 ? $differenceInDays : '' }}
+                                    night{{ $differenceInDays > 1 ? 's' : '' }}
                                 </p>
-                                <a href="{{ route('homeStayDetail', 3) }}" class="btn btn-primary btn-sm mt-2">
+                                <a href="{{ route('homeStayDetail', $item->id) }}" class="btn btn-primary btn-sm mt-2">
                                     View Deal
                                 </a>
                             </div>
@@ -145,7 +147,7 @@
     {{-- tourist-places-end --}}
 
     {{-- hire-me-start --}}
-    @include('layouts.hireMe')
+    {{-- @include('layouts.hireMe') --}}
     {{-- hire-me-end --}}
 @endsection
 
