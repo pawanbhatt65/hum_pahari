@@ -54,4 +54,10 @@ class HomeStay extends Model
     {
         return $this->hasMany(HomeStayImages::class, 'home_stay_id');
     }
+
+    // one to many relationship with register_users table
+    public function registerUsers(): HasMany
+    {
+        return $this->hasMany(UserRegister::class, 'home_stay_id');
+    }
 }

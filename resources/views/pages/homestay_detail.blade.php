@@ -61,6 +61,17 @@
         }
 
         /* carouse-arrow-end */
+        /* register-modal-start */
+        .register-modal input:focus {
+            box-shadow: none;
+        }
+
+        .register-modal .form-control.is-invalid:focus,
+        .register-modal .was-validated .form-control:invalid:focus {
+            box-shadow: none;
+        }
+
+        /* register-modal-end */
     </style>
 
     {{-- show google map --}}
@@ -265,9 +276,10 @@
                                                 Book Now
                                             </a>
                                         @endif --}}
-                                        <a href="" class="btn pr-book-now w-100 btnds">
+                                        <button type="button" class="btn pr-book-now w-100 btnds" data-toggle="modal"
+                                            data-target="#modal-default">
                                             Book Now
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -394,9 +406,10 @@
                                                                     Book Now
                                                                 </a>
                                                             @endif --}}
-                                                            <a href="" class="btn pr-book-now btnds">
+                                                            <button type="button" class="btn pr-book-now btnds"
+                                                                data-toggle="modal" data-target="#modal-default">
                                                                 Book Now
-                                                            </a>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -574,6 +587,85 @@
     {{-- hire-me-start --}}
     {{-- @include('layouts.hireMe') --}}
     {{-- hire-me-end --}}
+
+    {{-- user-register-modal-start --}}
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ route('registered-users.store') }}" method="POST" class="register-modal">
+                    @csrf
+                    <input type="hidden" name="homestay_id" value="{{ $homestay->id }}">
+                    <div class="modal-header justify-content-between align-items-center">
+                        <h4 class="modal-title">{{ $homestay->name }}: Book Now</h4>
+                        <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label for="name">
+                                    Name <sup class="text-danger">*</sup>
+                                </label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    placeholder="Enter Your Name">
+                                <p class="text-danger error" id="nameError"></p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="phone">
+                                    Phone <sup class="text-danger">*</sup>
+                                </label>
+                                <input type="text" class="form-control" id="phone" name="phone"
+                                    placeholder="Enter Your Phone">
+                                <p class="text-danger error" id="phoneError"></p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="email">
+                                    Email <sup class="text-danger">*</sup>
+                                </label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Enter Your Email">
+                                <p class="text-danger error" id="emailError"></p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="check_in">
+                                    Check In <sup class="text-danger">*</sup>
+                                </label>
+                                <input type="datetime-local" class="form-control" name="check_in" id="check_in">
+                                <p class="text-danger error" id="checkInError"></p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="check_out">
+                                    Check Out <sup class="text-danger">*</sup>
+                                </label>
+                                <input type="datetime-local" class="form-control" name="check_out" id="check_out">
+                                <p class="text-danger error" id="checkOutError"></p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="address">
+                                    Address
+                                </label>
+                                <input type="text" class="form-control" id="address" name="address"
+                                    placeholder="Enter Your Address">
+                                <p class="text-danger error" id="addressError"></p>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">
+                            Book Now
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    {{-- user-register-modal-end --}}
 @endsection
 
 @section('scripts')
@@ -584,8 +676,225 @@
     <!-- Bootstrap 4 -->
     <script src="{{ asset('assets/frontend/logged_seller/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-    {{-- modal-script --}}
-    <script></script>
+    {{-- user-register-modal-script-start --}}
+    <script>
+        (function() {
+            // Select form and controls
+            const form = document.querySelector('.register-modal');
+            if (!form) return;
+
+            const inputs = {
+                name: form.querySelector('#name'),
+                phone: form.querySelector('#phone'),
+                email: form.querySelector('#email'),
+                check_in: form.querySelector('#check_in'),
+                check_out: form.querySelector('#check_out'),
+                address: form.querySelector('#address'),
+            };
+
+            // error elements (existing in your markup)
+            const errors = {
+                name: document.getElementById('nameError'),
+                phone: document.getElementById('phoneError'),
+                email: document.getElementById('emailError'),
+                check_in: document.getElementById('checkInError'),
+                check_out: document.getElementById('checkOutError'),
+                address: document.getElementById('addressError'),
+            };
+
+            // Validation regexes
+            const nameRe = /^[A-Za-z\s]+$/; // letters and spaces only
+            const phoneStripRe = /[^\d\+]/g; // keep digits and plus for stripping (we'll count digits)
+            const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // reasonable email test
+            // Accept date formats that start with YYYY-MM-DD (time optional)
+            const dateStartRe = /^\s*(\d{4}-\d{2}-\d{2})/;
+
+            // Helpers
+            function showError(fieldKey, message) {
+                const el = errors[fieldKey];
+                if (el) el.textContent = message;
+                const inp = inputs[fieldKey];
+                if (inp) inp.classList.add('is-invalid');
+            }
+
+            function clearError(fieldKey) {
+                const el = errors[fieldKey];
+                if (el) el.textContent = '';
+                const inp = inputs[fieldKey];
+                if (inp) inp.classList.remove('is-invalid');
+            }
+
+            // Individual field validators return true if valid, false otherwise
+            function validateName() {
+                const v = (inputs.name.value || '').trim();
+                if (!v) {
+                    showError('name', 'Name is required.');
+                    return false;
+                }
+                if (!nameRe.test(v)) {
+                    showError('name', 'Name should contain only letters and spaces.');
+                    return false;
+                }
+                clearError('name');
+                return true;
+            }
+
+            function validatePhone() {
+                let v = (inputs.phone.value || '').trim();
+                if (!v) {
+                    showError('phone', 'Phone is required.');
+                    return false;
+                }
+                // remove spaces, dashes, parentheses etc but keep + possibly at start
+                // Count digits only
+                const digits = v.replace(/\D/g, '');
+                if (digits.length < 6 || digits.length > 16) {
+                    showError('phone', 'Phone must contain between 6 and 16 digits (country code optional).');
+                    return false;
+                }
+                // Basic allowed pattern: optional +, digits, spaces, hyphens, parentheses
+                if (!/^\+?[\d\-\s\(\)]+$/.test(v)) {
+                    showError('phone', 'Invalid phone format.');
+                    return false;
+                }
+                clearError('phone');
+                return true;
+            }
+
+            function validateEmail() {
+                const v = (inputs.email.value || '').trim();
+                if (!v) {
+                    showError('email', 'Email is required.');
+                    return false;
+                }
+                if (!emailRe.test(v)) {
+                    showError('email', 'Please enter a valid email address.');
+                    return false;
+                }
+                clearError('email');
+                return true;
+            }
+
+            // Parse date string to a Date object if it contains a valid YYYY-MM-DD; otherwise invalid.
+            function parseDateOnly(value) {
+                if (!value) return null;
+                // const m = dateStartRe.exec(value);
+                const m = value;
+                // console.log("m", m)
+                if (!m) return null;
+                // m[1] is YYYY-MM-DD
+                // const parts = m[1].split('-').map(Number);
+                // const dt = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+                // // check valid date
+                // if (dt && dt.getUTCFullYear() === parts[0] && dt.getUTCMonth() === parts[1] - 1 && dt.getUTCDate() ===
+                //     parts[2]) {
+                //     return dt;
+                // }
+                // return null;
+                return m;
+            }
+
+            function validateCheckIn() {
+                const v = (inputs.check_in.value || '').trim();
+                if (!v) {
+                    showError('check_in', 'Check-in date is required.');
+                    return false;
+                }
+                const d = parseDateOnly(v);
+                if (!d) {
+                    showError('check_in', 'Enter a valid date (YYYY-MM-DD). Time is optional.');
+                    return false;
+                }
+                clearError('check_in');
+                return true;
+            }
+
+            function validateCheckOut() {
+                const vin = (inputs.check_in.value || '').trim();
+                const vout = (inputs.check_out.value || '').trim();
+                if (!vout) {
+                    showError('check_out', 'Check-out date is required.');
+                    return false;
+                }
+                const dIn = parseDateOnly(vin);
+                const dOut = parseDateOnly(vout);
+                if (!dOut) {
+                    showError('check_out', 'Enter a valid date (YYYY-MM-DD). Time is optional.');
+                    return false;
+                }
+                if (dIn && dOut && dOut < dIn) {
+                    showError('check_out', 'Check-out cannot be earlier than check-in.');
+                    return false;
+                }
+                clearError('check_out');
+                return true;
+            }
+
+            function validateAddress() {
+                const v = (inputs.address.value || '').trim();
+                if (!v) {
+                    clearError('address');
+                    return true;
+                }
+                // allow letters, numbers, commas, dots, slashes, dashes, #, parentheses and spaces
+                if (!/^[A-Za-z0-9\s:;\.,#\-\/\(\)]+$/.test(v)) {
+                    showError('address', 'Address contains invalid characters.');
+                    return false;
+                }
+                clearError('address');
+                return true;
+            }
+
+            // Attach real-time validation handlers (on input / change)
+            if (inputs.name) inputs.name.addEventListener('input', validateName);
+            if (inputs.phone) inputs.phone.addEventListener('input', validatePhone);
+            if (inputs.email) inputs.email.addEventListener('input', validateEmail);
+            if (inputs.check_in) inputs.check_in.addEventListener('change', () => {
+                validateCheckIn();
+                validateCheckOut();
+            });
+            if (inputs.check_out) inputs.check_out.addEventListener('change', validateCheckOut);
+            if (inputs.address) inputs.address.addEventListener('input', validateAddress);
+
+            // Submit handling - your button is type="button", so hook the click OR form submit
+            // Prefer hooking form submit for future-proofing
+            form.addEventListener('submit', function(ev) {
+                ev.preventDefault();
+
+                const ok =
+                    validateName() &
+                    validatePhone() &
+                    validateEmail() &
+                    validateCheckIn() &
+                    validateCheckOut() &
+                    validateAddress();
+
+                if (ok) {
+                    // form is valid; submit normally
+                    // if you want AJAX submission, replace this with fetch/XHR
+                    form.submit();
+                } else {
+                    // focus first invalid field
+                    const firstInvalid = form.querySelector('.is-invalid, .text-danger.error:not(:empty)');
+                    if (firstInvalid) {
+                        if (firstInvalid.focus) firstInvalid.focus();
+                    }
+                }
+            });
+
+            // The modal's "Book Now" button in your HTML is type="button". Let's also attach it to trigger form submit.
+            const bookBtn = form.querySelector('.modal-footer .btn-primary');
+            if (bookBtn) {
+                bookBtn.addEventListener('click', function(ev) {
+                    // trigger form submit, will run the validation above
+                    form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', {
+                        cancelable: true
+                    }));
+                });
+            }
+        })();
+    </script>
+    {{-- user-register-modal-script-end --}}
 
     {{-- show map --}}
     <script>

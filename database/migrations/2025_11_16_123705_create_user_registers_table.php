@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->datetime('check_in_time');
             $table->datetime('check_out_time');
-            $table->string('address')->nullable();
+            $table->text('address')->nullable();
             $table->timestamps();
         });
     }

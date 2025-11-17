@@ -55,5 +55,5 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth', 'verified', 'role:s
     Route::resource('/homestays', HomeStayeController::class);
 
     // handle registered users
-    Route::resource('/registered-users', RegisteredUser::class);
+    Route::resource('/registered-users', RegisteredUser::class)->except(['store']);
 });

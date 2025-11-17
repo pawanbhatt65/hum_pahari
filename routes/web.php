@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\Seller\RegisteredUser;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -20,6 +21,10 @@ Route::get('/test-logging', function () {
 // location routes
 Route::get('/states', [LocationController::class, 'getStates'])->name('states');
 Route::get('/states/{stateId}/districts', [LocationController::class, 'getDistricts']);
+
+// visitor user booking
+Route::post('/registered-users', [RegisteredUser::class, 'store'])
+    ->name('registered-users.store');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/user.php';
