@@ -592,7 +592,7 @@
     <div class="modal fade" id="modal-default">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('registered-users.store') }}" method="POST" class="register-modal">
+                <form action="{{ route('registering-users.store') }}" method="POST" class="register-modal">
                     @csrf
                     <input type="hidden" name="homestay_id" value="{{ $homestay->id }}">
                     <div class="modal-header justify-content-between align-items-center">

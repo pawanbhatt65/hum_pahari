@@ -217,8 +217,8 @@
             let tables = $("#homestays_list").DataTable({
                 responsive: true,
                 lengthChange: true, // Enable page length menu
-                lengthMenu: [10, 15, 20], // Options for rows per page
-                pageLength: 10, // Default rows per page
+                lengthMenu: [20, 50, 100], // Options for rows per page
+                pageLength: 20, // Default rows per page
                 autoWidth: false,
                 buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
                 processing: true,

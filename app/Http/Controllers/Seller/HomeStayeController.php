@@ -122,18 +122,18 @@ class HomeStayeController extends Controller
             ], [
                 'check_in_time.date_format' => 'Check In Time must be Y-m-d H:i format',
                 'check_out_time.after'      => 'Check Out Time should be after Check In Time',
-                'room_image.max'          => 'Room image must be less than 2MB.',
-                'images.*.max'            => 'Each image must be less than 800KB.',
-                'images.min'              => 'Please upload at least one image.',
-                'images.max'              => 'You can upload up to 10 images.',
-                'location.regex'          => 'Location must be in the format: latitude, longitude (e.g., 12.345678, 76.543210).',
-                'name.regex'              => 'Name can only contain letters, digits, spaces, and hyphens.',
-                'note.regex'              => 'Note can only contain letters, digits, spaces, and special characters (-, $, &, @, #, +, .).',
-                'address.regex'           => 'Address can only contain letters, digits, spaces, commas, and hyphens.',
-                'benefit.*.regex'         => 'Benefits can only contain letters, digits, spaces, and hyphens.',
-                'common_space.*.regex'    => 'Common spaces can only contain letters, digits, spaces, and hyphens.',
-                'safety_security.*.regex' => 'Safety & security items can only contain letters, digits, spaces, and hyphens.',
-                'bedding.*.regex'         => 'Bedding items can only contain letters, digits, spaces, and hyphens.',
+                'room_image.max'            => 'Room image must be less than 2MB.',
+                'images.*.max'              => 'Each image must be less than 800KB.',
+                'images.min'                => 'Please upload at least one image.',
+                'images.max'                => 'You can upload up to 10 images.',
+                'location.regex'            => 'Location must be in the format: latitude, longitude (e.g., 12.345678, 76.543210).',
+                'name.regex'                => 'Name can only contain letters, digits, spaces, and hyphens.',
+                'note.regex'                => 'Note can only contain letters, digits, spaces, and special characters (-, $, &, @, #, +, .).',
+                'address.regex'             => 'Address can only contain letters, digits, spaces, commas, and hyphens.',
+                'benefit.*.regex'           => 'Benefits can only contain letters, digits, spaces, and hyphens.',
+                'common_space.*.regex'      => 'Common spaces can only contain letters, digits, spaces, and hyphens.',
+                'safety_security.*.regex'   => 'Safety & security items can only contain letters, digits, spaces, and hyphens.',
+                'bedding.*.regex'           => 'Bedding items can only contain letters, digits, spaces, and hyphens.',
             ]);
 
             $num_room   = (int) $validated['num_room'];
@@ -198,6 +198,7 @@ class HomeStayeController extends Controller
                 'no_show'                => $validated['no_show'],
                 'location'               => $validated['location'],
                 'price'                  => $validated['one_night_price'],
+                'is_approved'            => true,
             ]);
 
             // Store benefits
@@ -1660,7 +1661,7 @@ class HomeStayeController extends Controller
                 'is_approved' => 'required',
             ]);
             // Log::info('Updating Homestay status', ['home_stay_id' => $id, 'new_status' => $data['is_approved']]);
-            if ($data['is_approved']==="true" || $data['is_approved']===true) {
+            if ($data['is_approved'] === "true" || $data['is_approved'] === true) {
                 $data['is_approved'] = 1;
             } else {
                 $data['is_approved'] = 0;
