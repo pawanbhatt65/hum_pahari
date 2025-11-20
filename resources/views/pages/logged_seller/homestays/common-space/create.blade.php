@@ -25,8 +25,28 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('seller.dashboard') }}">
+                                <a href="{{ route('home') }}">
                                     Home
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('seller.dashboard') }}">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('homestays.index') }}">
+                                    Homestays
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a id="editHomestayRoute" href="">
+                                    Edit Homestay
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a id="editCommonSpaceRoute" href="">
+                                    Common Space
                                 </a>
                             </li>
                             <li class="breadcrumb-item active">Add Common Space</li>
@@ -61,4 +81,17 @@
 
 
 @section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // edit homestay route on breadcrumb
+            var editRouteTemplate = "{{ route('homestays.edit', ':id') }}";
+            var editFullUrl = editRouteTemplate.replace(':id', "{{ $id }}");
+            $("#editHomestayRoute").attr("href", editFullUrl);
+
+            // edit benefit route on breadcrumb
+            var editCommonSpaceRouteTemplate = "{{ route('homestays.commonSpaceses', ':id') }}";
+            var editCommonSpaceRoute = editCommonSpaceRouteTemplate.replace(':id', "{{ $id }}");
+            $("#editCommonSpaceRoute").attr("href", editCommonSpaceRoute);
+        });
+    </script>
 @endsection

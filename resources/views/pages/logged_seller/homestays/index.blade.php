@@ -288,7 +288,7 @@
             tables.buttons().container().appendTo('#homestays_list_wrapper .col-md-6:eq(0)');
 
             // Debug: Log the DataTable instance to ensure it's valid
-            console.log('DataTable instance after init:', tables);
+            // console.log('DataTable instance after init:', tables);
 
             // Show homestay details: when show button clicked
             window.showHomeStayFunction = function(button) {

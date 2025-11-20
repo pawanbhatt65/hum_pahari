@@ -29,8 +29,23 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('seller.dashboard') }}">
+                                <a href="{{ route('home') }}">
                                     Home
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('seller.dashboard') }}">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('homestays.index') }}">
+                                    Homestays
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a id="editHomestayRoute" href="">
+                                    Edit Homestay
                                 </a>
                             </li>
                             <li class="breadcrumb-item active">Safety & Security</li>
@@ -112,8 +127,8 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="name">Safety & Security</label>
-                                        <input type="text" name="name" id="name" placeholder="Enter Safety & Security"
-                                            value="" class="form-control">
+                                        <input type="text" name="name" id="name"
+                                            placeholder="Enter Safety & Security" value="" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -145,6 +160,11 @@
 
             let url = window.location.href.split('/').slice(-2)[0];
             // console.log("url is: ", url);
+
+            // edit homestay route on breadcrumb
+            var editRouteTemplate = "{{ route('homestays.edit', ':id') }}";
+            var editFullUrl = editRouteTemplate.replace(':id', url);
+            $("#editHomestayRoute").attr("href", editFullUrl);
 
             // add action parameter on add new safety & security link
             var routeTemplate = "{{ route('homestays.getAddNewSafetySecurity', ':id') }}";
@@ -179,7 +199,8 @@
                     },
                     error: function(xhr, error, thrown) {
                         console.error('DataTables AJAX error:', xhr.responseText, error, thrown);
-                        alert('Failed to load safety & security data: ' + xhr.status + ' ' + xhr.statusText);
+                        alert('Failed to load safety & security data: ' + xhr.status + ' ' + xhr
+                            .statusText);
                     }
                 },
                 columns: [{
@@ -249,7 +270,8 @@
                     },
                     error: function(xhr) {
                         console.error('AJAX error:', xhr.responseJSON);
-                        alert('Error fetching safety & security data: ' + (xhr.responseJSON?.error ||
+                        alert('Error fetching safety & security data: ' + (xhr.responseJSON
+                            ?.error ||
                             'Unknown error'));
                     }
                 });
@@ -310,7 +332,8 @@
                         },
                         error: function(xhr) {
                             console.error('AJAX error:', xhr.responseText);
-                            alert('Error deleting safety security: ' + (xhr.responseJSON?.error ||
+                            alert('Error deleting safety security: ' + (xhr.responseJSON
+                                ?.error ||
                                 'Unknown error'));
                         }
                     });

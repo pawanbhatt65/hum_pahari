@@ -25,8 +25,28 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('seller.dashboard') }}">
+                                <a href="{{ route('home') }}">
                                     Home
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('seller.dashboard') }}">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('homestays.index') }}">
+                                    Homestays
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a id="editHomestayRoute" href="">
+                                    Edit Homestay
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a id="editSafetySecurityRoute" href="">
+                                    Safety & Security
                                 </a>
                             </li>
                             <li class="breadcrumb-item active">Add Safety & Security</li>
@@ -41,13 +61,13 @@
             <div class="container-fluid">
                 <div class="row">
                     <!-- left column -->
-                    <form id="editBenefitForm" action="{{ route('homestays.postAddNewSafetySecurity', $id) }}" class="col-md-12"
-                        method="POST">
+                    <form id="editBenefitForm" action="{{ route('homestays.postAddNewSafetySecurity', $id) }}"
+                        class="col-md-12" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="name">Safety & Security</label>
-                            <input type="text" name="name" id="name" placeholder="Enter Safety & Security" value=""
-                                class="form-control" required>
+                            <input type="text" name="name" id="name" placeholder="Enter Safety & Security"
+                                value="" class="form-control" required>
                         </div>
                         <button type="Submit" class="btn btn-primary">Add It</button>
                     </form>
@@ -61,4 +81,17 @@
 
 
 @section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // edit homestay route on breadcrumb
+            var editRouteTemplate = "{{ route('homestays.edit', ':id') }}";
+            var editFullUrl = editRouteTemplate.replace(':id', "{{ $id }}");
+            $("#editHomestayRoute").attr("href", editFullUrl);
+
+            // edit benefit route on breadcrumb
+            var editSafetySecurityRouteTemplate = "{{ route('homestays.safetySecurities', ':id') }}";
+            var editSafetySecurityRoute = editSafetySecurityRouteTemplate.replace(':id', "{{ $id }}");
+            $("#editSafetySecurityRoute").attr("href", editSafetySecurityRoute);
+        });
+    </script>
 @endsection

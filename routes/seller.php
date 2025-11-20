@@ -59,5 +59,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth', 'verified', 'role:s
         ->except(['show', 'create', 'store', 'edit', 'update', 'delete']);
 
     // get profile page
-    Route::get('/profile', [RegisteredUser::class, 'getProfile'])->name('seller.profile');
+    Route::get('/profile', [SellerController::class, 'getProfile'])->name('seller.profile');
+    // update profile page
+    Route::put('/profile/update/{id}', [SellerController::class, 'postUpdateProfile'])->name('seller.updateProfile');
 });

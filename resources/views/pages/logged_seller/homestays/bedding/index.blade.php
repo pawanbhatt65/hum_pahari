@@ -29,8 +29,23 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('seller.dashboard') }}">
+                                <a href="{{ route('home') }}">
                                     Home
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('seller.dashboard') }}">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('homestays.index') }}">
+                                    Homestays
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a id="editHomestayRoute" href="">
+                                    Edit Homestay
                                 </a>
                             </li>
                             <li class="breadcrumb-item active">Bedding</li>
@@ -145,6 +160,11 @@
 
             let url = window.location.href.split('/').slice(-2)[0];
             // console.log("url is: ", url);
+
+            // edit homestay route on breadcrumb
+            var editRouteTemplate = "{{ route('homestays.edit', ':id') }}";
+            var editFullUrl = editRouteTemplate.replace(':id', url);
+            $("#editHomestayRoute").attr("href", editFullUrl);
 
             // add action parameter on add new bedding link
             var routeTemplate = "{{ route('homestays.getAddNewBedding', ':id') }}";
