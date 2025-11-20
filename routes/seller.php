@@ -57,4 +57,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['auth', 'verified', 'role:s
     // handle registered users
     Route::resource('/registered-users', RegisteredUser::class)
         ->except(['show', 'create', 'store', 'edit', 'update', 'delete']);
+
+    // get profile page
+    Route::get('/profile', [RegisteredUser::class, 'getProfile'])->name('seller.profile');
 });

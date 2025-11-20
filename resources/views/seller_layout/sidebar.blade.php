@@ -42,7 +42,7 @@
                 <li class="nav-item">
                     <a href="{{ route('homestays.index') }}"
                         class="nav-link {{ request()->routeIs('homestays.index') ? 'active' : '' }}">
-                        <i class="nav-icon far fa-image"></i>
+                        <i class="fas fa-home"></i>
                         <p>
                             Homestays
                         </p>
@@ -51,9 +51,18 @@
                 <li class="nav-item">
                     <a href="{{ route('registered-users.index') }}"
                         class="nav-link {{ request()->routeIs('registered-users.index') ? 'active' : '' }}">
-                        <i class="nav-icon far fa-image"></i>
+                        <i class="ion ion-person-add"></i>
                         <p>
                             Registered users
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('seller.profile') }}"
+                        class="nav-link {{ request()->routeIs('seller.profile') ? 'active' : '' }}">
+                        <i class="fas fa-user"></i>
+                        <p>
+                            Profile
                         </p>
                     </a>
                 </li>

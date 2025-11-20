@@ -287,6 +287,7 @@ class HomeStayeController extends Controller
                 'commonSpaces'     => fn($query)     => $query->select('id', 'home_stay_id', 'name'),
                 'images'           => fn($query)           => $query->select('id', 'home_stay_id', 'image_path'),
                 'safetySecurities' => fn($query) => $query->select('id', 'home_stay_id', 'name'),
+                'registerUsers'    => fn($query)    => $query->select('id', 'home_stay_id', 'name', 'email', 'phone', 'check_in_time', 'check_out_time', 'address'),
             ])
                 ->where('id', $id)
                 ->where('user_id', $user->id)
@@ -340,6 +341,7 @@ class HomeStayeController extends Controller
                         'common_spaces'          => $listing->common_spaces->toArray(),
                         'home_stay_images'       => $listing->home_stay_images->toArray(),
                         'safety_securities'      => $listing->safety_securities->toArray(),
+                        'registerUsers'          => $listing->registerUsers->toArray(),
                     ],
                 ], 200);
             }

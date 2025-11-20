@@ -373,7 +373,8 @@
                             } else {
                                 console.error('Invalid DataTable instance:', tables);
                                 alert(
-                                'Error: Unable to reload table. Please refresh the page.');
+                                    'Error: Unable to reload table. Please refresh the page.'
+                                    );
                                 // Optional: Attempt to reinitialize or redirect
                                 window.location.reload(); // Fallback to page refresh
                             }

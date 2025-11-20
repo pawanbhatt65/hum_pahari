@@ -374,6 +374,55 @@
             </div>
             <!-- /.card -->
 
+            @if (count($listing->registerUsers) > 0)
+                <div class="card card-solid mt-4">
+                    <div class="card-body">
+                        <table id="registeredUsersList" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Address</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($listing->registerUsers as $index => $user)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $user['name'] }}</td>
+                                        <td>{{ $user['phone'] }}</td>
+                                        <td>{{ $user['email'] }}</td>
+                                        <td>{{ date('d M Y', strtotime($user['check_in_time'])) }}</td>
+                                        <td>{{ date('d M Y', strtotime($user['check_out_time'])) }}</td>
+                                        <td>{{ $user['address'] }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">No registered users found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Address</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            @endif
+
         </section>
         <!-- /.content -->
     </div>

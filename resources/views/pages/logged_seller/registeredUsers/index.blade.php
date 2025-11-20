@@ -51,6 +51,7 @@
                                         <tr>
                                             <th>S.No.</th>
                                             <th>Name</th>
+                                            <th>Homestay Name</th>
                                             <th>Phone</th>
                                             <th>Email</th>
                                             <th>Check In</th>
@@ -64,6 +65,7 @@
                                         <tr>
                                             <th>S.No.</th>
                                             <th>Name</th>
+                                            <th>Homestay Name</th>
                                             <th>Phone</th>
                                             <th>Email</th>
                                             <th>Check In</th>
@@ -136,6 +138,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'homestays.name',
+                        name: 'homestays.name'
                     },
                     {
                         data: 'phone',
