@@ -15,7 +15,19 @@
             flex-basis: 100%
         }
 
-        .multiple-files {}
+        /* input date click anywhere and input will be open */
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
     </style>
 @endsection
 
@@ -256,40 +268,36 @@
                                     {{-- time --}}
                                     <div class="row">
                                         <div class="col-12">
-                                            <label for="">Homestay <small><em>Time</em>
-                                                </small></label>
+                                            <label for="">
+                                                Homestay <small><em>Days & Time</em></small>
+                                            </label>
                                         </div>
-                                        <div class="form-group col-12 col-lg-6">
+                                        <div class="form-group col-12 col-lg-4 pe-1">
+                                            <label for="">Days</label>
+                                            <input type="tel" name="days" id="days" class="form-control"
+                                                value="{{ old('days') }}" placeholder="Enter Days">
+                                        </div>
+                                        <div class="form-group col-12 col-lg-4 px-1 position-relative">
                                             <label for="">Check In Time</label>
-                                            <div class="input-group date" id="checkInTime" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input"
-                                                    data-target="#checkInTime" name="check_in_time"
-                                                    value="{{ old('check_in_time') }}" />
-                                                <div class="input-group-append" data-target="#checkInTime"
-                                                    data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                </div>
-                                            </div>
+                                            <input type="time" class="form-control"
+                                                data-target="#checkInTime" name="check_in_time"
+                                                value="{{ old('check_in_time') }}" />
                                         </div>
-                                        <div class="form-group col-12 col-lg-6">
+                                        <div class="form-group col-12 col-lg-4 ps-1 position-relative">
                                             <label for="">Checkout Time</label>
-                                            <div class="input-group date" id="checkOutTime" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input"
-                                                    data-target="#checkOutTime" name="check_out_time"
-                                                    value="{{ old('check_out_time') }}" />
-                                                <div class="input-group-append" data-target="#checkOutTime"
-                                                    data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                </div>
-                                            </div>
+                                            <input type="time" class="form-control"
+                                                data-target="#checkOutTime" name="check_out_time"
+                                                value="{{ old('check_out_time') }}" />
                                         </div>
                                     </div>
+
 
                                     {{-- rooms & spaces --}}
                                     <div class="row">
                                         <div class="col-12">
-                                            <label for="">Homestay <small><em>Room & Spaces</em>
-                                                </small></label>
+                                            <label for="">
+                                                Homestay <small><em>Room & Spaces</em></small>
+                                            </label>
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="area_sqft">Area (sq.ft)</label>
@@ -564,12 +572,13 @@
                                 </div>
                             </form>
                         </div>
-                        <!-- /.card -->
                     </div>
-                    <!--/.col (left) -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.row -->
-            </div><!-- /.container-fluid -->
+                <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+            <!-- /.container-fluid -->
         </section>
         <!-- /.content -->
     </div>
@@ -584,22 +593,8 @@
             // Initialize Select2
             $('.select2').select2();
 
-            // Date picker for check-in and check-out (format Y-m-d to match backend)
-            $('#checkInTime').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm',
-                useCurrent: false,
-                minDate: moment() // prevent past date selection
-                // minDate: moment().add(1, 'days') // uncomment to enforce at least one day in advance
-            });
-
-            $('#checkOutTime').datetimepicker({
-                format: 'YYYY-MM-DD HH:mm',
-                useCurrent: false
-            });
-
-            // Ensure check-out is after check-in
-            $('#checkInTime').on('change.datetimepicker', function(e) {
-                $('#checkOutTime').datetimepicker('minDate', e.date);
+            $(document).on("input", "#days", function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3);
             });
 
             // Room count validation (real-time feedback)
@@ -823,13 +818,15 @@
                         min: 1,
                         max: 12
                     },
+                    days: {
+                        required: true,
+                        digits: true,
+                    },
                     check_in_time: {
                         required: true,
-                        date: true
                     },
                     check_out_time: {
                         required: true,
-                        date: true
                     },
                     area: {
                         required: true,
@@ -937,6 +934,7 @@
                     },
                     num_adult: "Please select the number of adults",
                     num_children: "Please select the number of children",
+                    days: "Please enter number of days",
                     check_in_time: "Please select check-in time",
                     check_out_time: "Please select check-out time",
                     area: {

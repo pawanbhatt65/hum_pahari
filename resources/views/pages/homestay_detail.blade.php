@@ -87,50 +87,64 @@
                 {{-- @include('components.homestay_search') --}}
                 {{-- search-box-end --}}
                 {{-- homestay-images-start --}}
+                @php
+                    $images = $homestay->images ?? collect();
+                    $count = $images->count();
+                @endphp
                 <div class="col-12 homestay-img-col">
                     <div class="row homestay-inner-row">
                         <div class="col-6 homestay-inner-left">
                             <div class="img">
-                                <img src="{{ asset('storage/' . $homestay->images[0]?->image_path) }}"
-                                    alt="{{ $homestay->name }}" class="img-fluid">
+                                @if ($images->get(0))
+                                    <img src="{{ asset('storage/' . $images->get(0)->image_path) }}"
+                                        alt="{{ $homestay->name }}" class="img-fluid">
+                                @endif
                             </div>
                         </div>
                         <div class="col-6 homestay-inner-right">
                             <div class="row homestay-inner-inner-row">
-                                <div class="col-6">
-                                    <div class="img">
-                                        <img src="{{ asset('storage/' . $homestay->images[1]?->image_path) }}"
-                                            alt="{{ $homestay->name }}" class="img-fluid">
+                                @for ($i = 1; $i <= 3; $i++)
+                                    <div class="col-6">
+                                        <div class="img">
+                                            @if ($images->get($i))
+                                                <img src="{{ asset('storage/' . $images->get($i)->image_path) }}"
+                                                    alt="{{ $homestay->name }}" class="img-fluid">
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="img">
-                                        <img src="{{ asset('storage/' . $homestay->images[2]?->image_path) }}"
-                                            alt="{{ $homestay->name }}" class="img-fluid">
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="img">
-                                        <img src="{{ asset('storage/' . $homestay->images[3]?->image_path) }}"
-                                            alt="{{ $homestay->name }}" class="img-fluid">
-                                    </div>
-                                </div>
+                                @endfor
                                 <div class="col-6 position-relative">
                                     <div class="img">
-                                        <img src="{{ asset('storage/' . $homestay->images[4]?->image_path) }}"
-                                            alt="{{ $homestay->name }}" class="img-fluid">
+                                        @if ($images->get(4))
+                                            <img src="{{ asset('storage/' . $images->get(4)->image_path) }}"
+                                                alt="{{ $homestay->name }}" class="img-fluid">
+                                        @elseif($images->get(3))
+                                            {{-- fallback show the 4th image if 5th doesn't exist --}}
+                                            <img src="{{ asset('storage/' . $images->get(3)->image_path) }}"
+                                                alt="{{ $homestay->name }}" class="img-fluid">
+                                        @endif
                                     </div>
-                                    @if (count($homestay->images) > 4)
+                                    @if ($count > 5)
                                         <div class="backdrop view-all-backdrop position-absolute" data-toggle="modal"
                                             data-target="#modal-xl">
                                             <i class="fa-solid fa-plus me-1"></i> View All
                                         </div>
+
                                         @include('components.homestay_image', [
-                                            'images' => $homestay->images,
+                                            'images' => $images,
+                                        ])
+                                    @elseif($count > 4)
+                                        <div class="backdrop view-all-backdrop position-absolute" data-toggle="modal"
+                                            data-target="#modal-xl">
+                                            <i class="fa-solid fa-plus me-1"></i> View All
+                                        </div>
+
+                                        @include('components.homestay_image', [
+                                            'images' => $images,
                                         ])
                                     @endif
-
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -237,7 +251,7 @@
                                         @endphp
                                         <div class="aftr-disc-price">₹{{ $homestay->price }}/- </div>
                                         <div class="taxes-fees">Taxes &amp; Fees</div>
-                                        <div class="per-night">(Price for {{ $differenceInDays }} Night)</div>
+                                        <div class="per-night">(Price for {{ $homestay->days }} Night)</div>
                                         <div class="per-night">Refund as per policy</div>
                                     </div>
                                 </div>
@@ -246,14 +260,14 @@
                                         class="checkin-checkout check_in_border row mx-0 col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 ">
                                         <div class="col-12 pe-sm-2 px-0 check_in_out_title">Check In</div>
                                         <div class="col-12 pe-2 px-0">
-                                            {{ date('d M Y h:i A', strtotime($homestay->check_in_time)) }}
+                                            {{ date('h:i A', strtotime($homestay->check_in_time)) }}
                                         </div>
                                     </div>
                                     <div
                                         class="checkin-checkout row mx-0 col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 ">
                                         <div class="col-12 px-0 text-end check_in_out_title">Check Out</div>
                                         <div class="col-12 px-0 text-end">
-                                            {{ date('d M Y h:i A', strtotime($homestay->check_out_time)) }}
+                                            {{ date('h:i A', strtotime($homestay->check_out_time)) }}
                                         </div>
                                     </div>
                                 </div>
@@ -391,8 +405,8 @@
                                                         <div class="aftr-disc-price">₹{{ $homestay->price }}/- </div>
                                                         <div class="taxes-fees"> +₹0 Taxes &amp; Fees</div>
                                                         <div class="per-night">(Price for
-                                                            {{ $differenceInDays > 1 ? $differenceInDays : '' }}
-                                                            night{{ $differenceInDays > 1 ? 's' : '' }})</div>
+                                                            {{ $homestay->days > 1 ? $homestay->days : '' }}
+                                                            night{{ $homestay->days > 1 ? 's' : '' }})</div>
                                                         <div class="per-night text-end">Refund as per policy</div>
                                                         {{-- <div class="text-end bfr-disc-price">Room is not available.</div> --}}
                                                         <div class="text-end mt-3">

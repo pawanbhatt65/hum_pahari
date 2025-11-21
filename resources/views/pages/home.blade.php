@@ -19,24 +19,17 @@
                         <h3 class="title mb-1 mb-md-2">Homestays in Uttarakhand</h3>
                         <p class="has-text-dark">Get affordable price homestays.</p>
                         <div class="search-form">
-                            <form name="bannerSearchForm">
+                            <form action="{{ route('home.homestay.search') }}" method="POST" name="bannerSearchForm">
+                                @csrf
                                 <div class="mb-3">
                                     <label for="" class="form-label">Destination</label>
-                                    <input type="text" name="destination" class="form-control" value="Nainital">
+                                    <input type="text" name="destination" class="form-control" value=""
+                                        placeholder="Destination">
                                 </div>
                                 <div class="mb-3">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label for="check_in">Check In</label>
-                                            <input type="text" name="check_in" id="check_in" placeholder="Check In"
-                                                class="form-control">
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="check_out">Check Out</label>
-                                            <input type="text" name="check_out" id="check_out" placeholder="Check Out"
-                                                class="form-control">
-                                        </div>
-                                    </div>
+                                    <label for="pin">Pin Code</label>
+                                    <input type="text" name="pin" id="pin" placeholder="Pin Code"
+                                        class="form-control" length="6" minlength="6" maxlength="6" value="">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
@@ -62,9 +55,9 @@
                 </div>
                 @forelse ($homestay as $index => $item)
                     @php
-                        $check_in_time = \Carbon\Carbon::parse($item->check_in_time);
-                        $check_out_time = \Carbon\Carbon::parse($item->check_out_time);
-                        $differenceInDays = floor($check_in_time->diffInDays($check_out_time)); // Use floor() to get integer
+                        // $check_in_time = \Carbon\Carbon::parse($item->check_in_time);
+                        // $check_out_time = \Carbon\Carbon::parse($item->check_out_time);
+                        // $differenceInDays = floor($check_in_time->diffInDays($check_out_time)); // Use floor() to get integer
                         // \Log::info('differenceInDays: ' . $differenceInDays);
                     @endphp
                     <div class="col-12 col-sm-6 col-xl-3">
@@ -72,18 +65,18 @@
                             <div class="images">
                                 <div class="single-img">
                                     @if ($item->images && $item->images->isNotEmpty())
-                                        <img src="{{ asset('storage/' . $item->images[0]->image_path) }}"
-                                            class="card-img-top" alt="{{ $item->name }}">
+                                        @php $img0 = $item->images->first(); @endphp
+                                        <img src="{{ asset('storage/' . ($img0->image_path ?? '')) }}" class="card-img-top"
+                                            alt="{{ $item->name }}">
                                     @endif
                                 </div>
                                 <div class="more-imgs">
-                                    @forelse ($item->images ?? [] as $index => $img)
+                                    @foreach ($item->images->slice(0, 3) as $img)
                                         <div class="single-img-box">
-                                            <img src="{{ asset('storage/' . $img->image_path) }}" alt=""
+                                            <img src="{{ asset('storage/' . ($img->image_path ?? '')) }}" alt=""
                                                 class="img-fluid">
                                         </div>
-                                    @empty
-                                    @endforelse
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="card-body">
@@ -94,8 +87,8 @@
                                 </p>
                                 <p class="card-text">
                                     <strong>₹ {{ $item->price }}</strong>
-                                    /{{ $differenceInDays > 1 ? $differenceInDays : '' }}
-                                    night{{ $differenceInDays > 1 ? 's' : '' }}
+                                    /{{ $item->days > 1 ? $item->days : '' }}
+                                    night{{ $item->days > 1 ? 's' : '' }}
                                 </p>
                                 <a href="{{ route('homeStayDetail', $item->id) }}" class="btn btn-primary btn-sm mt-2">View
                                     Deal</a>
@@ -104,121 +97,6 @@
                     </div>
                 @empty
                 @endforelse
-
-                {{-- <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
-                            </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
-                            </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card card-more">
-                        <div class="images">
-                            <div class="single-img">
-                                <img src="https://images.pexels.com/photos/813788/pexels-photo-813788.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                    class="card-img-top" alt="...">
-                            </div>
-                            <div class="more-imgs">
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://plus.unsplash.com/premium_photo-1676321046449-5fc72b124490?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                                <div class="single-img-box">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                        alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Pine View Studio Cottage</h5>
-                            <p class="card-text">
-                                Apartment: <strong>2</strong> Guest <strong>1</strong> Bedroom
-                            </p>
-                            <p class="card-text">
-                                <strong>₹ 1671</strong> /night
-                            </p>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">View Deal</a>
-                        </div>
-                    </div>
-                </div> --}}
                 <div class="col-12">
                     <div class="view-more text-center">
                         <a href="{{ route('homestays') }}" class="btn btn-secondary btn-sm">

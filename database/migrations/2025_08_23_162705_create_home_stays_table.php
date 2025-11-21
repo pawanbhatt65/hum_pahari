@@ -30,8 +30,9 @@ return new class extends Migration
             $table->string('pincode')->length(6);
             $table->integer('number_of_adults')->default(0);
             $table->integer('number_of_children')->default(0);
-            $table->datetime('check_in_time');
-            $table->datetime('check_out_time');
+            $table->string('days');
+            $table->string('check_in_time');
+            $table->string('check_out_time');
             $table->string('area');
             $table->string('guest');
             $table->string('mountain_view');

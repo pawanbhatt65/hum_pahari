@@ -51,7 +51,7 @@ class HomeStaySeeder extends Seeder
             $foodAllowed = $faker->randomElement(['yes', 'no']);
 
             $homestay = HomeStay::create([
-                                               
+
                 'user_id'                => 1, // change as needed
                 'name'                   => ucfirst($faker->words(3, true)) . ' Homestay',
                 'room_type'              => $roomType,
@@ -67,9 +67,10 @@ class HomeStaySeeder extends Seeder
                 'address'                => $faker->address,
                 'pincode'                => $faker->numberBetween(100000, 999999),
                 'number_of_adults'       => $faker->numberBetween(1, 6),
-                'number_of_children'     => $faker->numberBetween(0, 4),
-                'check_in_time'          => now()->format('Y-m-d H:i:s'),
-                'check_out_time'         => now()->addDays(1)->format('Y-m-d H:i:s'),
+                'number_of_children'     => $faker->numberBetween(1, 4),
+                'days'                   => $faker->numberBetween(1, 14),
+                'check_in_time'          => now()->format('H:i'),
+                'check_out_time'         => now()->format('H:i'),
                 'area'                   => $faker->randomElement(['Downtown', 'Uptown', 'Suburb']),
                 'guest'                  => $faker->numberBetween(1, 6),
                 'mountain_view'          => $faker->randomElement(['yes', 'no']),

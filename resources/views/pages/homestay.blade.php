@@ -91,8 +91,8 @@
                                 </p>
                                 <p class="card-text">
                                     <strong>₹ {{ $item->price }}</strong>
-                                    /{{ $differenceInDays > 1 ? $differenceInDays : '' }}
-                                    night{{ $differenceInDays > 1 ? 's' : '' }}
+                                    /{{ $item->days > 1 ? $item->days : '' }}
+                                    night{{ $item->days > 1 ? 's' : '' }}
                                 </p>
                                 <a href="{{ route('homeStayDetail', $item->id) }}" class="btn btn-primary btn-sm mt-2">
                                     View Deal

@@ -2,7 +2,7 @@
 .register-section {
     padding-top: 100px;
     padding-bottom: 30px;
-    min-height: 60vh;
+    min-height: 70vh;
     background-color: var(--theme-light-gray);
 }
 .register-section form input {

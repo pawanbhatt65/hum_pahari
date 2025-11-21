@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\UserRegister;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -17,17 +16,50 @@ class HomeController extends Controller
     // homepage
     public function home(Request $request)
     {
-        Log::info("auth: ", ["auth_is" => Auth::user()]);
-        $homestay = HomeStay::where('is_approved', true)
-        // Constrain the `images` relationship
-            ->with(['images' => function ($query) {
-                $query->take(3);
-            }])
-            ->take(12)
+        // If search results exist → show them
+        if (session()->has('searched_homestays')) {
+            $homestay = session('searched_homestays');
+        } else {
+            // Default homepage listings
+            $homestay = HomeStay::where('is_approved', true)
+                ->with(['images' => function ($query) {
+                    $query->take(3);
+                }])
+                ->take(12)
+                ->orderBy('id', 'DESC')
+                ->get();
+        }
+
+        return view('pages.home', compact('homestay'));
+    }
+
+    // homepage search homestay
+    public function postHomeStaySearch(Request $request)
+    {
+        $data = $request->validate([
+            'destination' => ['nullable', 'string'],
+            'pin'         => ['nullable', 'string'],
+        ]);
+
+        $homestaysQuery = HomeStay::where('is_approved', true);
+
+        if (! empty($data['destination'])) {
+            $homestaysQuery->where(function ($q) use ($data) {
+                $q->where('address', 'LIKE', '%' . $data['destination'] . '%')
+                    ->orWhere('city', 'LIKE', '%' . $data['destination'] . '%');
+            });
+        }
+        if (! empty($data['pin'])) {
+            $homestaysQuery->where('pincode', 'LIKE', '%' . $data['pin'] . '%');
+        }
+
+        $result = $homestaysQuery
+            ->with(['images' => function ($q) {$q->take(3);}])
             ->orderBy('id', 'DESC')
             ->get();
-        // Log::info("home stay image", ["homestay" => $homestay]);
-        return view('pages.home', compact('homestay'));
+        // Log::info('Homestay Search Results: ', ['results' => $result->toArray()]);
+
+        return view('pages.home', ['homestay' => $result]);
     }
 
     // homestays
@@ -36,7 +68,7 @@ class HomeController extends Controller
         $homestay = HomeStay::where('is_approved', true)
         // Constrain the `images` relationship
             ->with(['images' => function ($query) {
-                $query->orderBy('id', 'DESC');
+                $query->take(3)->orderBy('id', 'DESC');
             }])
             ->orderBy('id', 'DESC')
             ->get();

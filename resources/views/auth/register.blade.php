@@ -16,14 +16,14 @@
                             @csrf
                             <input type="hidden" name="redirect" value="{{ $redirectUrl ?? '' }}">
                             <div class="mb-3 d-flex justify-content-center align-items-center">
-                                <div class="register">
+                                {{-- <div class="register">
                                     <input type="radio" name="role" value="user" id="user" checked>
                                     <label for="user">Register as a User</label>
-                                </div>
-                                <div class="register ms-2">
-                                    <input type="radio" name="role" value="seller" id="seller">
-                                    <label for="seller">Register as a Seller</label>
-                                </div>
+                                </div> --}}
+                                {{-- <div class="register ms-2"> --}}
+                                <input type="hidden" name="role" value="seller" id="seller" checked>
+                                {{-- <label for="seller">Register as a Seller</label>
+                                </div> --}}
                             </div>
                             <div class="mb-3">
                                 <label for="" class="form-label">Name</label>

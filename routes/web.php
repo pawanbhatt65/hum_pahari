@@ -5,6 +5,7 @@ use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::post('/home-search', [HomeController::class, 'postHomeStaySearch'])->name('home.homestay.search');
 Route::get('/homestays', [HomeController::class, 'homestays'])->name('homestays');
 Route::get('/homestays/detail/{id}', [HomeController::class, 'homeStayDetail'])->name('homeStayDetail');
 Route::get('/products', [HomeController::class, 'products'])->name('products');

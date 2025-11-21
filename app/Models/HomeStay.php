@@ -11,7 +11,7 @@ class HomeStay extends Model
 
     public static array $is_approved = [true, false];
 
-    protected $fillable = ['user_id', 'name', 'room_type', 'bedroom_type', 'number_of_rooms', 'number_of_single_rooms', 'number_of_double_rooms', 'food_allowed', 'note', 'state_id', 'district_id', 'city', 'address', 'pincode', 'number_of_adults', 'number_of_children', 'check_in_time', 'check_out_time', 'area', 'guest', 'mountain_view', 'room_image', 'upto_3days_prior', 'upto_2days_prior', '1day_prior', 'same_day_cancellation', 'no_show', 'location', 'price', 'is_approved'];
+    protected $fillable = ['user_id', 'name', 'room_type', 'bedroom_type', 'number_of_rooms', 'number_of_single_rooms', 'number_of_double_rooms', 'food_allowed', 'note', 'state_id', 'district_id', 'city', 'address', 'pincode', 'number_of_adults', 'number_of_children', 'days', 'check_in_time', 'check_out_time', 'area', 'guest', 'mountain_view', 'room_image', 'upto_3days_prior', 'upto_2days_prior', '1day_prior', 'same_day_cancellation', 'no_show', 'location', 'price', 'is_approved'];
 
     // many-to-One Relationship
     public function user(): BelongsTo

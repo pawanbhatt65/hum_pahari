@@ -33,7 +33,7 @@ class UserRegisterSeeder extends Seeder
                 'check_in_time'  => $checkIn->format('Y-m-d'),
                 'check_out_time' => $checkOut->format('Y-m-d'),
                 'address'        => $faker->address,
-                'home_stay_id'   => rand(1, 153), // homestay id range
+                'home_stay_id'   => rand(1, 151), // homestay id range
             ]);
         }
     }
