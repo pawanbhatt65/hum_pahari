@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\UserRegister;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -63,17 +62,74 @@ class HomeController extends Controller
     }
 
     // homestays
-    public function homestays()
+    public function homestays(Request $request)
     {
-        $homestay = HomeStay::where('is_approved', true)
-        // Constrain the `images` relationship
-            ->with(['images' => function ($query) {
-                $query->take(3)->orderBy('id', 'DESC');
-            }])
-            ->orderBy('id', 'DESC')
-            ->get();
-        return view('pages.homestay', compact('homestay'));
+        // Retrieve filters from session (if any)
+        $filters = session('homestay_filters', []);
+
+        $query = HomeStay::where('is_approved', true)
+            ->with(['images' => function ($q) {
+                $q->take(3)->orderBy('id', 'DESC');
+            }]);
+
+        // Apply filters from session (if present)
+        if (! empty($filters['name'])) {
+            $query->where('name', 'LIKE', '%' . $filters['name'] . '%');
+        }
+
+        if (! empty($filters['location'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('address', 'LIKE', '%' . $filters['location'] . '%')
+                    ->orWhere('city', 'LIKE', '%' . $filters['location'] . '%');
+            });
+        }
+
+        // price handling: if min & max present use between, else >= or <=
+        if (isset($filters['min_price']) && isset($filters['max_price'])) {
+            $min = (float) $filters['min_price'];
+            $max = (float) $filters['max_price'];
+            if ($min > $max) {[$min, $max] = [$max, $min];}
+            $query->whereBetween('price', [$min, $max]);
+        } elseif (isset($filters['min_price'])) {
+            $query->where('price', '>=', (float) $filters['min_price']);
+        } elseif (isset($filters['max_price'])) {
+            $query->where('price', '<=', (float) $filters['max_price']);
+        }
+
+        $homestay = $query->orderBy('id', 'DESC')->paginate(52);
+
+        // Pass current filters to the view so the form fields can show them
+        return view('pages.homestay', compact('homestay', 'filters'));
     }
+
+    // homestays search from homestays page
+    public function postHomeStayHomeStaySearch(Request $request)
+    {
+        $data = $request->validate([
+            'name'      => ['nullable', 'string'],
+            'location'  => ['nullable', 'string'],
+            'min_price' => ['nullable', 'numeric'],
+            'max_price' => ['nullable', 'numeric'],
+        ]);
+
+        // Save only the small filter values in session (NOT the query/result)
+        $filters = array_filter($data, function ($v) {
+            return $v !== null && $v !== '';
+        });
+
+        session(['homestay_filters' => $filters]);
+
+        // Redirect to the listing page with NO filter params in URL
+        return redirect()->route('homestays');
+    }
+
+    // in HomeController
+    public function clearFilters()
+    {
+        session()->forget('homestay_filters');
+        return redirect()->route('homestays');
+    }
+
     // homestays detail page
     public function homeStayDetail(Request $request, $id)
     {

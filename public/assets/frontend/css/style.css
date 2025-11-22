@@ -341,7 +341,8 @@ body.overflowHidden {
     margin-bottom: 30px;
 }
 .single-img {
-    height: 250px;overflow: hidden;
+    height: 250px;
+    overflow: hidden;
 }
 .single-img img {
     object-fit: cover;
@@ -561,3 +562,31 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 /* global-css-currently using homestays.blade.php and products.blade.php-end */
+
+/* pagination-css-start */
+.paginator-box {
+    text-align: right;
+}
+.page-ul {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    column-gap: 10px;
+}
+.page-ul li span,
+.page-ul li a {
+    padding-block: 8px;
+    padding-inline: 12px;
+    background-color: #0d6efd;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-weight: 600;
+}
+.page-ul li.active span {
+    background-color: var(--theme-black);
+}
+.page-ul li.disabled span {
+    opacity: 0.6;
+}
+/* paginator-css-end */

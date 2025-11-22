@@ -40,13 +40,9 @@ class SellerController extends Controller
 
         $req->validate([
             'name'   => 'required|string|max:255',
-            'email'  => 'required|email|max:255|unique:users,email,' . $seller->id,
             'mobile' => 'required|string|max:20',
         ], [
             'name.required'   => 'Name is required.',
-            'email.required'  => 'Email is required.',
-            'email.email'     => 'Please provide a valid email address.',
-            'email.unique'    => 'This email is already taken.',
             'mobile.required' => 'Mobile number is required.',
         ]);
 
@@ -54,8 +50,39 @@ class SellerController extends Controller
         $seller->mobile = $req->input('mobile');
         $seller->save();
 
-        Log::info("Profile updated successfully", ['seller_id' => $seller->id]);
+        // Log::info("Profile updated successfully", ['seller_id' => $seller->id]);
         Alert::success('Success', 'Profile updated successfully.', 3500);
         return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
+    // for updating password
+    public function postUpdatePassword(Request $req, $id)
+    {
+        $seller = Auth::user();
+        if ($seller->id != $id) {
+            Log::warning("Unauthorized password update attempt", ['attempted_seller_id' => $id, 'actual_seller_id' => $seller->id]);
+            Alert::error('Error', 'Unauthorized action.', 3500);
+            return redirect()->back()->with('error', 'Unauthorized action.');
+        }
+        $req->validate([
+            'current_password'          => 'required|string',
+            'new_password'              => 'required|string|min:8|confirmed',
+            'new_password_confirmation' => 'required|string|min:8',
+        ], [
+            'current_password.required' => 'Current password is required.',
+            'new_password.required'     => 'New password is required.',
+            'new_password.min'          => 'New password must be at least 8 characters.',
+            'new_password.confirmed'    => 'New password confirmation does not match.',
+        ]);
+        if (! password_verify($req->input('current_password'), $seller->password)) {
+            Log::warning("Current password does not match", ['seller_id' => $seller->id]);
+            Alert::error('Error', 'Current password is incorrect.', 3500);
+            return redirect()->back()->with('error', 'Current password is incorrect.');
+        }
+        $seller->password = bcrypt($req->input('new_password'));
+        $seller->save();
+        // Log::info("Password updated successfully", ['seller_id' => $seller->id]);
+        Alert::success('Success', 'Password updated successfully.', 3500);
+        return redirect()->back()->with('success', 'Password updated successfully.');
     }
 }
