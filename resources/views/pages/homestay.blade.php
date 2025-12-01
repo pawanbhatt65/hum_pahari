@@ -17,7 +17,9 @@
                     <div class="is-title text-center">
                         <h1>HomeStays</h1>
                         <p>
-                            The affordable HomeStays.
+                            Discover comfortable and affordable homestays across Uttarakhand, offering peaceful stays,
+                            scenic surroundings, and warm hospitality. Explore verified properties, compare prices, check
+                            amenities, and book the perfect stay for your next getaway.
                         </p>
                     </div>
                 </div>

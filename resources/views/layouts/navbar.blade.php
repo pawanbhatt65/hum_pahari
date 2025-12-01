@@ -1,6 +1,6 @@
 <nav class="navbar fixed-top navbar-expand-lg main-navbar--main">
     <div class="container-lg container-fluid">
-        <a class="navbar-brand" href="{{ route('home') }}">Navbar</a>
+        <a class="navbar-brand" href="{{ route('home') }}">humpahari</a>
         <button class="navbar-toggler navbar-toggler-improve" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" id="navbarTogglerButton" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
