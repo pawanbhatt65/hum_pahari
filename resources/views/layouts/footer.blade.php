@@ -5,14 +5,15 @@
             <div class="row g-3">
                 <div class="col-12 col-lg-4">
                     <div class="logo-side">
-                        <figure>
+                        {{-- <figure>
                             <img src="https://static.vecteezy.com/system/resources/previews/023/654/784/non_2x/golden-logo-template-free-png.png"
                                 alt="logo" class="img-fluid">
-                        </figure>
+                        </figure> --}}
+                        <h1 class="text-white">humpahari</h1>
                         <p class="text-white">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod mollitia in impedit quam
-                            itaque
-                            porro omnis corrupti nulla? Accusantium, architecto.
+                            Discover comfortable and affordable homestays across Uttarakhand, offering peaceful stays,
+                            scenic surroundings, and warm hospitality. Explore verified properties, compare prices,
+                            check amenities, and book the perfect stay for your next getaway.
                         </p>
                     </div>
                 </div>

@@ -256,7 +256,7 @@ body.overflowHidden {
 
 /* home.blade.php > banner-start */
 .banner-sec {
-    height: calc(100vh - 0px);
+    /* height: calc(100vh - 0px); */
     overflow: hidden;
 }
 @media (max-width: 1100px) {

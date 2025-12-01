@@ -12,8 +12,7 @@
     <section class="banner-sec">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="https://images.pexels.com/photos/1403653/pexels-photo-1403653.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    class="d-block w-100" alt="...">
+                <img src="{{ asset('assets/frontend/images/hero_banner.png') }}" class="d-block w-100" alt="Home Stay">
                 <div class="carousel-caption">
                     <div class="box search-box">
                         <h3 class="title mb-1 mb-md-2">Homestays in Uttarakhand</h3>
@@ -23,13 +22,14 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="" class="form-label">Destination</label>
-                                    <input type="text" name="destination" class="form-control" value=""
-                                        placeholder="Destination">
+                                    <input type="text" name="destination" class="form-control"
+                                        value="{{ old('destination') }}" placeholder="Destination">
                                 </div>
                                 <div class="mb-3">
                                     <label for="pin">Pin Code</label>
                                     <input type="text" name="pin" id="pin" placeholder="Pin Code"
-                                        class="form-control" length="6" minlength="6" maxlength="6" value="">
+                                        class="form-control" length="6" minlength="6" maxlength="6"
+                                        value="{{ old('pin') }}">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
@@ -49,7 +49,9 @@
                     <div class="is-title text-center">
                         <h1>HomeStays</h1>
                         <p>
-                            The affordable HomeStays.
+                            Discover comfortable and affordable homestays across Uttarakhand, offering peaceful stays,
+                            scenic surroundings, and warm hospitality. Explore verified properties, compare prices, check
+                            amenities, and book the perfect stay for your next getaway.
                         </p>
                     </div>
                 </div>
