@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    Dashboard
+    Admin | Dashboard
 @endsection
 
 @section('styles')

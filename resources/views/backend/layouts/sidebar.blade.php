@@ -31,8 +31,8 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <li class="nav-item menu-open">
-                    <a href="{{ route('seller.dashboard') }}"
-                        class="nav-link {{ request()->routeIs('seller.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -40,20 +40,20 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('registered-seller.index') }}"
+                        class="nav-link {{ request()->routeIs('registered-seller.index') ? 'active' : '' }}">
+                        <i class="ion ion-person-add"></i>
+                        <p>
+                            Sellers
+                        </p>
+                    </a>
+                </li>
+                {{-- <li class="nav-item">
                     <a href="{{ route('homestays.index') }}"
                         class="nav-link {{ request()->routeIs('homestays.index') ? 'active' : '' }}">
                         <i class="fas fa-home"></i>
                         <p>
                             Homestays
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('registered-users.index') }}"
-                        class="nav-link {{ request()->routeIs('registered-users.index') ? 'active' : '' }}">
-                        <i class="ion ion-person-add"></i>
-                        <p>
-                            Registered users
                         </p>
                     </a>
                 </li>
@@ -65,9 +65,9 @@
                             Profile
                         </p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
-                    <form action="{{ route('logout') }}" method="post">
+                    <form action="{{ route('admin.logout') }}" method="post">
                         @csrf
                         <button type="submit" class="nav-link bg-transparent text-white text-left border-0">
                             <i class="nav-icon far fa-circle text-danger"></i>
